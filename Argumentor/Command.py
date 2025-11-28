@@ -29,3 +29,16 @@ class Command():
         
         self.arguments.sort(key=lambda x: x.order)
         
+    def getFormattedDescription(self) -> str:
+        """
+        Get the description of command and arguments combined with formatting.
+
+        Returns:
+            str: String description.
+        """
+        
+        argumentDescriptions = ""
+        for argument in self.arguments:
+            argumentDescriptions = f"{argumentDescriptions}\n{argument.getFormattedDescription()}"
+        
+        return f"{self.name}: {self.description}{argumentDescriptions}"

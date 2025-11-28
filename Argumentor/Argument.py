@@ -41,3 +41,12 @@ class Argument():
         self.defaultValue = defaultValue
         self.description = description
                 
+    def getFormattedDescription(self) -> str:
+        """
+        Get the description of arguments with formatting.
+
+        Returns:
+            str: String description.
+        """
+        
+        return f"\t{self.name}: {self.description}\n\tAlias: {self.alias}"
