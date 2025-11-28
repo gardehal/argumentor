@@ -32,11 +32,11 @@ Creating a command to read size of some objects with width, depth, height as arg
     # Example inputs
     inputA = "-dim 1 2 3" # Valid
     inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
-    inputC = "-d w:4 d:5 h:6" # Valid
+    inputC = "-d width:4 d:5 h:6" # Valid
     inputD = "-d w:7 8 d:9" # Valid, note the order: width, unnamed arg which will be resolved to height because width and depth are named with an alias, depth
     inputE = "-d w:10 11 12" # Valid
-    inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts) or with a named alias e.g. h:-15
-    inputG = "-d w:16 d:':17' h:18" # Invalid, the defaault int casting will fail, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts) or with a named alias e.g. h:-15
+    # WIP(14') inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts) or with a named alias e.g. h:-15
+    # WIP(double ::) inputG = "-d w:16 d:':17' h::18" # Invalid, the defaault int casting will fail, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts)
     inputH = "-test 1 2 3" # Invalid, and will not be returned from .validate() 
     
     # The validation itself, input may be a string or a list of string like sys.argv
@@ -54,6 +54,7 @@ Creating a command to read size of some objects with width, depth, height as arg
 
     # [...]
 
+    # Note: Must be from typeT and return bool
     def validateInt(value: int) -> bool:
         return value > 0 and value < 100
 
