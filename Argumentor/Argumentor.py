@@ -20,7 +20,7 @@ class Argumentor():
         self.namedArgDelim = namedArgDelim
         self.inputDelim = inputDelim
     
-    def validate(self, input: str) -> list[ArgResult]:
+    def validateString(self, input: str) -> list[ArgResult]:
         return self.validate(input.split(self.inputDelim))
         
     def validate(self, input: list[str]) -> list[ArgResult]:
@@ -130,7 +130,6 @@ class Argumentor():
                 errorMessages.append(self.__formatArgumentError(value, "No Argument found"))
                 continue
             
-            # TODO new func for this?
             value = arguments[key]
             if(value is None and not argument.nullable):
                 if(argument.useDefaultValue):
@@ -143,8 +142,10 @@ class Argumentor():
             
             castValue = None
             try:
-                # TODO if cast func
-                castValue = (argument.typeT)(value)
+                if(argument.castFunc):
+                    castValue = argument.castFunc(value)
+                else:
+                    castValue = (argument.typeT)(value)
             except:
                 if(argument.useDefaultValue):
                     errorMessages.append(self.__formatArgumentError(value, f"{key} could not be cast, default value {argument.defaultValue} was applied"))

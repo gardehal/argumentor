@@ -40,7 +40,7 @@ Creating a command to read size of some objects with width, depth, height as arg
     inputH = "-test 1 2 3" # Invalid, and will not be returned from .validate() 
     
     # The validation itself, input may be a string or a list of string like sys.argv
-    argResults = argumentor.validate(inputA)
+    argResults = argumentor.validateString(inputA)
     
     # Print the description and aliases available for the Command and Arguments
     print(dimensionCommand.getFormattedDescription())
