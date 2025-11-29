@@ -27,18 +27,18 @@ class ValidationDto():
             errorMessages: {self.errorMessages},
             """
 
-    def populateNamedArguments(self, inputList: list[str]) -> ResultDto:
-        nameArgumentSplit = [e for e in inputList if(self.namedArgDelim in e)]
+    def populateNamedArguments(self, inputList: list[str], namedArgDelim: str) -> ValidationDto:
+        nameArgumentSplit = [e for e in inputList if(namedArgDelim in e)]
         namedArguments = {}
         for value in nameArgumentSplit:
-            key, value = value.split(self.namedArgDelim)
+            key, value = value.split(namedArgDelim)
             namedArguments[key] = value
             
         self.namedArguments = namedArguments
         return self
     
     # TODO combine with populate?
-    def validateNamedArguments(self, arguments: list[Argument]) -> ResultDto:
+    def validateNamedArguments(self, arguments: list[Argument]) -> ValidationDto:
         argumentAliasMap = {}
         for argument in arguments:
             argumentAliasMap[argument.name] = argument.name
@@ -58,7 +58,7 @@ class ValidationDto():
             
         return self
     
-    def addPositionalArguments(self, inputList: list[str], namedArgDelim: str, command: Command) -> ResultDto:
+    def addPositionalArguments(self, inputList: list[str], namedArgDelim: str, command: Command) -> ValidationDto:
         unnamedArgs = [e for e in inputList if(e.split(namedArgDelim)[0] not in list(self.validatedArguments.keys()))]
         
         for i in range(len(unnamedArgs)):
@@ -67,11 +67,11 @@ class ValidationDto():
                 for extraArg in unnamedArgs[i:]:
                     self.errorMessages.append(self.__formatArgumentError(extraArg, f"Skipped, exceeds Arguments length"))
                     
-                break
+                break # unnamedArgs loop
             
             unnamedArg = unnamedArgs[i]
             positionalArg = command.arguments[i]
-            if(positionalArg.name in aliasArgs.keys()):
+            if(positionalArg.name in self.validatedArguments.keys()):
                 self.errorMessages.append(self.__formatArgumentError(unnamedArg, f"Already added as named argument {positionalArg.name}"))
                 continue
             
@@ -79,7 +79,7 @@ class ValidationDto():
             
         return self
     
-    def castAndValidateArguments(self, command: Command) -> ResultDto:
+    def castAndValidateArguments(self, command: Command) -> ValidationDto:
         failedValidation = False
         for key in self.validatedArguments.keys():
             argument = [e for e in command.arguments if e.name is key ][0]
