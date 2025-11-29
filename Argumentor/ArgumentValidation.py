@@ -1,9 +1,9 @@
 from .Argument import Argument
 from .Command import Command
 
-class ValidationDto():
+class ArgumentValidation():
     """
-    DTO for working with arguments internally in Argumentor.
+    Internal validation in Argumentor.
     """
     
     isValid: bool
@@ -12,11 +12,17 @@ class ValidationDto():
     castArguments: dict[str, object]
     errorMessages: list[str]
     
-    def __init__(self):
+    def __init__(self, inputList: list[str], command: Command, namedArgDelim: str):
         self.isValid = False
         self.namedArguments = {}
+        self.validatedArguments = {}
         self.castArguments = {}
         self.errorMessages = []
+        
+        self.__populateNamedArguments(inputList, namedArgDelim)
+        self.__validateNamedArguments(command.arguments)
+        self.__addPositionalArguments(inputList, namedArgDelim, command.arguments)
+        self.__castAndValidateArguments(inputList, command)
         
     def toString(self) -> str:
         return f"""
@@ -26,8 +32,8 @@ class ValidationDto():
             castArguments: {self.castArguments},
             errorMessages: {self.errorMessages},
             """
-
-    def populateNamedArguments(self, inputList: list[str], namedArgDelim: str) -> ValidationDto:
+            
+    def __populateNamedArguments(self, inputList: list[str], namedArgDelim: str):
         nameArgumentSplit = [e for e in inputList if(namedArgDelim in e)]
         namedArguments = {}
         for value in nameArgumentSplit:
@@ -35,10 +41,9 @@ class ValidationDto():
             namedArguments[key] = value
             
         self.namedArguments = namedArguments
-        return self
     
     # TODO combine with populate?
-    def validateNamedArguments(self, arguments: list[Argument]) -> ValidationDto:
+    def __validateNamedArguments(self, arguments: list[Argument]):
         argumentAliasMap = {}
         for argument in arguments:
             argumentAliasMap[argument.name] = argument.name
@@ -55,10 +60,8 @@ class ValidationDto():
                 continue
             
             self.validatedArguments[argumentAliasMap[key]] = self.namedArguments[key]
-            
-        return self
     
-    def addPositionalArguments(self, inputList: list[str], namedArgDelim: str, command: Command) -> ValidationDto:
+    def __addPositionalArguments(self, inputList: list[str], namedArgDelim: str, command: Command):
         unnamedArgs = [e for e in inputList if(e.split(namedArgDelim)[0] not in list(self.validatedArguments.keys()))]
         
         for i in range(len(unnamedArgs)):
@@ -77,9 +80,7 @@ class ValidationDto():
             
             self.validatedArguments[positionalArg.name] = unnamedArg
             
-        return self
-    
-    def castAndValidateArguments(self, command: Command) -> ValidationDto:
+    def __castAndValidateArguments(self, command: Command):
         failedValidation = False
         for key in self.validatedArguments.keys():
             argument = [e for e in command.arguments if e.name is key ][0]
@@ -126,7 +127,6 @@ class ValidationDto():
             self.castArguments[key] = castValue
         
         self.isValid = not failedValidation
-        return self
     
     def __formatArgumentError(self, arg: str, error: str) -> str:
         return f"Argument \"{arg}\" error: {error}"
