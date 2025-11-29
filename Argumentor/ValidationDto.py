@@ -1,20 +1,18 @@
 from .Argument import Argument
 from .Command import Command
 
-class ResultDto():
+class ValidationDto():
     """
     DTO for working with arguments internally in Argumentor.
     """
     
-    namedArgDelim: str
     isValid: bool
     namedArguments: dict[str, str]
     validatedArguments: dict[str, str]
     castArguments: dict[str, object]
     errorMessages: list[str]
     
-    def __init__(self, namedArgDelim: str):
-        self.namedArgDelim = namedArgDelim
+    def __init__(self):
         self.isValid = False
         self.namedArguments = {}
         self.castArguments = {}
@@ -60,8 +58,8 @@ class ResultDto():
             
         return self
     
-    def addPositionalArguments(self, inputList: list[str], command: Command) -> ResultDto:
-        unnamedArgs = [e for e in inputList if(e.split(self.namedArgDelim)[0] not in list(self.validatedArguments.keys()))]
+    def addPositionalArguments(self, inputList: list[str], namedArgDelim: str, command: Command) -> ResultDto:
+        unnamedArgs = [e for e in inputList if(e.split(namedArgDelim)[0] not in list(self.validatedArguments.keys()))]
         
         for i in range(len(unnamedArgs)):
             if(i >= len(command.arguments)):
