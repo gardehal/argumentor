@@ -54,13 +54,18 @@ Creating a command to read size of some objects with width, depth, height as arg
 
     # [...]
 
-    # Note: Must be from typeT and return bool
+    # Note: castFunc must be from string and return typeT
+    def castInt(value: str) -> int:
+        return (int)(value.replace("-", ""))
+
+    # Note: validateFunc must be from typeT and return bool
     def validateInt(value: int) -> bool:
         return value > 0 and value < 100
 
 
 ## TODO
 
+- example inputs F and G
 - fix __argsAreValid
 - check duplicate command names/alias and argument/alias so it cant be -dimensions w:1 w:2 (width and weight)
   - Let user find out themselves? 
