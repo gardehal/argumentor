@@ -21,8 +21,8 @@ class ArgumentValidation():
         
         self.__populateNamedArguments(inputList, namedArgDelim)
         self.__validateNamedArguments(command.arguments)
-        self.__addPositionalArguments(inputList, namedArgDelim, command.arguments)
-        self.__castAndValidateArguments(inputList, command)
+        self.__addPositionalArguments(inputList, namedArgDelim, command)
+        self.__castAndValidateArguments(command)
         
     def toString(self) -> str:
         return f"""
@@ -98,12 +98,15 @@ class ArgumentValidation():
                     self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} was None, and Argument is not nullable"))
                     failedValidation = True
             
+            castSuccess = False
             castValue = None
             try:
                 if(argument.castFunc):
                     castValue = argument.castFunc(value)
                 else:
                     castValue = (argument.typeT)(value)
+                
+                castSuccess = True
             except:
                 if(argument.useDefaultValue):
                     self.errorMessages.append(self.__formatArgumentError(value, f"{key} could not be cast, default value {argument.defaultValue} was applied"))
@@ -113,7 +116,7 @@ class ArgumentValidation():
                     self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} could not be cast to {argument.typeT}")) 
                     failedValidation = True
         
-            if(argument.validateFunc):
+            if(castSuccess and argument.validateFunc):
                 resultValid = argument.validateFunc(castValue)
                 if(not resultValid):
                     if(argument.useDefaultValue):
