@@ -6,7 +6,7 @@ import re
 
 class Argumentor():
     """
-    Holder of all commands and args
+    Holder of all commands and args, base for validation.
     """
     
     commands: list[Command]
