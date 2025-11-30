@@ -28,19 +28,9 @@ Creating a command to read size of some objects with width, depth, height as arg
     # Create command(s) and Argumentor 
     dimensionCommand = Command("Dimensions", 1, ["dimensions", "dimension", "dim", "d"], "DIM", dimensionArguments, "Add the dimensions of object in CM")
     argumentor = Argumentor([dimensionCommand])
-
-    # Example inputs
-    inputA = "-dim 1 2 3" # Valid
-    inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
-    inputC = "-d width:4 d:5 h:6" # Valid
-    inputD = "-d w:7 8 d:9" # Valid, note the order: width, unnamed arg which will be resolved to height because width and depth are named with an alias, depth
-    inputE = "-d w:10 11 12" # Valid
-    # WIP(14') inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts) or with a named alias e.g. h:-15
-    # WIP(double ::) inputG = "-d w:16 d:':17' h::18" # Invalid, the defaault int casting will fail, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts)
-    inputH = "-test 1 2 3" # Invalid, and will not be returned from .validate() 
     
     # The validation itself, input may be a string or a list of string like sys.argv
-    argResults = argumentor.validateString(inputA)
+    argResults = argumentor.validate(sys.argv)
     
     # Print the description and aliases available for the Command and Arguments
     print(dimensionCommand.getFormattedDescription())
@@ -62,14 +52,25 @@ Creating a command to read size of some objects with width, depth, height as arg
     def validateInt(value: int) -> bool:
         return value > 0 and value < 100
 
+The following list of examples explains some expected outcomes, or could be used to test Argumentor.
+
+    # Example inputs
+    inputA = "-dim 1 2 3" # Valid
+    inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
+    inputC = "-d width:4 d:5 h:6" # Valid
+    inputD = "-d w:7 8 d:9" # Valid, note the order: width, unnamed arg which will be resolved to height because width and depth are named with an alias, depth
+    inputE = "-d w:10 11 12" # Valid
+    # WIP(14') inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts) or with a named alias e.g. h:-15
+    # WIP(double ::) inputG = "-d w:16 d:':17' h::18" # Invalid, the defaault int casting will fail, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts)
+    inputH = "-test 1 2 3" # Invalid, and will not be returned from .validate()
+    
+    argResults = argumentor.validateString(inputA)
 
 ## TODO
 
 - example inputs F and G
-- fix __argsAreValid
 - check duplicate command names/alias and argument/alias so it cant be -dimensions w:1 w:2 (width and weight)
-  - Let user find out themselves? 
-- reverse first check? as in get inputs with prefix, remove it, and match on alias, then find index again?
+  - Let user find out themselves?
 - error messages should be improved, shorter, more concise
 
 - make egg stuff
