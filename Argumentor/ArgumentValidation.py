@@ -34,9 +34,9 @@ class ArgumentValidation():
             """
             
     def __populateNamedArguments(self, inputList: list[str], namedArgDelim: str):
-        nameArgumentSplit = [e for e in inputList if(namedArgDelim in e)]
+        namedInputs = [e for e in inputList if(namedArgDelim in e)]
         namedArguments = {}
-        for value in nameArgumentSplit:
+        for value in namedInputs:
             key, value = value.split(namedArgDelim)
             namedArguments[key] = value
             
