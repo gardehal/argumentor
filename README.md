@@ -32,12 +32,13 @@ Creating a command to read size of some objects with width, depth, height as arg
     # The validation itself, input may be a string or a list of string like sys.argv
     argResults = argumentor.validate(sys.argv)
     
-    # Print the description and aliases available for the Command and Arguments
-    print(dimensionCommand.getFormattedDescription())
+    # Print the description and alias available in Command and Arguments
+    if(len(argResults) == 0): # Or input is None or empty...
+        print(dimensionCommand.getFormattedDescription())
     
     # Looping over results. Note that only Command defined above will be output here 
     for result in argResults:
-        print(result.toString())
+        # print(result.toString()) # Visualize content of result, i.e. debugging
 
         if(result.isValid and result.commandHitValue == "DIM"):
             print("Dimensions updated!")
@@ -68,10 +69,12 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- add command alias to descriptionstring method
 - example inputs F and G
 - check duplicate command names/alias and argument/alias so it cant be -dimensions w:1 w:2 (width and weight)
   - Let user find out themselves?
 - error messages should be improved, shorter, more concise
-
 - make egg stuff
 - publish pip       
+- add unit as optional argument to example?
+- make advanced example section with multiple commands?
