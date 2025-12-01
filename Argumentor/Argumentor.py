@@ -1,6 +1,6 @@
-from .Argument import Argument
-from .ArgResult import ArgResult
+from .Result import Result
 from .Command import Command
+from .ArgumentValidation import ArgumentValidation
 
 import re
 
@@ -20,13 +20,30 @@ class Argumentor():
         self.namedArgDelim = namedArgDelim
         self.inputDelim = inputDelim
     
-    def validateString(self, input: str) -> list[ArgResult]:
-        return self.validate(input.split(self.inputDelim))
-        
-    def validate(self, input: list[str]) -> list[ArgResult]:
+    def validateString(self, input: str) -> list[Result]:
         """
         Validate input and return list of ArgResults found, with arguments, if any are found.
         Commands and related arguments not in commands list will not be parsed.
+
+        Args:
+            input (str): Input as a single string.
+
+        Returns:
+            list[Result]: List of results of commands hit, with corresponding cast and validated arguments.
+        """
+        
+        return self.validate(input.split(self.inputDelim))
+        
+    def validate(self, input: list[str]) -> list[Result]:
+        """
+        Validate input and return list of ArgResults found, with arguments, if any are found.
+        Commands and related arguments not in commands list will not be parsed.
+
+        Args:
+            input (list[str]): Input as list of string.
+
+        Returns:
+            list[Result]: List of results of commands hit, with corresponding cast and validated arguments.
         """
         
         if(len(input) == 0):
@@ -46,13 +63,15 @@ class Argumentor():
                 nextInputs = potentialArgs[argsEndIndex:]
                 
                 args = potentialArgs[:argsEndIndex]
+                # validation = ArgumentValidation(args, command, self.namedArgDelim)
                 aliasArgs = self.__getAliasArgs(args)
                 arguments, errorMessages = self.__getNamedArgs(command.arguments, aliasArgs)
                 self.__addPositionalArgs(args, arguments, errorMessages, command, aliasArgs)
                 castArguments = self.__argsAreValid(command, arguments, errorMessages)
                     
                 isValid = castArguments != None
-                argResult = ArgResult(isValid, command.name, command.hitValue, commandIndex, castArguments, errorMessages, nextInputs)
+                argResult = Result(isValid, command.name, command.hitValue, commandIndex, castArguments, errorMessages, nextInputs)
+                # argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.castArguments, validation.errorMessages, nextInputs)
                 result.append(argResult)
         
         if(nextInputs):
