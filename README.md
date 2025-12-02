@@ -17,12 +17,14 @@ Feel free to contribute if you find any issues though.
 
 ## Example
 
+#### Getting started
+
 Creating a command to read size of some objects with width, depth, height as arguments.
 
     # Set up Arguments
-    widthArgument = Argument("Width", 1, ["width", "w"], int, validateFunc= validateInt, description= "Width of object in CM")
-    depthArgument = Argument("Depth", 2, ["depth", "d"], int, validateFunc= validateInt, description= "Depth of object in CM")
-    heightArgument = Argument("Height", 3, ["height", "h"], int, validateFunc= validateInt, description= "Height of object in CM")
+    widthArgument = Argument("Width", 1, ["width", "w"], int, description= "Width of object in CM")
+    depthArgument = Argument("Depth", 2, ["depth", "d"], int, description= "Depth of object in CM")
+    heightArgument = Argument("Height", 3, ["height", "h"], int, description= "Height of object in CM")
     dimensionArguments = [widthArgument, depthArgument, heightArgument]
     
     # Create command(s) and Argumentor 
@@ -43,16 +45,6 @@ Creating a command to read size of some objects with width, depth, height as arg
         if(result.isValid and result.commandHitValue == "DIM"):
             print("Dimensions updated!")
 
-    # [...]
-
-    # Note: castFunc must be from string and return typeT
-    def castInt(value: str) -> int:
-        return (int)(value.replace("-", ""))
-
-    # Note: validateFunc must be from typeT and return bool
-    def validateInt(value: int) -> bool:
-        return value > 0 and value < 100
-
 The following list of examples explains some expected outcomes, or could be used to test Argumentor.
 
     # Example inputs
@@ -67,6 +59,20 @@ The following list of examples explains some expected outcomes, or could be used
     
     argResults = argumentor.validateString(inputA)
 
+#### The opportunities
+
+TODO
+
+    # [...]
+
+    # Note: castFunc must be from string and return typeT
+    def castInt(value: str) -> int:
+        return (int)(value.replace("-", ""))
+
+    # Note: validateFunc must be from typeT and return bool
+    def validateInt(value: int) -> bool:
+        return value > 0 and value < 100
+
 ## TODO
 
 - add command alias to descriptionstring method
@@ -77,4 +83,5 @@ The following list of examples explains some expected outcomes, or could be used
 - make egg stuff
 - publish pip       
 - add unit as optional argument to example?
-- make advanced example section with multiple commands?
+- make advanced example section with multiple commands, optional nullable arg unit default CM, casting and validator funcs
+    - test and finish examples
