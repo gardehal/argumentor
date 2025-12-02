@@ -41,4 +41,4 @@ class Command():
         for argument in self.arguments:
             argumentDescriptions = f"{argumentDescriptions}\n{argument.getFormattedDescription()}"
         
-        return f"{self.name}: {self.description}{argumentDescriptions}"
+        return f"{self.name}: {self.description}\n\tAlias: {self.alias}{argumentDescriptions}"
