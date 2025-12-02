@@ -6,7 +6,7 @@ import re
 
 class Argumentor():
     """
-    Holder of all commands and args, base for validation.
+    Holder of all commands and arguments, base for validation of input.
     """
     
     commands: list[Command]
@@ -59,19 +59,13 @@ class Argumentor():
                 
                 commandIndex = input.index(commandAlias)
                 potentialArgs = input[commandIndex + 1:]
-                argsEndIndex = self.__getLastArgIndex(potentialArgs)
+                argsEndIndex = self.__getLastArgumentIndex(potentialArgs)
                 nextInputs = potentialArgs[argsEndIndex:]
                 
                 args = potentialArgs[:argsEndIndex]
-                # validation = ArgumentValidation(args, command, self.namedArgDelim)
-                aliasArgs = self.__getAliasArgs(args)
-                arguments, errorMessages = self.__getNamedArgs(command.arguments, aliasArgs)
-                self.__addPositionalArgs(args, arguments, errorMessages, command, aliasArgs)
-                castArguments = self.__argsAreValid(command, arguments, errorMessages)
-                    
-                isValid = castArguments != None
-                argResult = Result(isValid, command.name, command.hitValue, commandIndex, castArguments, errorMessages, nextInputs)
-                # argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.castArguments, validation.errorMessages, nextInputs)
+                validation = ArgumentValidation(args, command, self.namedArgDelim)
+                
+                argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.castArguments, validation.errorMessages, nextInputs)
                 result.append(argResult)
         
         if(nextInputs):
@@ -79,7 +73,7 @@ class Argumentor():
     
         return result
     
-    def __getLastArgIndex(self, potentialArgs: list[str]) -> int:
+    def __getLastArgumentIndex(self, potentialArgs: list[str]) -> int:
         commandRegex = fr"^{self.commandPrefix}.*"
         for potentialArg in potentialArgs:
             if(re.search(commandRegex, potentialArg)):
@@ -87,108 +81,4 @@ class Argumentor():
             
         # None found, default to end of list
         return len(potentialArgs)
-    
-    def __getAliasArgs(self, args: list[str]) -> dict[str, str]:
-        inputAliasArgs = [e for e in args if(self.namedArgDelim in e)]
-        aliasArgs = {}
-        for value in inputAliasArgs:
-            key, value = value.split(self.namedArgDelim)
-            aliasArgs[key] = value
-            
-        return aliasArgs
-    
-    def __getNamedArgs(self, arguments: list[Argument], aliasArgs: dict[str, str]) -> tuple[list[str], list[str]]:
-        argumentAliasMap = {}
-        for argument in arguments:
-            argumentAliasMap[argument.name] = argument.name
-            for alias in argument.alias:
-                argumentAliasMap[alias] = argument.name
-            
-        argumentsDict = {}
-        unhandledInputs = []
-        for key in aliasArgs.keys():
-            if(key not in argumentAliasMap.keys()):
-                unhandledInputs.append(self.__formatArgumentError(key, "Not a valid argument alias"))
-                continue
-            
-            if(key in argumentsDict.keys()):
-                unhandledInputs.append(self.__formatArgumentError(key, "Alias was already added"))
-                continue
-            
-            argumentsDict[argumentAliasMap[key]] = aliasArgs[key]
-            
-        return argumentsDict, unhandledInputs
-    
-    def __addPositionalArgs(self, args: list[str], arguments: dict[str, str], errorMessages: list[str], command: Command, aliasArgs: dict[str, str]) -> tuple[list[str], list[str]]:
-        unnamedArgs = [e for e in args if(e.split(self.namedArgDelim)[0] not in list(aliasArgs.keys()))]
-        
-        for i in range(len(unnamedArgs)):
-            if(i >= len(command.arguments)):
-                errorMessages.append(f"Received more arguments ({len(unnamedArgs)}) than expected ({len(command.arguments)})")
-                for extraArg in unnamedArgs[i:]:
-                    errorMessages.append(self.__formatArgumentError(extraArg, f"Skipped, exceeds Arguments length"))
-                    
-                break
-            
-            unnamedArg = unnamedArgs[i]
-            positionalArg = command.arguments[i]
-            if(positionalArg.name in aliasArgs.keys()):
-                errorMessages.append(self.__formatArgumentError(unnamedArg, f"Already added as named argument {positionalArg.name}"))
-                continue
-            
-            arguments[positionalArg.name] = unnamedArg
-            
-        return arguments, errorMessages
-    
-    def __argsAreValid(self, command: Command, arguments: dict[str, str], errorMessages: list[str]) -> dict[str, object]:
-        
-        castDict: dict[str, object] = {}
-        for key in arguments.keys():
-            argument = [e for e in command.arguments if e.name is key ][0]
-            if(argument is None):
-                errorMessages.append(self.__formatArgumentError(value, "No Argument found"))
-                continue
-            
-            value = arguments[key]
-            if(value is None and not argument.nullable):
-                if(argument.useDefaultValue):
-                    errorMessages.append(self.__formatArgumentError(value, f"{key} was None and not nullable, default value {argument.defaultValue} was applied"))
-                    castValue = argument.defaultValue
-                    continue
-                else:
-                    errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} was None, and Argument is not nullable"))
-                    return None
-            
-            castValue = None
-            try:
-                if(argument.castFunc):
-                    castValue = argument.castFunc(value)
-                else:
-                    castValue = (argument.typeT)(value)
-            except:
-                if(argument.useDefaultValue):
-                    errorMessages.append(self.__formatArgumentError(value, f"{key} could not be cast, default value {argument.defaultValue} was applied"))
-                    castValue = argument.defaultValue
-                    continue
-                else:
-                    errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} could not be cast to {argument.typeT}")) 
-                    return None
-        
-            if(argument.validateFunc):
-                resultValid = argument.validateFunc(castValue)
-                if(not resultValid):
-                    if(argument.useDefaultValue):
-                        errorMessages.append(self.__formatArgumentError(value, f"{key} did not pass validation, default value {argument.defaultValue} was applied"))
-                        castValue = argument.defaultValue
-                        continue
-                    else:
-                        errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} did not pass validation"))
-                        return None
-        
-            castDict[key] = castValue
-        
-        return castDict
-    
-    def __formatArgumentError(self, arg: str, error: str) -> str:
-        return f"Argument \"{arg}\" error: {error}"
     
