@@ -2,7 +2,6 @@ from .Argument import Argument
 
 class Command():
     name: str
-    order: int
     alias: list[str]
     hitValue: object
     arguments: list[Argument]
@@ -20,10 +19,10 @@ class Command():
 
         Args:
             name (str): Name of command
-            alias (list[str]): _description_
-            hitValue (object): _description_
-            arguments (list[Argument]): _description_
-            description (str, optional): _description_. Defaults to None.
+            alias (list[str]): Alias of command
+            hitValue (object): Value to return in Result when this command is found in input
+            arguments (list[Argument]): Arguments to be cast and validated, then returned in Result
+            description (str, optional): Explaining what the command does. Defaults to None.
         """
         self.name = name
         self.alias = alias

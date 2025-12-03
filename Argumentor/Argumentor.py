@@ -5,16 +5,21 @@ from .ArgumentValidation import ArgumentValidation
 import re
 
 class Argumentor():
-    """
-    Holder of all commands and arguments, base for validation of input.
-    """
-    
     commands: list[Command]
     commandPrefix: str
     namedArgDelim: str
     inputDelim: str
     
     def __init__(self, commands: list[Command], commandPrefix: str = "-", namedArgDelim: str = ":", inputDelim: str = " "):
+        """
+        Holder of all commands and arguments, base for validation of input.
+
+        Args:
+            commands (list[Command]): Commands to search for in input.
+            commandPrefix (str, optional): Prefix expected to be in front of Commands only. Defaults to "-".
+            namedArgDelim (_type_, optional): Deliminator for named arguments, e.g. "width:10". Defaults to ":".
+            inputDelim (str, optional): Deliminator for input, only used for validateString. Defaults to " ".
+        """
         self.commands = commands
         self.commandPrefix = commandPrefix
         self.namedArgDelim = namedArgDelim
