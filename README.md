@@ -75,10 +75,10 @@ TODO
 
 ## TODO
 
-- add command alias to descriptionstring method
+- when giving named argument thats wrong, command should still hit and return valid + errors,
 - example inputs F and G
 - check duplicate command names/alias and argument/alias so it cant be -dimensions w:1 w:2 (width and weight)
-  - Let user find out themselves?
+  - throw error on init
 - error messages should be improved, shorter, more concise
 - make egg stuff
 - publish pip       

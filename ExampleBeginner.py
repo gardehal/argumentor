@@ -28,8 +28,9 @@ class Main:
         # Looping over results. Note that only Command defined above will be output here 
         for result in results:
             if(result.isValid and result.commandHitValue == CommandHitValues.CALC_VOLUME):
-                print("Calculating volume!")
-                # volumeService.calculateById(id= result.arguments[idArgument.name])
+                itemDetails = f"{idArgument.name}: {result.arguments[idArgument.name]}"
+                print(f"Calculating volume for {itemDetails} ...")
+                # itemService.calculateVolumeById(id= result.arguments[idArgument.name])
         
 if __name__ == "__main__":
     Main.main()

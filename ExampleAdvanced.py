@@ -39,7 +39,7 @@ class Main:
         
         for result in results:
             if(result.isValid and result.commandHitValue == CommandHitValues.DIMENSIONS):
-                print("Updating dimensions...")
+                print("Updating dimensions ...")
                 # itemService.updateDimensions(result.arguments[widthArgument.name], 
                 #   result.arguments[depthArgument.name], 
                 #   result.arguments[heightArgument.name], 
