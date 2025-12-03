@@ -10,16 +10,14 @@ class Result():
     commandIndex: int
     arguments: dict[str, object]
     errorMessages: list[str]
-    nextInputs: list[str]
     
-    def __init__(self, isValid: bool, commandName: str, commandHitValue: object, commandIndex: int, arguments: dict[str, object], errorMessages: list[str], nextInputs: list[str]):
+    def __init__(self, isValid: bool, commandName: str, commandHitValue: object, commandIndex: int, arguments: dict[str, object], errorMessages: list[str]):
         self.isValid = isValid
         self.commandName = commandName
         self.commandHitValue = commandHitValue
         self.commandIndex = commandIndex
         self.arguments = arguments
         self.errorMessages = errorMessages
-        self.nextInputs = nextInputs
         
     def toString(self) -> str:
         return f"""
@@ -29,5 +27,4 @@ class Result():
             commandIndex: {self.commandIndex},
             arguments: {self.arguments},
             errorMessages: {self.errorMessages},
-            nextInputs: {self.nextInputs},
             """

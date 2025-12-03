@@ -70,7 +70,7 @@ class Argumentor():
                 args = potentialArgs[:argsEndIndex]
                 validation = ArgumentValidation(args, command, self.namedArgDelim)
                 
-                argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.castArguments, validation.errorMessages, nextInputs)
+                argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.castArguments, validation.errorMessages)
                 result.append(argResult)
         
         if(nextInputs):
