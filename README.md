@@ -19,35 +19,20 @@ Feel free to contribute if you find any issues though.
 
 #### Getting started
 
-Creating a command to read size of some objects with width, depth, height as arguments.
+Creating a command to calculate volume for a given object we have stored somewhere with an ID.
 
-    # Set up Arguments
-    widthArgument = Argument("Width", 1, ["width", "w"], int, description= "Width of object in CM")
-    depthArgument = Argument("Depth", 2, ["depth", "d"], int, description= "Depth of object in CM")
-    heightArgument = Argument("Height", 3, ["height", "h"], int, description= "Height of object in CM")
-    dimensionArguments = [widthArgument, depthArgument, heightArgument]
-    
-    # Create command(s) and Argumentor 
-    dimensionCommand = Command("Dimensions", 1, ["dimensions", "dimension", "dim", "d"], "DIM", dimensionArguments, "Add the dimensions of object in CM")
-    argumentor = Argumentor([dimensionCommand])
-    
-    # The validation itself, input may be a string or a list of string like sys.argv
-    argResults = argumentor.validate(sys.argv)
-    
-    # Print the description and alias available in Command and Arguments
-    if(len(argResults) == 0): # Or input is None or empty...
-        print(dimensionCommand.getFormattedDescription())
-    
-    # Looping over results. Note that only Command defined above will be output here 
-    for result in argResults:
-        # print(result.toString()) # Visualize content of result, i.e. debugging
+[ExampleBeginner.py](./ExampleBeginner.py)
 
-        if(result.isValid and result.commandHitValue == "DIM"):
-            print("Dimensions updated!")
+#### A step further
+
+Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
+
+[ExampleAdvanced.py](./ExampleAdvanced.py)
+
+#### Expected outcomes
 
 The following list of examples explains some expected outcomes, or could be used to test Argumentor.
 
-    # Example inputs
     inputA = "-dim 1 2 3" # Valid
     inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
     inputC = "-d width:4 d:5 h:6" # Valid
@@ -58,20 +43,6 @@ The following list of examples explains some expected outcomes, or could be used
     inputH = "-test 1 2 3" # Invalid, and will not be returned from .validate()
     
     argResults = argumentor.validateString(inputA)
-
-#### The opportunities
-
-TODO
-
-    # [...]
-
-    # Note: castFunc must be from string and return typeT
-    def castInt(value: str) -> int:
-        return (int)(value.replace("-", ""))
-
-    # Note: validateFunc must be from typeT and return bool
-    def validateInt(value: int) -> bool:
-        return value > 0 and value < 100
 
 ## TODO
 
@@ -85,3 +56,4 @@ TODO
 - add unit as optional argument to example?
 - make advanced example section with multiple commands, optional nullable arg unit default CM, casting and validator funcs
     - test and finish examples
+- rename argument type to typeT for legibility, including docs
