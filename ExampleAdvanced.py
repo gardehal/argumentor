@@ -32,7 +32,7 @@ class Main:
         
         dimensionCommand = Command("Dimensions", 1, ["dimensions", "dimension", "dim", "d"], CommandHitValues.DIMENSIONS, arguments, "Add the dimensions of object")
         argumentor = Argumentor([dimensionCommand])
-        results = argumentor.validateString(sys.argv)
+        results = argumentor.validate(sys.argv)
         
         if(len(results) == 0):
             print(dimensionCommand.getFormattedDescription())

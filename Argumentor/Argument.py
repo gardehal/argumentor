@@ -49,4 +49,4 @@ class Argument():
             str: String description.
         """
         
-        return f"\t{self.name}: {self.description}\n\tAlias: {self.alias}"
+        return f"\tArgument: {self.name} - {self.description}\n\t- Alias: {self.alias}"
