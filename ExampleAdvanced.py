@@ -25,12 +25,12 @@ class Main:
                                   validateFunc= validateInt, description= "Height of object")
         unitArgument = Argument("Unit", 4, ["unit", "u"], Measurement, 
                                 castFunc= castMeasurements, nullable= True, 
-                                validateFunc= validateInt, 
+                                validateFunc= validateMeasurements, 
                                 useDefaultValue= True, defaultValue= Measurement.CENTIMETERS, 
                                 description= "Unit of measurements, cm or inches, default cm")
         arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
         
-        dimensionCommand = Command("Dimensions", 1, ["dimensions", "dimension", "dim", "d"], CommandHitValues.DIMENSIONS, arguments, "Add the dimensions of object")
+        dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"], CommandHitValues.DIMENSIONS, arguments, "Add the dimensions of object")
         argumentor = Argumentor([dimensionCommand])
         results = argumentor.validate(sys.argv)
         
@@ -50,13 +50,13 @@ def castMeasurements(value: str) -> Measurement:
     match value.lower():
         case "1", "cm":
             return Measurement.CENTIMETERS
-        case 2, "inch", "inches":
+        case "2", "inch", "inches":
             return Measurement.INCEHES
         case _:
             return None
             
 # Note: validateFunc must be from typeT and return bool
-def validateMeasurements(value: int) -> bool:
+def validateMeasurements(value: Measurement) -> bool:
     return value in Measurement
 
 # Note: validateFunc must be from typeT and return bool

@@ -15,7 +15,7 @@ class Main:
         arguments = [idArgument]
         
         # Create command(s) and Argumentor 
-        volumeCommand = Command("Calculate Volume", 1, ["calculatevolume", "calcvolume", "cv"], CommandHitValues.CALC_VOLUME, arguments, "Calculate volume of object by ID")
+        volumeCommand = Command("Calculate Volume", ["calculatevolume", "calcvolume", "cv"], CommandHitValues.CALC_VOLUME, arguments, "Calculate volume of object by ID")
         argumentor = Argumentor([volumeCommand])
 
         # The validation itself, input may be a string or a list of string like sys.argv

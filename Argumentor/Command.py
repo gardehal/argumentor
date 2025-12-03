@@ -1,12 +1,6 @@
 from .Argument import Argument
 
 class Command():
-    """
-    Designates commands
-    eg. dimensions in 
-    $ -dimensions value:100
-    """
-    
     name: str
     order: int
     alias: list[str]
@@ -15,13 +9,23 @@ class Command():
     description: str
     
     def __init__(self, name: str, 
-                 order: int, 
                  alias: list[str], 
                  hitValue: object, 
                  arguments: list[Argument], 
                  description: str = None):
+        """
+        Designates commands
+        eg. dimensions in 
+        $ -dimensions value:100
+
+        Args:
+            name (str): Name of command
+            alias (list[str]): _description_
+            hitValue (object): _description_
+            arguments (list[Argument]): _description_
+            description (str, optional): _description_. Defaults to None.
+        """
         self.name = name
-        self.order = order
         self.alias = alias
         self.hitValue = hitValue
         self.arguments = arguments 
