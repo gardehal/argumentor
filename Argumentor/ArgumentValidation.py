@@ -83,9 +83,9 @@ class ArgumentValidation():
     def __castAndValidateArguments(self, command: Command):
         failedValidation = False
         for key in self.validatedArguments.keys():
-            argument = [e for e in command.arguments if e.name is key ][0]
+            argument = [e for e in command.arguments if e.name is key][0]
             if(argument is None):
-                self.errorMessages.append(self.__formatArgumentError(value, "No Argument found"))
+                self.errorMessages.append(self.__formatArgumentError(value, "No Argument object found"))
                 continue
             
             value = self.validatedArguments[key]
@@ -105,6 +105,10 @@ class ArgumentValidation():
                     castValue = argument.castFunc(value)
                 else:
                     castValue = (argument.typeT)(value)
+                
+                # should Nullable refer to nullable from input or nullable as result...? 
+                if(castValue is None and argument.nullable and argument.useDefaultValue):
+                    castValue = argument.defaultValue
                 
                 castSuccess = True
             except:
