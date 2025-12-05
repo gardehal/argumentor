@@ -18,11 +18,11 @@ class Main:
             print(dimensionCommand.getFormattedDescription())
             
         widthArgument = Argument("Width", 1, ["width", "w"], int, 
-                                 validateFunc= validateInt, description= "Width of object")
+                                 validateFunc= validateInt, description= "Width of object, between 1 and 100")
         depthArgument = Argument("Depth", 2, ["depth", "d"], int, 
-                                 validateFunc= validateInt, description= "Depth of object")
+                                 validateFunc= validateInt, description= "Depth of object, between 1 and 100")
         heightArgument = Argument("Height", 3, ["height", "h"], int, 
-                                  validateFunc= validateInt, description= "Height of object")
+                                  validateFunc= validateInt, description= "Height of object, between 1 and 100")
         unitArgument = Argument("Unit", 4, ["unit", "u"], Measurement, 
                                 castFunc= castMeasurements, nullable= True, 
                                 validateFunc= validateMeasurements, 

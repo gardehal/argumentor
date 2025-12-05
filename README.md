@@ -47,8 +47,6 @@ The following list of examples explains some expected outcomes, or could be used
 
 - when giving named argument thats wrong, command should still hit and return valid + errors,
 - example inputs F and G
-- error messages should be improved, shorter, more concise
 - make egg stuff
 - publish pip
-- tostring on result runs validation again???
-- add str field for arguments for "expected values" in cases of enums, or a place to give users more info about validation? eg. if validation is 0> value > 100, this could say "Expecting value between 0 and 100", or enum values
+- tostring on result runs validation again??? some debug prints runs twice, once before all, and once after prints after return, before tostring prints
