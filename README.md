@@ -57,3 +57,4 @@ The following list of examples explains some expected outcomes, or could be used
 - make advanced example section with multiple commands, optional nullable arg unit default CM, casting and validator funcs
     - test and finish examples
 - rename argument type to typeT for legibility, including docs
+- tostring on result runs validation again???
