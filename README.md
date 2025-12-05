@@ -56,5 +56,5 @@ The following list of examples explains some expected outcomes, or could be used
 - add unit as optional argument to example?
 - make advanced example section with multiple commands, optional nullable arg unit default CM, casting and validator funcs
     - test and finish examples
-- rename argument type to typeT for legibility, including docs
 - tostring on result runs validation again???
+- add str field for arguments for "expected values" in cases of enums, or a place to give users more info about validation? eg. if validation is 0> value > 100, this could say "Expecting value between 0 and 100"?

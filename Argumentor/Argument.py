@@ -17,7 +17,7 @@ class Argument():
     def __init__(self, name: str, 
                  order: int, 
                  alias: list[str], 
-                 type: Type[T], 
+                 typeT: Type[T], 
                  castFunc: Callable[[str], T] = None, 
                  nullable: bool = False, 
                  validateFunc: Callable[[T], bool] = None, 
@@ -33,19 +33,19 @@ class Argument():
             name (str): Name of argument, key for dictionary in Return
             order (int): Order in which arguments are expected to appear in input
             alias (list[str]): Alias of argument
-            type (Type[T]): Type of argument, str, int, bool, enum, etc.
-            castFunc (Callable[[str], T], optional): Optional function for custom casting of input to type. Must take in 1 argument: str and return type. Defaults to None.
+            typeT (Type[T]): Type of argument, str, int, bool, enum, etc.
+            castFunc (Callable[[str], T], optional): Optional function for custom casting of input to typeT. Must take in 1 argument: str and return typeT. Defaults to None.
             nullable (bool, optional): Argument is nullable (from input). Defaults to False. Note that this implies the argument can be None in result, unless useDefaultValue and defaultValue are both set.
-            validateFunc (Callable[[T], bool], optional): Optional function for custom validation. Must take in 1 argument: type and return bool. Defaults to None.
+            validateFunc (Callable[[T], bool], optional): Optional function for custom validation. Must take in 1 argument: typeT and return bool. Defaults to None.
             useDefaultValue (bool, optional): Use a default value if casting and validation fails. Defaults to False.
-            defaultValue (T, optional): The default value to use if casting and validation fails, and useDefaultValue is True. Must be type. Defaults to None.
+            defaultValue (T, optional): The default value to use if casting and validation fails, and useDefaultValue is True. Must be typeT. Defaults to None.
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         
         self.name = name
         self.order = order
         self.alias = alias
-        self.typeT = type
+        self.typeT = typeT
         self.castFunc = castFunc
         self.nullable = nullable
         self.validateFunc = validateFunc

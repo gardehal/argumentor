@@ -17,7 +17,7 @@ class Argumentor():
         Args:
             commands (list[Command]): Commands to search for in input.
             commandPrefix (str, optional): Prefix expected to be in front of Commands only. Defaults to "-".
-            namedArgDelim (_type_, optional): Deliminator for named arguments, e.g. "width:10". Defaults to ":".
+            namedArgDelim (str, optional): Deliminator for named arguments, e.g. "width:10". Defaults to ":".
             inputDelim (str, optional): Deliminator for input, only used for validateString. Defaults to " ".
         """
         self.commands = commands
