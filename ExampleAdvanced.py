@@ -38,6 +38,9 @@ class Main:
             print(dimensionCommand.getFormattedDescription())
         
         for result in results:
+            # For debugging
+            # print(result.toString())
+            
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
                 for error in result.errorMessages:
