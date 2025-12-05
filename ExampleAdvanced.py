@@ -38,6 +38,11 @@ class Main:
             print(dimensionCommand.getFormattedDescription())
         
         for result in results:
+            if(not result.isValid):
+                print(f"Input for {result.commandName} was not valid:")
+                for error in result.errorMessages:
+                    print(f"\t{error}")
+                    
             if(result.isValid and result.commandHitValue == CommandHitValues.DIMENSIONS):
                 print("Updating dimensions ...")
                 # itemService.updateDimensions(result.arguments[widthArgument.name], 
