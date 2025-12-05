@@ -35,7 +35,7 @@ class Argument():
             alias (list[str]): Alias of argument
             type (Type[T]): Type of argument, str, int, bool, enum, etc.
             castFunc (Callable[[str], T], optional): Optional function for custom casting of input to type. Must take in 1 argument: str and return type. Defaults to None.
-            nullable (bool, optional): Argument is nullable (from input). Defaults to False.
+            nullable (bool, optional): Argument is nullable (from input). Defaults to False. Note that this implies the argument can be None in result, unless useDefaultValue and defaultValue are both set.
             validateFunc (Callable[[T], bool], optional): Optional function for custom validation. Must take in 1 argument: type and return bool. Defaults to None.
             useDefaultValue (bool, optional): Use a default value if casting and validation fails. Defaults to False.
             defaultValue (T, optional): The default value to use if casting and validation fails, and useDefaultValue is True. Must be type. Defaults to None.
