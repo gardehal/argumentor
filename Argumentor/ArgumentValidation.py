@@ -85,18 +85,19 @@ class ArgumentValidation():
         for key in self.validatedArguments.keys():
             argument = [e for e in command.arguments if e.name is key][0]
             if(argument is None):
-                self.errorMessages.append(self.__formatArgumentError(value, "No Argument object found"))
+                self.errorMessages.append(self.__formatArgumentError(key, "No Argument object found"))
                 continue
             
             value = self.validatedArguments[key]
             if(value is None and not argument.nullable):
                 if(argument.useDefaultValue):
-                    self.errorMessages.append(self.__formatArgumentError(value, f"{key} was None and not nullable, default value {argument.defaultValue} was applied"))
+                    self.errorMessages.append(self.__formatArgumentError(key, f"{value} was None and not nullable, default value {argument.defaultValue} was applied"))
                     castValue = argument.defaultValue
                     continue
                 else:
-                    self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} was None, and Argument is not nullable"))
+                    self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} was None, and Argument is not nullable"))
                     isValid = False
+                    continue
             
             castSuccess = False
             castValue = None
@@ -108,48 +109,52 @@ class ArgumentValidation():
                 
                 if(castValue is None and not argument.nullable):
                     if(argument.useDefaultValue):
-                        self.errorMessages.append(self.__formatArgumentError(value, f"{key} was None but argument was not nullable, default value {argument.defaultValue} was applied"))
+                        self.errorMessages.append(self.__formatArgumentError(key, f"{value} was None but argument was not nullable, default value {argument.defaultValue} was applied"))
                         castValue = argument.defaultValue
+                        continue
                     else:
-                        self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} was None, not nullable, and no default was given")) # Remember useDefaultValue
+                        self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} was None, not nullable, and no default was given")) # Remember useDefaultValue
                         isValid = False
                         continue
                 
                 castSuccess = True
             except Exception as ex:
                 if(argument.useDefaultValue):
-                    self.errorMessages.append(self.__formatArgumentError(value, f"{key} could not be cast, default value {argument.defaultValue} was applied"))
+                    self.errorMessages.append(self.__formatArgumentError(key, f"{value} could not be cast, default value {argument.defaultValue} was applied"))
                     castValue = argument.defaultValue
                     continue
                 else:
-                    self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} could not be cast to {argument.typeT}")) 
+                    self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} could not be cast to {argument.typeT}")) 
                     isValid = False
+                    continue
         
             if(castSuccess and argument.validateFunc and isValid):
                 try: 
                     resultValid = argument.validateFunc(castValue)
                     if(not resultValid):
                         if(argument.useDefaultValue):
-                            self.errorMessages.append(self.__formatArgumentError(value, f"{key} did not pass validation, default value {argument.defaultValue} was applied"))
+                            self.errorMessages.append(self.__formatArgumentError(key, f"{value} did not pass validation, default value {argument.defaultValue} was applied"))
                             castValue = argument.defaultValue
+                            continue
                         else:
-                            self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} did not pass validation"))
+                            self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} did not pass validation"))
                             isValid = False
                             continue
                 except Exception as ex:
                     if(argument.useDefaultValue):
-                        self.errorMessages.append(self.__formatArgumentError(value, f"{key} validation raised an exception, default value {argument.defaultValue} was applied"))
+                        self.errorMessages.append(self.__formatArgumentError(key, f"{value} validation raised an exception, default value {argument.defaultValue} was applied"))
                         castValue = argument.defaultValue
+                        continue
                     else:
-                        self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! {key} validation raised an exception and no defaults were given"))
+                        self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} validation raised an exception and no defaults were given"))
                         isValid = False
                         continue
         
             self.castArguments[key] = castValue
             
-        argumentKeys = [e.name for e in command.arguments if not e.nullable]
-        if(len(self.castArguments.keys())) < len(argumentKeys):
-            self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! Required arguments are missing"))
+        requiredArgumentNames = [e.name for e in command.arguments if not e.nullable]
+        if(len(self.castArguments.keys())) < len(requiredArgumentNames):
+            self.errorMessages.append(f"Critical error! Required arguments are missing (got {len(self.castArguments.keys())}/{len(requiredArgumentNames)})")
             isValid = False
         
         if(isValid):
@@ -160,5 +165,5 @@ class ArgumentValidation():
         self.isValid = isValid
     
     def __formatArgumentError(self, arg: str, error: str) -> str:
-        return f"Argument \"{arg}\" error: {error}"
+        return f"{arg} error: {error}"
     
