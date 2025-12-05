@@ -147,7 +147,15 @@ class ArgumentValidation():
         
             self.castArguments[key] = castValue
             
-        # check for missing arguments, add defaults for nullable arguments?
+        argumentKeys = [e.name for e in command.arguments if not e.nullable]
+        if(len(self.castArguments.keys())) < len(argumentKeys):
+            self.errorMessages.append(self.__formatArgumentError(value, f"Critical error! Required arguments are missing"))
+            isValid = False
+        
+        if(isValid):
+            for argument in command.arguments:
+                if(argument.name not in self.castArguments.keys() and argument.useDefaultValue):
+                    self.castArguments[argument.name] = argument.defaultValue
         
         self.isValid = isValid
     
