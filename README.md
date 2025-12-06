@@ -31,13 +31,14 @@ Creating a command that takes multiple inputs, validating dimensions, and a opti
 
 The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./ExampleAdvanced.py).
 
+    # Note, depending on CLI, these results may vary when comparing string version as below, or as input into CLI
     inputA = "-dim 1 2 3" # Valid
     inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
     inputC = "-d width:4 d:5 h:6" # Valid
     inputD = "-d w:7 8 d:9" # Valid, note the order: width, unnamed arg which will be resolved to height because width and depth are named with an alias, depth
     inputE = "-d w:10 11 12" # Valid
-    # WIP(14') inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts) or with a named alias e.g. h:-15
-    # WIP(double ::) inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting will fail, note also arguments starting with the command prefix (default "-") must be put in quotation marks (anything CLI and Python accepts)
+    inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be a named alias e.g. h:-15, quotation marks may resolve to string and therefore read as a new command
+    inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting will fail, arguments with colon ":" must be a named alias or in quotation marks
     inputH = "-test 1 2 3" # Invalid, and will not be returned from .validate()
     
     # Input as string
@@ -45,8 +46,10 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- when giving named argument thats wrong, command should still hit and return valid + errors,
-- example inputs F and G
+- named + position args clash
+- make list for invalid inputs?
+    - named arguments thats not in alias can be added as positional arguments eg. hg:2 (attempt at height alias), cant filter out in case other valid input has "some text: xyz"
+    - with list, these values can be filtered out in positional parse
+- tostring on result runs validation again??? some debug prints runs twice, once before all, and once after prints after return, before tostring prints
 - make egg stuff
 - publish pip
-- tostring on result runs validation again??? some debug prints runs twice, once before all, and once after prints after return, before tostring prints

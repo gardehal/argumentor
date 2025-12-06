@@ -65,7 +65,7 @@ def castMeasurements(value: str) -> Measurement:
             
 # Note: validateFunc must be from typeT and return bool
 def validateMeasurements(value: Measurement) -> bool:
-    return value in Measurement
+    return value in iter(Measurement)
 
 # Note: validateFunc must be from typeT and return bool
 def validateInt(value: int) -> bool:

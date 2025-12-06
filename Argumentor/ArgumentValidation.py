@@ -36,13 +36,14 @@ class ArgumentValidation():
     def __populateNamedArguments(self, inputList: list[str], namedArgDelim: str):
         namedInputs = [e for e in inputList if(namedArgDelim in e)]
         namedArguments = {}
-        for value in namedInputs:
-            key, value = value.split(namedArgDelim)
+        for input in namedInputs:
+            namedSplit = input.split(namedArgDelim)
+            key = namedSplit[0]
+            value = namedArgDelim.join(namedSplit[1:])
             namedArguments[key] = value
             
         self.namedArguments = namedArguments
     
-    # TODO combine with populate?
     def __validateNamedArguments(self, arguments: list[Argument]):
         argumentAliasMap = {}
         for argument in arguments:
@@ -68,14 +69,14 @@ class ArgumentValidation():
             if(i >= len(command.arguments)):
                 self.errorMessages.append(f"Received more arguments ({len(unnamedArgs)}) than expected ({len(command.arguments)})")
                 for extraArg in unnamedArgs[i:]:
-                    self.errorMessages.append(self.__formatArgumentError(extraArg, f"Skipped, exceeds Arguments length"))
+                    self.errorMessages.append(f"{extraArg} not added, exceeds expected Arguments length")
                     
                 break # unnamedArgs loop
             
             unnamedArg = unnamedArgs[i]
             positionalArg = command.arguments[i]
             if(positionalArg.name in self.validatedArguments.keys()):
-                self.errorMessages.append(self.__formatArgumentError(unnamedArg, f"Already added as named argument {positionalArg.name}"))
+                self.errorMessages.append(self.__formatArgumentError(positionalArg.name, f"Already added as named argument {unnamedArg}"))
                 continue
             
             self.validatedArguments[positionalArg.name] = unnamedArg
