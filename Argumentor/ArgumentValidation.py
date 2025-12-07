@@ -63,6 +63,7 @@ class ArgumentValidation():
             self.validatedArguments[argumentAliasMap[key]] = self.namedArguments[key]
     
     def __addPositionalArguments(self, inputList: list[str], namedArgDelim: str, command: Command):
+        # TODO this could filter out positional arguments like "test: more words"
         unnamedArgs = [e for e in inputList if(e.split(namedArgDelim)[0] not in list(self.validatedArguments.keys()))]
         
         for i in range(len(unnamedArgs)):
@@ -73,6 +74,7 @@ class ArgumentValidation():
                     
                 break # unnamedArgs loop
             
+            # TODO adds named args as positional because theyre nmot filtered out un unnamedArgs after __validateNamedArguments
             unnamedArg = unnamedArgs[i]
             positionalArg = command.arguments[i]
             if(positionalArg.name in self.validatedArguments.keys()):
