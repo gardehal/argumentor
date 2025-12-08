@@ -6,7 +6,7 @@ from Argumentor.Argumentor import *
 from enum import IntEnum
 class Measurement(IntEnum):
     CENTIMETERS = 1,
-    INCEHES = 2,
+    INCHES = 2,
     
 class CommandHitValues(IntEnum):
     DIMENSIONS = 1,
@@ -59,7 +59,7 @@ def castMeasurements(value: str) -> Measurement:
         case "1" | "cm":
             return Measurement.CENTIMETERS
         case "2" | "inch" | "inches":
-            return Measurement.INCEHES
+            return Measurement.INCHES
         case _:
             return None
             
