@@ -27,19 +27,19 @@ Creating a command to calculate volume for a given object we have stored somewhe
 Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
 [ExampleAdvanced.py](./ExampleAdvanced.py)
 
-#### Expected outcomes
+##### Expected outcomes
 
 The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./ExampleAdvanced.py).
 
-    # Note, depending on CLI, these results may vary when comparing string version as below, or as input into CLI
+    # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI
     inputA = "-dim 1 2 3" # Valid
     inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
     inputC = "-d width:4 d:5 h:6" # Valid
-    inputD = "-d w:7 8 d:9" # Valid, note the order: width, unnamed arg which will be resolved to height because width and depth are named with an alias, depth
+    inputD = "-d w:7 8 d:9" # Valid, note the order: width, then unnamed argument which will be resolved to height because width and depth are named with an alias, then depth
     inputE = "-d w:10 11 12" # Valid
     inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be a named alias e.g. h:-15, quotation marks may resolve to string and therefore read as a new command
     inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting will fail, arguments with colon ":" must be a named alias or in quotation marks
-    inputH = "-test 1 2 3" # Invalid, and will not be returned from .validate()
+    inputH = "-test 1 2 3" # Invalid, command "test" does not exist and nothing will be returned from validate
     
     # Input as string
     argResults = argumentor.validateString(inputA)
