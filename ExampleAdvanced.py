@@ -56,9 +56,9 @@ class Main:
 # Note: castFunc must be from string and return typeT
 def castMeasurements(value: str) -> Measurement:
     match value.lower():
-        case "1", "cm":
+        case "1" | "cm":
             return Measurement.CENTIMETERS
-        case "2", "inch", "inches":
+        case "2" | "inch" | "inches":
             return Measurement.INCEHES
         case _:
             return None

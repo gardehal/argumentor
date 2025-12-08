@@ -46,10 +46,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- named + position args clash
-- make list for invalid inputs?
-    - named arguments thats not in alias can be added as positional arguments eg. hg:2 (attempt at height alias), cant filter out in case other valid input has "some text: xyz"
-    - with list, these values can be filtered out in positional parse
+- more testing
 - tostring on result runs validation again??? some debug prints runs twice, once before all, and once after prints after return, before tostring prints
 - make egg stuff
 - publish pip
