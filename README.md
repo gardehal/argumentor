@@ -47,6 +47,5 @@ The following list of examples explains some expected outcomes, or could be used
 ## TODO
 
 - more testing
-- tostring on result runs validation again??? some debug prints runs twice, once before all, and once after prints after return, before tostring prints
 - make egg stuff
 - publish pip
