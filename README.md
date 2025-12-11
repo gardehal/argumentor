@@ -47,5 +47,4 @@ The following list of examples explains some expected outcomes, or could be used
 ## TODO
 
 - more testing
-- make egg stuff
 - publish pip
