@@ -46,6 +46,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- improve help prints, print all form argumentor, include optional if nullable, include typeT?
 - more testing
 - publish pip
 - add flags? 
