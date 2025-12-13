@@ -11,7 +11,7 @@ class Measurement(IntEnum):
 class CommandHitValues(IntEnum):
     HELP = 1,
     DIMENSIONS = 2,
-    GET_VOLUME = 3,
+    CALC_VOLUME = 3,
     
 class Main:
     def main():

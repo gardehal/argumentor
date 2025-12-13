@@ -7,16 +7,16 @@ from enum import IntEnum
 class CommandHitValues(IntEnum):
     HELP = 1,
     DIMENSIONS = 2,
-    GET_VOLUME = 3,
+    CALC_VOLUME = 3,
     
 class Main:
     def main():
         # Set up Arguments
-        idArgument = Argument("Object ID", 1, ["id"], int, description= "Width of object")
+        idArgument = Argument("Object ID", 1, ["id"], int, description= "Int ID of object to get volume for")
         arguments = [idArgument]
         
         # Create command(s) and Argumentor 
-        volumeCommand = Command("Calculate Volume", CommandHitValues.GET_VOLUME, ["calculatevolume", "calcvolume", "cv"], arguments, "Calculate volume of object by ID")
+        volumeCommand = Command("Calculate Volume", CommandHitValues.CALC_VOLUME, ["calculatevolume", "calcvolume", "cv"], arguments, "Calculate volume of object by ID")
         argumentor = Argumentor([volumeCommand])
 
         # The validation itself, input may be a string or a list of string like sys.argv
@@ -33,7 +33,7 @@ class Main:
                 for error in result.errorMessages:
                     print(f"\t{error}")
                     
-            if(result.isValid and result.commandHitValue == CommandHitValues.GET_VOLUME):
+            if(result.isValid and result.commandHitValue == CommandHitValues.CALC_VOLUME):
                 itemDetails = f"{idArgument.name}: {result.arguments[idArgument.name]}"
                 print(f"Calculating volume for {itemDetails} ...")
                 # itemService.calculateVolumeById(id= result.arguments[idArgument.name])
