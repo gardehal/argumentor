@@ -2,15 +2,15 @@ from .Argument import Argument
 
 class Command():
     name: str
-    alias: list[str]
     hitValue: object
+    alias: list[str]
     arguments: list[Argument]
     description: str
     
     def __init__(self, name: str, 
-                 alias: list[str], 
                  hitValue: object, 
-                 arguments: list[Argument], 
+                 alias: list[str] = [], 
+                 arguments: list[Argument] = [], 
                  description: str = None):
         """
         Designates commands
@@ -19,14 +19,14 @@ class Command():
 
         Args:
             name (str): Name of command
-            alias (list[str]): Alias of command
             hitValue (object): Value to return in Result when this command is found in input
-            arguments (list[Argument]): Arguments to be cast and validated, then returned in Result
+            alias (list[str]): Alias of command. Defaults to [].
+            arguments (list[Argument]): Arguments to be cast and validated, then returned in Result. Defaults to [].
             description (str, optional): Explaining what the command does. Defaults to None.
         """
         self.name = name
-        self.alias = alias
         self.hitValue = hitValue
+        self.alias = alias
         self.arguments = arguments 
         self.description = description
         

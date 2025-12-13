@@ -9,13 +9,12 @@ class Measurement(IntEnum):
     INCHES = 2,
     
 class CommandHitValues(IntEnum):
-    DIMENSIONS = 1,
-    GET_VOLUME = 2,
+    HELP = 1,
+    DIMENSIONS = 2,
+    GET_VOLUME = 3,
     
 class Main:
     def main():
-        if(len(sys.argv) == 0):
-            print(dimensionCommand.getFormattedDescription())
             
         widthArgument = Argument("Width", 1, ["width", "w"], int, 
                                  validateFunc= validateInt, description= "Width of object, between 1 and 100")
@@ -30,22 +29,26 @@ class Main:
                                 description= "Unit of measurements, cm or inches, default cm")
         arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
         
-        dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"], CommandHitValues.DIMENSIONS, arguments, "Add the dimensions of object")
-        argumentor = Argumentor([dimensionCommand])
+        helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h"], [], "Print this documentation")
+        dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], arguments, "Add the dimensions of object")
+        argumentor = Argumentor([helpCommand, dimensionCommand])
+        
         results = argumentor.validate(sys.argv)
         
-        if(len(results) == 0):
-            print(dimensionCommand.getFormattedDescription())
+        if(len(sys.argv) < 2 or len(results) == 0):
+            print(argumentor.getFormattedDescription())
         
         for result in results:
-            # For debugging
-            # print(result.toString())
+            # print(result.toString()) # For debugging
             
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
                 for error in result.errorMessages:
                     print(f"\t{error}")
-                    
+                        
+            if(result.isValid and result.commandHitValue == CommandHitValues.HELP):
+                print(argumentor.getFormattedDescription())
+                
             if(result.isValid and result.commandHitValue == CommandHitValues.DIMENSIONS):
                 print("Updating dimensions ...")
                 # itemService.updateDimensions(result.arguments[widthArgument.name], 
