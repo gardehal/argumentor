@@ -16,8 +16,8 @@ class Argument():
     
     def __init__(self, name: str, 
                  order: int, 
-                 alias: list[str], 
-                 typeT: Type[T], 
+                 alias: list[str] = [], 
+                 typeT: Type[T] = str, 
                  castFunc: Callable[[str], T] = None, 
                  nullable: bool = False, 
                  validateFunc: Callable[[T], bool] = None, 
@@ -32,8 +32,8 @@ class Argument():
         Args:
             name (str): Name of argument, key for dictionary in Return
             order (int): Order in which arguments are expected to appear in input
-            alias (list[str]): Alias of argument
-            typeT (Type[T]): Type of argument, str, int, bool, enum, etc.
+            alias (list[str]): Alias of argument. Defaults to [].
+            typeT (Type[T]): Type of argument, str, int, bool, enum, etc. Defaults to str.
             castFunc (Callable[[str], T], optional): Optional function for custom casting of input to typeT. Must take in 1 argument: str and return typeT. Defaults to None.
             nullable (bool, optional): Argument is nullable (from input). Defaults to False. Note that this implies the argument can be None in result, unless useDefaultValue and defaultValue are both set.
             validateFunc (Callable[[T], bool], optional): Optional function for custom validation. Must take in 1 argument: typeT and return bool. Defaults to None.

@@ -10,7 +10,10 @@ class Argumentor():
     namedArgDelim: str
     inputDelim: str
     
-    def __init__(self, commands: list[Command], commandPrefix: str = "-", namedArgDelim: str = ":", inputDelim: str = " "):
+    def __init__(self, commands: list[Command], 
+                 commandPrefix: str = "-", 
+                 namedArgDelim: str = ":", 
+                 inputDelim: str = " "):
         """
         Holder of all commands and arguments, base for validation of input.
 
@@ -24,6 +27,20 @@ class Argumentor():
         self.commandPrefix = commandPrefix
         self.namedArgDelim = namedArgDelim
         self.inputDelim = inputDelim
+        
+    def getFormattedDescription(self) -> str:
+        """
+        Get the description of commands and arguments combined with formatting.
+
+        Returns:
+            str: String description.
+        """
+        
+        commandsDescriptions = ""
+        for command in self.commands:
+            commandsDescriptions = f"{commandsDescriptions}\n{command.getFormattedDescription()}"
+        
+        return commandsDescriptions
     
     def validateString(self, input: str) -> list[Result]:
         """
