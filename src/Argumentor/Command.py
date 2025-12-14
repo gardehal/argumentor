@@ -24,9 +24,10 @@ class Command():
             arguments (list[Argument]): Arguments to be cast and validated, then returned in Result. Defaults to [].
             description (str, optional): Explaining what the command does. Defaults to None.
         """
-        self.name = name
+        
+        self.name = name.replace(r"\s", "")
         self.hitValue = hitValue
-        self.alias = alias
+        self.alias = [e.replace(r"\s", "") for e in alias]
         self.arguments = arguments 
         self.description = description
         

@@ -42,9 +42,9 @@ class Argument():
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         
-        self.name = name
+        self.name = name.replace(r"\s", "")
         self.order = order
-        self.alias = alias
+        self.alias = [e.replace(r"\s", "") for e in alias]
         self.typeT = typeT
         self.castFunc = castFunc
         self.nullable = nullable
@@ -61,4 +61,5 @@ class Argument():
             str: String description.
         """
         
-        return f"\tArgument: {self.name} - {self.description}\n\t- Alias: {self.alias}"
+        nullableDisplay = "optional" if self.nullable else "required"
+        return f"\tArgument: {self.name} ({self.typeT.__name__}, {nullableDisplay}) - {self.description}\n\t- Alias: {self.alias}"
