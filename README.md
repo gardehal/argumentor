@@ -37,8 +37,8 @@ The following list of examples explains some expected outcomes, or could be used
     inputC = "-d width:4 d:5 h:6" # Valid
     inputD = "-d w:7 8 d:9" # Valid, note the order: width, then unnamed argument which will be resolved to height because width and depth are named with an alias, then depth
     inputE = "-d w:10 11 12" # Valid
-    inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values, note also arguments starting with the command prefix (default "-") must be a named alias e.g. h:-15, quotation marks may resolve to string and therefore read as a new command
-    inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting will fail, arguments with colon ":" must be a named alias or in quotation marks
+    inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values (-14), and arguments (h:-15) starting with the command prefix (default "-") must be a named alias with quotation marks
+    inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting (':17') will fail, and arguments with colon ":" (h::18) must be a named alias or in quotation marks
     inputH = "-test 1 2 3" # Invalid, command "test" does not exist and nothing will be returned from validate
     
     # Input as string
@@ -46,7 +46,6 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- improve help prints, print all form argumentor, include optional if nullable, include typeT?
 - more testing
 - publish pip
 - add flags? 
