@@ -1,3 +1,5 @@
+import re
+
 from .Argument import Argument
 
 class Command():
@@ -25,9 +27,9 @@ class Command():
             description (str, optional): Explaining what the command does. Defaults to None.
         """
         
-        self.name = name.replace(r"\s", "")
+        self.name = re.sub(r"\s", "", name)
         self.hitValue = hitValue
-        self.alias = [e.replace(r"\s", "") for e in alias]
+        self.alias = [re.sub(r"\s", "", e) for e in alias]
         self.arguments = arguments 
         self.description = description
         

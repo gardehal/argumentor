@@ -1,3 +1,5 @@
+import re
+
 from typing import TypeVar, Type, Callable
 
 T = TypeVar("T")
@@ -42,9 +44,9 @@ class Argument():
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         
-        self.name = name.replace(r"\s", "")
+        self.name = re.sub(r"\s", "", name)
         self.order = order
-        self.alias = [e.replace(r"\s", "") for e in alias]
+        self.alias = [re.sub(r"\s", "", e) for e in alias]
         self.typeT = typeT
         self.castFunc = castFunc
         self.nullable = nullable
