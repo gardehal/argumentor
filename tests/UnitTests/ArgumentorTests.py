@@ -5,10 +5,9 @@ from Argumentor import *
 
 class ArgumentorTests(unittest.TestCase):
         
-    def test_Argumentor_WhenSpacesInNamesAndAlias_ShouldRemoveSpaces(self):
+    def test_Argumentor_ShouldRemoveSpaces_WhenSpacesInNamesAndAlias(self):
         argumentor = self.__basicArgumentor()
         namesAndAlias = []
-        argumentNames = [a.name for c in argumentor.commands for a in c.arguments]
         for command in argumentor.commands:
             namesAndAlias.append(command.name)
             namesAndAlias.extend(command.alias)
@@ -19,8 +18,19 @@ class ArgumentorTests(unittest.TestCase):
         for name in namesAndAlias:
             print(name)
             self.assertFalse(name.__contains__(" "))
+            
+    def test_Argumentor_ShouldSortArgumentsByOrder_WhenLastOrderArgAddedFirst(self):
+        argumentor = self.__basicArgumentor()
+        arguments = [e.arguments for e in argumentor.commands]
+        
+        self.assertEqual("Width", arguments[0].name)
+        self.assertEqual("Depth", arguments[1].name)
+        self.assertEqual("Height", arguments[2].name)
+        self.assertEqual("Unit", arguments[3].name)
+        
         
     def __basicArgumentor(self) -> Argumentor:
+        # Note spaces in name and alias
         widthArgument = Argument("Widt h", 1, ["w idt h", "w"], int, 
                                  validateFunc= validateInt, description= "Width of object, between 1 and 100")
         depthArgument = Argument("Depth", 2, ["depth", "d"], int, 
@@ -32,9 +42,11 @@ class ArgumentorTests(unittest.TestCase):
                                 validateFunc= validateMeasurements, 
                                 useDefaultValue= True, defaultValue= Measurement.CENTIMETERS, 
                                 description= "Unit of measurements, cm or inches, default cm")
+        # Note order
         arguments = [unitArgument, widthArgument, depthArgument, heightArgument]
         
-        helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h"], [], "Print this documentation")
+        # Note spaces in name and alias
+        helpCommand = Command("He lp", CommandHitValues.HELP, ["h e l p", "h"], [], "Print this documentation")
         dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], arguments, "Add the dimensions of object")
         return Argumentor([helpCommand, dimensionCommand])
 
