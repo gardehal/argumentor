@@ -4,14 +4,19 @@ from enum import IntEnum
 from Argumentor import *
 
 class ArgumentorTests(unittest.TestCase):
-    
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
         
     def test_Argumentor_WhenSpacesInNamesAndAlias_ShouldRemoveSpaces(self):
         argumentor = self.__basicArgumentor()
+        namesAndAlias = []
         argumentNames = [a.name for c in argumentor.commands for a in c.arguments]
-        for name in argumentNames:
+        for command in argumentor.commands:
+            namesAndAlias.append(command.name)
+            namesAndAlias.extend(command.alias)
+            for argument in command.arguments:
+                namesAndAlias.append(argument.name)
+                namesAndAlias.extend(argument.alias)
+            
+        for name in namesAndAlias:
             print(name)
             self.assertFalse(name.__contains__(" "))
         
