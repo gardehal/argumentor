@@ -21,13 +21,20 @@ class ArgumentorTests(unittest.TestCase):
             
     def test_Argumentor_ShouldSortArgumentsByOrder_WhenLastOrderArgAddedFirst(self):
         argumentor = self.__basicArgumentor()
-        arguments = [e.arguments for e in argumentor.commands]
+        arguments = [a for c in argumentor.commands for a in c.arguments]
         
         self.assertEqual("Width", arguments[0].name)
         self.assertEqual("Depth", arguments[1].name)
         self.assertEqual("Height", arguments[2].name)
         self.assertEqual("Unit", arguments[3].name)
         
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentNameAlias(self):
+        duplicateArgument = Argument("test", 1, ["test", "t"], int)
+        try:
+            Command("Duplicate", 1, [], [duplicateArgument])
+            self.assertTrue(False) # Fail here
+        except:
+            self.assertTrue(True)
         
     def __basicArgumentor(self) -> Argumentor:
         # Note spaces in name and alias
@@ -42,16 +49,13 @@ class ArgumentorTests(unittest.TestCase):
                                 validateFunc= validateMeasurements, 
                                 useDefaultValue= True, defaultValue= Measurement.CENTIMETERS, 
                                 description= "Unit of measurements, cm or inches, default cm")
-        # Note order
+        # Note order, unit (4) first
         arguments = [unitArgument, widthArgument, depthArgument, heightArgument]
         
         # Note spaces in name and alias
         helpCommand = Command("He lp", CommandHitValues.HELP, ["h e l p", "h"], [], "Print this documentation")
         dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], arguments, "Add the dimensions of object")
         return Argumentor([helpCommand, dimensionCommand])
-
-    def __splitInput(self, input: str) -> list[str]:
-        return input.split(" ")
     
 if __name__ == '__main__':
     unittest.main()
