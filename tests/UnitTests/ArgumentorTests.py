@@ -61,6 +61,30 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(len(result[0].errorMessages), 3)
         self.assertFalse(result[0].isValid)
         
+    def test_Argumentor_ShouldReturnValid_WhenInputC(self):
+        argumentor = self.__basicArgumentor()
+        result = argumentor.validate(self.inputC.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertTrue(result[0].isValid)
+        
+    def test_Argumentor_ShouldReturnValid_WhenInputD(self):
+        argumentor = self.__basicArgumentor()
+        result = argumentor.validate(self.inputD.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertTrue(result[0].isValid)
+        
+    def test_Argumentor_ShouldReturnValid_WhenInputE(self):
+        argumentor = self.__basicArgumentor()
+        result = argumentor.validate(self.inputE.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertTrue(result[0].isValid)
+        
     def __basicArgumentor(self) -> Argumentor:
         # Note spaces in name and alias
         widthArgument = Argument("Widt h", 1, ["w idt h", "w"], int, 
