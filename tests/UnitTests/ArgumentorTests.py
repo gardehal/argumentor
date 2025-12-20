@@ -5,6 +5,15 @@ from Argumentor import *
 
 class ArgumentorTests(unittest.TestCase):
         
+    inputA = "-dim 1 2 3" # Valid
+    inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
+    inputC = "-d width:4 d:5 h:6" # Valid
+    inputD = "-d w:7 8 d:9" # Valid, note the order: width, then unnamed argument which will be resolved to height because width and depth are named with an alias, then depth
+    inputE = "-d w:10 11 12" # Valid
+    inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values (-14), and arguments (h:-15) starting with the command prefix (default "-") must be a named alias with quotation marks
+    inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting (':17') will fail, and arguments with colon ":" (h::18) must be a named alias or in quotation marks
+    inputH = "-test 1 2 3" # Invalid, command "test" does not exist and nothing will be returned from validate
+    
     def test_Argumentor_ShouldRemoveSpaces_WhenSpacesInNamesAndAlias(self):
         argumentor = self.__basicArgumentor()
         namesAndAlias = []
@@ -35,6 +44,22 @@ class ArgumentorTests(unittest.TestCase):
             self.assertTrue(False) # Fail here
         except:
             self.assertTrue(True)
+            
+    def test_Argumentor_ShouldReturnValid_WhenInputA(self):
+        argumentor = self.__basicArgumentor()
+        result = argumentor.validate(self.inputA.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertTrue(result[0].isValid)
+        
+    def test_Argumentor_ShouldReturnInvalid_WhenInputB(self):
+        argumentor = self.__basicArgumentor()
+        result = argumentor.validate(self.inputB.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertEqual(len(result[0].errorMessages), 3)
+        self.assertFalse(result[0].isValid)
         
     def __basicArgumentor(self) -> Argumentor:
         # Note spaces in name and alias
