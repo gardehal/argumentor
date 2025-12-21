@@ -1,7 +1,8 @@
 import unittest
-from enum import IntEnum
 
 from Argumentor import *
+from ..enums.Measurement import Measurement
+from ..enums.CommandHitValues import CommandHitValues
 
 class ArgumentorTests(unittest.TestCase):
         
@@ -112,14 +113,14 @@ class ArgumentorTests(unittest.TestCase):
     def __basicArgumentor(self) -> Argumentor:
         # Note spaces in name and alias
         widthArgument = Argument("Widt h", 1, ["w idt h", "w"], int, 
-                                 validateFunc= validateInt, description= "Width of object, between 1 and 100")
+                                 validateFunc= self.validateInt, description= "Width of object, between 1 and 100")
         depthArgument = Argument("Depth", 2, ["depth", "d"], int, 
-                                 validateFunc= validateInt, description= "Depth of object, between 1 and 100")
+                                 validateFunc= self.validateInt, description= "Depth of object, between 1 and 100")
         heightArgument = Argument("Height", 3, ["height", "h"], int, 
-                                  validateFunc= validateInt, description= "Height of object, between 1 and 100")
+                                  validateFunc= self.validateInt, description= "Height of object, between 1 and 100")
         unitArgument = Argument("Unit", 4, ["unit", "u"], Measurement, 
-                                castFunc= castMeasurements, nullable= True, 
-                                validateFunc= validateMeasurements, 
+                                castFunc= self.castMeasurements, nullable= True, 
+                                validateFunc= self.validateMeasurements, 
                                 useDefaultValue= True, defaultValue= Measurement.CENTIMETERS, 
                                 description= "Unit of measurements, cm or inches, default cm")
         # Note order, unit (4) first
@@ -130,32 +131,24 @@ class ArgumentorTests(unittest.TestCase):
         dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], arguments, "Add the dimensions of object")
         return Argumentor([helpCommand, dimensionCommand])
     
+    # Note: castFunc must be from string and return typeT
+    def castMeasurements(self, value: str) -> Measurement:
+        match value.lower():
+            case "1" | "cm":
+                return Measurement.CENTIMETERS
+            case "2" | "inch" | "inches":
+                return Measurement.INCHES
+            case _:
+                return None
+                
+    # Note: validateFunc must be from typeT and return bool
+    def validateMeasurements(self, value: Measurement) -> bool:
+        return value in iter(Measurement)
+
+    # Note: validateFunc must be from typeT and return bool
+    def validateInt(self, value: int) -> bool:
+        return value > -10 and value < 100
+
 if __name__ == '__main__':
     unittest.main()
     
-class Measurement(IntEnum):
-    CENTIMETERS = 1,
-    INCHES = 2,
-    
-class CommandHitValues(IntEnum):
-    HELP = 1,
-    DIMENSIONS = 2,
-    CALC_VOLUME = 3,
-    
-# Note: castFunc must be from string and return typeT
-def castMeasurements(value: str) -> Measurement:
-    match value.lower():
-        case "1" | "cm":
-            return Measurement.CENTIMETERS
-        case "2" | "inch" | "inches":
-            return Measurement.INCHES
-        case _:
-            return None
-            
-# Note: validateFunc must be from typeT and return bool
-def validateMeasurements(value: Measurement) -> bool:
-    return value in iter(Measurement)
-
-# Note: validateFunc must be from typeT and return bool
-def validateInt(value: int) -> bool:
-    return value > -10 and value < 100
