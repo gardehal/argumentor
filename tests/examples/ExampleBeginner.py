@@ -1,13 +1,6 @@
 import sys
-from Argumentor.Argument import *
-from Argumentor.Command import *
-from Argumentor.Argumentor import *
-
-from enum import IntEnum
-class CommandHitValues(IntEnum):
-    HELP = 1,
-    DIMENSIONS = 2,
-    CALC_VOLUME = 3,
+from Argumentor import *
+from ..enums.CommandHitValues import CommandHitValues
     
 class Main:
     def main():

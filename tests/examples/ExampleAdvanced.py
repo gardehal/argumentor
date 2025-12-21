@@ -1,17 +1,7 @@
 import sys
-from Argumentor.Argument import *
-from Argumentor.Command import *
-from Argumentor.Argumentor import *
-
-from enum import IntEnum
-class Measurement(IntEnum):
-    CENTIMETERS = 1,
-    INCHES = 2,
-    
-class CommandHitValues(IntEnum):
-    HELP = 1,
-    DIMENSIONS = 2,
-    CALC_VOLUME = 3,
+from Argumentor import *
+from ..enums.Measurement import Measurement
+from ..enums.CommandHitValues import CommandHitValues
     
 class Main:
     def main():
