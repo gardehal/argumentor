@@ -20,16 +20,16 @@ Feel free to contribute if you find any issues though.
 #### Getting started
 
 Creating a command to calculate volume for a given object we have stored somewhere with an ID.
-[ExampleBeginner.py](./ExampleBeginner.py)
+[ExampleBeginner.py](./tests/examples/ExampleBeginner.py)
 
 #### A step further
 
 Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
-[ExampleAdvanced.py](./ExampleAdvanced.py)
+[ExampleAdvanced.py](./tests/examples/ExampleAdvanced.py)
 
 ##### Expected outcomes
 
-The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./ExampleAdvanced.py).
+The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./tests/examples/ExampleAdvanced.py).
 
     # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI
     inputA = "-dim 1 2 3" # Valid
