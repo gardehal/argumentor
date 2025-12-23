@@ -34,11 +34,10 @@ class Command():
         self.description = description
         
         argumentNamesAndAlias = [e.name for e in self.arguments]
-        argumentNamesAndAlias.extend([e.alias for e in self.arguments])
+        [argumentNamesAndAlias.extend(e.alias) for e in self.arguments]
         aliasDuplicates = [e for e in argumentNamesAndAlias if argumentNamesAndAlias.count(e) > 1]
         if(aliasDuplicates):
-            message = f"Duplicates found in arguments (name or alias): {aliasDuplicates}"
-            raise Exception(message)
+            raise AttributeError(f"Duplicates found in arguments (name or alias): {aliasDuplicates}")
         
         self.arguments.sort(key=lambda e: e.order)
         
