@@ -1,8 +1,8 @@
 import unittest
 
 from Argumentor import *
-from ..enums.Measurement import Measurement
-from ..enums.CommandHitValues import CommandHitValues
+from enums.Measurement import Measurement
+from enums.CommandHitValues import CommandHitValues
 
 class ArgumentorTests(unittest.TestCase):
         
