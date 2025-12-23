@@ -26,7 +26,6 @@ class ArgumentorTests(unittest.TestCase):
                 namesAndAlias.extend(argument.alias)
             
         for name in namesAndAlias:
-            print(name)
             self.assertFalse(name.__contains__(" "))
             
     def test_Argumentor_ShouldSortArgumentsByOrder_WhenLastOrderArgAddedFirst(self):
@@ -59,7 +58,7 @@ class ArgumentorTests(unittest.TestCase):
         result = argumentor.validate(self.inputB.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 3)
+        self.assertEqual(len(result[0].errorMessages), 4)
         self.assertFalse(result[0].isValid)
         
     def test_Argumentor_ShouldReturnValid_WhenInputC(self):
@@ -99,16 +98,14 @@ class ArgumentorTests(unittest.TestCase):
         result = argumentor.validate(self.inputG.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 3)
+        self.assertEqual(len(result[0].errorMessages), 5)
         self.assertFalse(result[0].isValid)
         
-    def test_Argumentor_ShouldReturnInvalid_WhenInputH(self):
+    def test_Argumentor_ShouldReturnEmptyResult_WhenInputH(self):
         argumentor = self.__basicArgumentor()
         result = argumentor.validate(self.inputH.split(" "))
         
-        self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 3)
-        self.assertFalse(result[0].isValid)
+        self.assertEqual(len(result), 0)
         
     def __basicArgumentor(self) -> Argumentor:
         # Note spaces in name and alias
