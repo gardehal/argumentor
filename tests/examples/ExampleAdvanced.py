@@ -5,6 +5,7 @@ from ..enums.CommandHitValues import CommandHitValues
     
 class Main:
     def main():
+        # Example input: python ExampleAdvanced.py -d 1 2 3 inches
             
         widthArgument = Argument("Width", 1, ["width", "w"], int, 
                                  validateFunc= validateInt, description= "Width of object, between 1 and 100")
