@@ -21,11 +21,13 @@ Feel free to contribute if you find any issues though.
 
 Creating a command to calculate volume for a given object we have stored somewhere with an ID.
 [ExampleBeginner.py](./tests/examples/ExampleBeginner.py)
+$ `cd test/examples ; python ExampleBeginner.py -help`
 
 #### A step further
 
 Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
 [ExampleAdvanced.py](./tests/examples/ExampleAdvanced.py)
+$ `cd test/examples ; python ExampleAdvanced.py -help`
 
 ##### Expected outcomes
 
@@ -46,6 +48,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- maybe its a bad idea to put non-error messages(?) in errorMessages, like using defaults when input is missing, its a mix of error and info..
 - more testing
 - publish pip
 - add flags? 
