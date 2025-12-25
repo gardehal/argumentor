@@ -7,7 +7,12 @@ Command and argument parsing for Python CLI.
 
 Feel free to contribute if you find any issues though.
 
-## Install locally
+## Install
+
+TODO
+$ `pip install xxx`
+
+#### Local from folder
 
 1. $ `cd [path to this folder]`
 1. Check installed packages
@@ -33,7 +38,7 @@ $ `cd test/examples ; python ExampleAdvanced.py -help`
 
 The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./tests/examples/ExampleAdvanced.py).
 
-    # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI
+    # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI (using ' or " would be a main reason as CLI reads it differently)
     inputA = "-dim 1 2 3" # Valid
     inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
     inputC = "-d width:4 d:5 h:6" # Valid
@@ -48,7 +53,5 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- maybe its a bad idea to put non-error messages(?) in errorMessages, like using defaults when input is missing, its a mix of error and info..
-- more testing
 - publish pip
 - add flags? 
