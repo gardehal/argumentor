@@ -5,16 +5,7 @@ from enums.Measurement import Measurement
 from enums.CommandHitValues import CommandHitValues
 
 class ArgumentorTests(unittest.TestCase):
-        
-    inputA = "-dim 1 2 3" # Valid
-    inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
-    inputC = "-d width:4 d:5 h:6" # Valid
-    inputD = "-d w:7 8 d:9" # Valid, note the order: width, then unnamed argument which will be resolved to height because width and depth are named with an alias, then depth
-    inputE = "-d w:10 11 12" # Valid
-    inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values (-14), and arguments (h:-15) starting with the command prefix (default "-") must be a named alias with quotation marks
-    inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting (':17') will fail, and arguments with colon ":" (h::18) must be a named alias or in quotation marks
-    inputH = "-test 1 2 3" # Invalid, command "test" does not exist and nothing will be returned from validate
-    
+
     def test_Argumentor_ShouldRemoveSpaces_WhenSpacesInNamesAndAlias(self):
         argumentor = self.__basicArgumentor()
         namesAndAlias = []
@@ -38,72 +29,94 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual("Unit", arguments[3].name)
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentNameAlias(self):
-        duplicateArgument = Argument("test", 1, ["test", "t"], int)
+        duplicateArgument = Argument("someargument", 1, ["someargument", "t"], int)
+
         try:
             Command("Duplicate", 1, [], [duplicateArgument])
             self.assertTrue(False) # Fail here
-        except:
-            self.assertTrue(True)
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicates found in arguments"))
+            self.assertTrue(str(ex).__contains__("someargument"))
             
     def test_Argumentor_ShouldReturnValid_WhenInputA(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputA.split(" "))
+        inputA = "-dim 1 2 3" # Valid
+        result = argumentor.validate(inputA.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 0)
         self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].errorMessages), 0)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputB(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputB.split(" "))
+        inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
+        result = argumentor.validate(inputB.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 4)
         self.assertFalse(result[0].isValid)
+        self.assertEqual(len(result[0].errorMessages), 4)
+        self.assertTrue(result[0].errorMessages[0].__contains__("a could not be cast"))
+        self.assertTrue(result[0].errorMessages[1].__contains__("b could not be cast"))
+        self.assertTrue(result[0].errorMessages[2].__contains__("c could not be cast"))
+        self.assertTrue(result[0].errorMessages[3].__contains__("Critical error! Required arguments are missing (got 0/3)"))
         
     def test_Argumentor_ShouldReturnValid_WhenInputC(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputC.split(" "))
+        inputC = "-d width:4 d:5 h:6" # Valid
+        result = argumentor.validate(inputC.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 0)
         self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].errorMessages), 0)
         
     def test_Argumentor_ShouldReturnValid_WhenInputD(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputD.split(" "))
+        inputD = "-d w:7 8 d:9" # Valid, note the order: width, then unnamed argument which will be resolved to height because width and depth are named with an alias, then depth
+        result = argumentor.validate(inputD.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 0)
         self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].errorMessages), 0)
         
     def test_Argumentor_ShouldReturnValid_WhenInputE(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputE.split(" "))
+        inputE = "-d w:10 11 12" # Valid
+        result = argumentor.validate(inputE.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 0)
         self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].errorMessages), 0)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputF(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputF.split(" "))
-        
+        # Note quatation markes ' removed as it's not CLI input
+        inputF = "-d w:13 d:-14 h:-15" # Invalid, validateInt function does not allow negative values (-14), and arguments (h:-15) starting with the command prefix (default "-") must be a named alias with quotation marks
+        result = argumentor.validate(inputF.split(" "))
+    
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 3)
         self.assertFalse(result[0].isValid)
+        self.assertEqual(len(result[0].errorMessages), 3)
+        self.assertTrue(result[0].errorMessages[0].__contains__("-14 did not pass validation"))
+        self.assertTrue(result[0].errorMessages[1].__contains__("-15 did not pass validation"))
+        self.assertTrue(result[0].errorMessages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputG(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputG.split(" "))
+        # Note quatation markes ' removed as it's not CLI input
+        inputG = "-d w:16 d::17 h::18" # Invalid, the default int casting (':17') will fail, and arguments with colon ":" (h::18) must be a named alias or in quotation marks
+        result = argumentor.validate(inputG.split(" "))
         
         self.assertEqual(len(result), 1)
-        self.assertEqual(len(result[0].errorMessages), 5)
         self.assertFalse(result[0].isValid)
+        self.assertEqual(len(result[0].errorMessages), 3)
+        self.assertTrue(result[0].errorMessages[0].__contains__(":17 could not be cast to int"))
+        self.assertTrue(result[0].errorMessages[1].__contains__(":18 could not be cast to int"))
+        self.assertTrue(result[0].errorMessages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
         
     def test_Argumentor_ShouldReturnEmptyResult_WhenInputH(self):
         argumentor = self.__basicArgumentor()
-        result = argumentor.validate(self.inputH.split(" "))
+        inputH = "-test 1 2 3" # Invalid, command "test" does not exist and nothing will be returned from validate
+        result = argumentor.validate(inputH.split(" "))
         
         self.assertEqual(len(result), 0)
         
@@ -120,7 +133,7 @@ class ArgumentorTests(unittest.TestCase):
                                 validateFunc= self.validateMeasurements, 
                                 useDefaultValue= True, defaultValue= Measurement.CENTIMETERS, 
                                 description= "Unit of measurements, cm or inches, default cm")
-        # Note order, unit (4) first
+        # Note order, unit (order: 4) first
         arguments = [unitArgument, widthArgument, depthArgument, heightArgument]
         
         # Note spaces in name and alias
@@ -144,7 +157,7 @@ class ArgumentorTests(unittest.TestCase):
 
     # Note: validateFunc must be from typeT and return bool
     def validateInt(self, value: int) -> bool:
-        return value > -10 and value < 100
+        return value > 0 and value < 100
 
 if __name__ == '__main__':
     unittest.main()
