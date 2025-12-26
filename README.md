@@ -53,5 +53,9 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- ArgumentValidation check on input empty and return empty/nonvalid result to prevent looping over all commands..
+- maybe some default print for printing errors like in advanced example
+- add default value to help print if enabled
+- clean up help print, looks weird, look at similar manual man etc., less indentation, no use of -, replace with * r something, remove command/argument before the names?
 - publish pip
 - add flags? 
