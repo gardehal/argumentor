@@ -25,14 +25,14 @@ $ `pip install xxx`
 #### Getting started
 
 Creating a command to calculate volume for a given object we have stored somewhere with an ID.
-[ExampleBeginner.py](./tests/examples/ExampleBeginner.py)
-$ `cd test/examples ; python ExampleBeginner.py -help`
+[ExampleBasic.py](./tests/ExampleBasic.py)
+$ `python .\tests\ExampleBasic.py -help`
 
 #### A step further
 
 Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
-[ExampleAdvanced.py](./tests/examples/ExampleAdvanced.py)
-$ `cd test/examples ; python ExampleAdvanced.py -help`
+[ExampleAdvanced.py](./tests/ExampleAdvanced.py)
+$ `python .\tests\ExampleAdvanced.py -help`
 
 ##### Expected outcomes
 
@@ -53,8 +53,6 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- for the users, results named and validated arguments should be hidden, they only hold temporary values and shouldnt be exposed
-- remove order from arguments, unnessecary since order is given by list to command anyway
 - add default value to help print if enabled
 - clean up help print, looks weird, look at similar manual man etc., less indentation, no use of -, replace with * r something, remove command/argument before the names?
 - publish pip
