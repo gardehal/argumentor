@@ -21,6 +21,10 @@ class ArgumentValidation():
         self.castArguments = {}
         self.errorMessages = []
         
+        if(len(inputList) == 0):
+            self.errorMessages.append("No input was supplied")
+            return
+
         self.__populateNamedArguments(inputList, namedArgDelim)
         self.__validateNamedArguments(command.arguments)
         self.__addPositionalArguments(inputList, namedArgDelim, command)
@@ -90,15 +94,18 @@ class ArgumentValidation():
         for key in self.validatedArguments.keys():
             argument = [e for e in command.arguments if e.name is key][0]
             if(argument is None):
-                self.errorMessages.append(self.__formatArgumentError(key, "No Argument object found"))
+                self.errorMessages.append(self.__formatArgumentError(key, "Critical error! No Argument object found"))
                 inputIsValid = False
                 continue
             
             value = self.validatedArguments[key]
-            if(value is None and not argument.nullable):
+            if(value is None):
                 if(argument.useDefaultValue):
                     self.errorMessages.append(self.__formatArgumentError(key, f"Value was None and not nullable, default value {argument.defaultValue} was applied"))
                     castValue = argument.defaultValue
+                    continue
+                elif(argument.nullable):
+                    self.castArguments[key] = None
                     continue
                 else:
                     self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! Value was None, and Argument is not nullable"))
