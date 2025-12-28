@@ -21,8 +21,8 @@ class ArgumentValidation():
         self.castArguments = {}
         self.errorMessages = []
         
-        if(len(inputList) == 0):
-            self.errorMessages.append("No input was supplied")
+        if(len(command.arguments) == 0):
+            self.isValid = True
             return
 
         self.__populateNamedArguments(inputList, namedArgDelim)
