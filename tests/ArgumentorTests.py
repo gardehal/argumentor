@@ -5,7 +5,6 @@ from enums.Measurement import Measurement
 from enums.CommandHitValues import CommandHitValues
 
 class ArgumentorTests(unittest.TestCase):
-
     def test_Argumentor_ShouldRemoveSpaces_WhenSpacesInNamesAndAlias(self):
         argumentor = self.__basicArgumentor()
         namesAndAlias = []
@@ -19,7 +18,7 @@ class ArgumentorTests(unittest.TestCase):
         for name in namesAndAlias:
             self.assertFalse(name.__contains__(" "))
             
-    def test_Argumentor_ShouldSortArgumentsByOrder_WhenLastOrderArgAddedFirst(self):
+    def test_Argumentor_ShouldBeInAddedOrder_WhenAddedAsList(self):
         argumentor = self.__basicArgumentor()
         arguments = [a for c in argumentor.commands for a in c.arguments]
         
@@ -29,10 +28,10 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual("Unit", arguments[3].name)
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentNameAlias(self):
-        duplicateArgument = Argument("someargument", 1, ["someargument", "t"], int)
+        duplicateArgument = Argument("someargument", ["someargument", "t"], int)
 
         try:
-            Command("Duplicate", 1, [], [duplicateArgument])
+            Command("Duplicate", "DUPLICATEHITVALUE", [], [duplicateArgument])
             self.assertTrue(False) # Fail here
         except AttributeError as ex:
             self.assertTrue(str(ex).__contains__("Duplicates found in arguments"))
@@ -122,19 +121,18 @@ class ArgumentorTests(unittest.TestCase):
         
     def __basicArgumentor(self) -> Argumentor:
         # Note spaces in name and alias
-        widthArgument = Argument("Widt h", 1, ["w idt h", "w"], int, 
-                                 validateFunc= self.validateInt, description= "Width of object, between 1 and 100")
-        depthArgument = Argument("Depth", 2, ["depth", "d"], int, 
-                                 validateFunc= self.validateInt, description= "Depth of object, between 1 and 100")
-        heightArgument = Argument("Height", 3, ["height", "h"], int, 
-                                  validateFunc= self.validateInt, description= "Height of object, between 1 and 100")
-        unitArgument = Argument("Unit", 4, ["unit", "u"], Measurement, 
-                                castFunc= self.castMeasurements, nullable= True, 
-                                validateFunc= self.validateMeasurements, 
-                                useDefaultValue= True, defaultValue= Measurement.CENTIMETERS, 
-                                description= "Unit of measurements, cm or inches, default cm")
-        # Note order, unit (order: 4) first
-        arguments = [unitArgument, widthArgument, depthArgument, heightArgument]
+        widthArgument = Argument("Widt h", ["w idt h", "w"], int,
+            validateFunc= self.validateInt, description= "Width of object, between 1 and 100")
+        depthArgument = Argument("Depth", ["depth", "d"], int,
+            validateFunc= self.validateInt, description= "Depth of object, between 1 and 100")
+        heightArgument = Argument("Height", ["height", "h"], int,
+            validateFunc= self.validateInt, description= "Height of object, between 1 and 100")
+        unitArgument = Argument("Unit", ["unit", "u"], Measurement,
+            castFunc= self.castMeasurements, nullable= True,
+            validateFunc= self.validateMeasurements,
+            useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
+            description= "Unit of measurements, cm or inches, default cm")
+        arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
         
         # Note spaces in name and alias
         helpCommand = Command("He lp", CommandHitValues.HELP, ["h e l p", "h"], [], "Print this documentation")

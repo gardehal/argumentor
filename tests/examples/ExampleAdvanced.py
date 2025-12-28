@@ -1,23 +1,23 @@
 import sys
 from Argumentor import *
-from ..enums.Measurement import Measurement
-from ..enums.CommandHitValues import CommandHitValues
+from enums.Measurement import Measurement
+from enums.CommandHitValues import CommandHitValues
     
 class Main:
     def main():
         # Example input: python ExampleAdvanced.py -d 1 2 3 inches
             
-        widthArgument = Argument("Width", 1, ["width", "w"], int, 
-                                 validateFunc= validateInt, description= "Width of object, between 1 and 100")
-        depthArgument = Argument("Depth", 2, ["depth", "d"], int, 
-                                 validateFunc= validateInt, description= "Depth of object, between 1 and 100")
-        heightArgument = Argument("Height", 3, ["height", "h"], int, 
-                                  validateFunc= validateInt, description= "Height of object, between 1 and 100")
-        unitArgument = Argument("Unit", 4, ["unit", "u"], Measurement, 
-                                castFunc= castMeasurements, nullable= True, 
-                                validateFunc= validateMeasurements, 
-                                useDefaultValue= True, defaultValue= Measurement.CENTIMETERS, 
-                                description= "Unit of measurements, cm or inches, default cm")
+        widthArgument = Argument("Width", ["width", "w"], int,
+            validateFunc= validateInt, description= "Width of object, between 1 and 100")
+        depthArgument = Argument("Depth", ["depth", "d"], int,
+            validateFunc= validateInt, description= "Depth of object, between 1 and 100")
+        heightArgument = Argument("Height", ["height", "h"], int,
+            validateFunc= validateInt, description= "Height of object, between 1 and 100")
+        unitArgument = Argument("Unit", ["unit", "u"], Measurement,
+            castFunc= castMeasurements, nullable= True,
+            validateFunc= validateMeasurements,
+            useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
+            description= "Unit of measurements, cm or inches, default cm")
         arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
         
         helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h"], [], "Print this documentation")

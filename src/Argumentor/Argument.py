@@ -6,7 +6,6 @@ T = TypeVar("T")
 
 class Argument():
     name: str
-    order: int
     alias: list[str]
     typeT: Type[T]
     castFunc: Callable[[str], T]
@@ -17,7 +16,6 @@ class Argument():
     description: str
     
     def __init__(self, name: str, 
-                 order: int, 
                  alias: list[str] = [], 
                  typeT: Type[T] = str, 
                  castFunc: Callable[[str], T] = None, 
@@ -33,7 +31,6 @@ class Argument():
 
         Args:
             name (str): Name of argument, key for dictionary in Return
-            order (int): Order in which arguments are expected to appear in input
             alias (list[str]): Alias of argument. Defaults to [].
             typeT (Type[T]): Type of argument, str, int, bool, enum, etc. Defaults to str.
             castFunc (Callable[[str], T], optional): Optional function for custom casting of input to typeT. Must take in 1 argument: str and return typeT. Defaults to None.
@@ -45,7 +42,6 @@ class Argument():
         """
         
         self.name = re.sub(r"\s", "", name)
-        self.order = order
         self.alias = [re.sub(r"\s", "", e) for e in alias]
         self.typeT = typeT
         self.castFunc = castFunc
