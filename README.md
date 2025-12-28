@@ -53,7 +53,9 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- remove order from arguments, unnessecary since order is given by list to command anyway
 - ArgumentValidation check on input empty and return empty/nonvalid result to prevent looping over all commands..
+- if input is None and arg is nullable, apply defaults there, if no defaults and nullable, no keep it as None
 - maybe some default print for printing errors like in advanced example
 - add default value to help print if enabled
 - clean up help print, looks weird, look at similar manual man etc., less indentation, no use of -, replace with * r something, remove command/argument before the names?
