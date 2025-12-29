@@ -53,7 +53,6 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- add default value to help print if enabled
-- clean up help print, looks weird, look at similar manual man etc., less indentation, no use of -, replace with * r something, remove command/argument before the names?
+- add some basic input methods like casting string to bool (input in ["yes", "y", "1"] etc), casting to number like 1.3, 1,3 etc to decimals? too broad scope?
 - publish pip
 - add flags? 
