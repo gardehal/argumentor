@@ -4,7 +4,7 @@ from enums.CommandHitValues import CommandHitValues
     
 class Main:
     def main():
-        # Example input: python ExampleBeginner.py -cv 1
+        # Example input: python ExampleBasic.py -cv 1
 
         # Set up Arguments
         idArgument = Argument("ObjectID", ["id"], int, description= "Int ID of object to get volume for")

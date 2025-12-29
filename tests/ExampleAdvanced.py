@@ -20,14 +20,15 @@ class Main:
             description= "Unit of measurements, cm or inches, default cm")
         arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
         
-        helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h"], [], "Print this documentation")
+        helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h", "man"], [], "Print this documentation")
         dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], arguments, "Add the dimensions of object")
         argumentor = Argumentor([helpCommand, dimensionCommand])
         
         results = argumentor.validate(sys.argv)
         
-        if(len(sys.argv) < 2 or len(results) == 0):
-            print(argumentor.getFormattedDescription())
+        if(len(results) == 0):
+            print("No valid command was found, please consult the manual for available commands.")
+            return
         
         for result in results:
             # print(result.toString()) # For debugging

@@ -53,6 +53,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- duplicate checks: have to check duplicate commands and alias across all commands, duplicate arguments and alias across all arguments in command, eg. there can't ever be two arguments to the same command named "d", could be alias for directory and dimensions 
 - add some basic input methods like casting string to bool (input in ["yes", "y", "1"] etc), casting to number like 1.3, 1,3 etc to decimals? too broad scope?
 - publish pip
-- add flags? 
+- add flags? (would function like a named argument that is true if present, eg. "-command argument1 --flag1"(-- : prefix?) results in command rin with argument1 = argument1 and flag1 = true)
