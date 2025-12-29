@@ -31,11 +31,10 @@ class Main:
         
         for result in results:
             # print(result.toString()) # For debugging
-            
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
-                for error in result.errorMessages:
-                    print(f"\t{error}")
+                print(result.getFormattedErrors())
+                continue
                         
             if(result.isValid and result.commandHitValue == CommandHitValues.HELP):
                 print(argumentor.getFormattedDescription())

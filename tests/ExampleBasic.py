@@ -25,8 +25,8 @@ class Main:
         for result in results:
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
-                for error in result.errorMessages:
-                    print(f"\t{error}")
+                print(result.getFormattedErrors())
+                continue
                     
             if(result.isValid and result.commandHitValue == CommandHitValues.CALC_VOLUME):
                 itemDetails = f"{idArgument.name}: {result.arguments[idArgument.name]}"

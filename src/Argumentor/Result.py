@@ -28,3 +28,17 @@ class Result():
             arguments: {self.arguments},
             errorMessages: {self.errorMessages},
             """
+
+    def getFormattedErrors(self) -> str:
+        """
+        Get errormessages formatted in a printable way.
+
+        Returns: 
+            str: String errors.
+        """
+        
+        errorMessages = f"Input for {self.commandName} was not valid:"
+        for error in self.errorMessages:
+            errorMessages += f"\n* {error}"
+
+        return errorMessages
