@@ -59,5 +59,9 @@ class Argument():
             str: String description.
         """
         
-        nullableDisplay = "optional" if self.nullable else "required"
-        return f"\tArgument: {self.name} ({self.typeT.__name__}, {nullableDisplay}) - {self.description}\n\t- Alias: {self.alias}"
+        nullableDisplayString = "optional" if self.nullable else "required"
+        typeDisplayString = f", type: {self.typeT.__name__}"
+        aliasDisplayString = f", alias: {", ".join(self.alias)}" if self.alias else ""
+        defaultDisplayString = f", default: {str(self.defaultValue)}" if self.useDefaultValue else ""
+        return f"* Argument {self.name} ({nullableDisplayString}{typeDisplayString}{defaultDisplayString}{aliasDisplayString}): \
+            \n\t{self.description}"

@@ -36,11 +36,7 @@ class Argumentor():
             str: String description.
         """
         
-        commandsDescriptions = ""
-        for command in self.commands:
-            commandsDescriptions = f"{commandsDescriptions}\n{command.getFormattedDescription()}"
-        
-        return commandsDescriptions
+        return "\n".join([e.getFormattedDescription() for e in self.commands])
     
     def validateString(self, input: str) -> list[Result]:
         """
