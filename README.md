@@ -36,7 +36,7 @@ $ `python .\tests\ExampleAdvanced.py -help`
 
 ##### Expected outcomes
 
-The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./tests/examples/ExampleAdvanced.py).
+The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./tests/ExampleAdvanced.py).
 
     # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI (using ' or " would be a main reason as CLI reads it differently)
     inputA = "-dim 1 2 3" # Valid
@@ -51,16 +51,21 @@ The following list of examples explains some expected outcomes, or could be used
     # Input as string
     argResults = argumentor.validateString(inputA)
 
+## Recommendations
+
+1. Use a more complete argument parser
+1. See [ExampleBasic.py](./tests/ExampleBasic.py) and [ExampleAdvanced.py](./tests/ExampleAdvanced.py) for examples of usage.
+1. Argumentor().validate() returns a list of Result with detected commands. Parse the result with this in mind:
+    1. If the list is empty, no command-like input was detected.
+    1. When populated, each Result will specify what command was hit by name and have a hitValue that was specified on init.
+    1. If a command is detected but has errors, isValid will be false, and errorMessages will details.
+    1. Valid commands will have a dict of cast arguments ready to use.
+1. Document your Commands and Arguments using descprition, provide a command (HELP/MAN) for users to see this. Access a printable description of commands through Argumentor().getFormattedDescription().
+1. Arguments have fields for custom casting and validation functions (castFunc, validateFunc), the usage and limitations of these should be documented in descriptions.
+1. Use arguments defaultValue and useDefaultValue to set a default or fallback in case casting or validating input from user fails.
+
 ## TODO
 
-- add some basic input methods like casting string to bool (input in ["yes", "y", "1"] etc), casting to number like 1.3, 1,3 etc to decimals? too broad scope?
-    - pointless for bools when flags are in place, pointless for other validation since vaildation can only take one arg, string -> bool 
-    - confirm/isAffirmative
-    - deny ?
-    - check enum/int is a valid enum
-    - validate number is beween x and y
-    - str length
-    - file or dir exists
-- in prints, (int)enum values show as int, not user friendly
+- generic probably misused a bit, should be init as Argument[int] not Argument(typeT = int) but how to get name of T for desc print?
 - publish pip
 - add flags? (would function like a named argument that is true if present, eg. "-command argument1 --flag1"(-- : prefix?) results in command rin with argument1 = argument1 and flag1 = true)
