@@ -22,8 +22,8 @@ class Command():
         Args:
             name (str): Name of command
             hitValue (object): Value to return in Result when this command is found in input
-            alias (list[str]): Alias of command. Defaults to [].
-            arguments (list[Argument]): Arguments to be cast and validated, then returned in Result. Defaults to [].
+            alias (list[str], optional): Alias of command. Defaults to [].
+            arguments (list[Argument], optional): Arguments to be cast and validated, then returned in Result. Defaults to [].
             description (str, optional): Explaining what the command does. Defaults to None.
         """
         
