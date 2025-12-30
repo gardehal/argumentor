@@ -4,10 +4,6 @@ from .Command import Command
 import re
 
 class ArgumentValidation():
-    """
-    Internal validation in Argumentor.
-    """
-    
     isValid: bool
     namedArguments: dict[str, str]
     validatedArguments: dict[str, str]
@@ -20,6 +16,14 @@ class ArgumentValidation():
         self.validatedArguments = {}
         self.castArguments = {}
         self.errorMessages = []
+        """
+        Internal validation in Argumentor.
+
+        Args:
+            inputList (list[str]): List of inputs from user
+            command (Command): Command to validate input against
+            namedArgDelim (str): Delimiter used for named input, e.g. ":" in key:value
+        """
         
         if(len(command.arguments) == 0):
             self.isValid = True
@@ -31,7 +35,14 @@ class ArgumentValidation():
         self.__castAndValidateArguments(command)
         
     def toString(self) -> str:
-        return f"""
+        """
+        Returns string with class properties.
+
+        Returns: 
+            str: String of class properties.
+        """
+
+        return f""" \
             isValid: {self.isValid},
             namedArguments: {self.namedArguments},
             validatedArguments: {self.validatedArguments},
