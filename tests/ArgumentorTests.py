@@ -28,14 +28,73 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual("Unit", arguments[3].name)
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentNameAlias(self):
-        duplicateArgument = Argument("someargument", ["someargument", "t"], int)
+        duplicateArgumentA = Argument("someargument", ["A"], int)
+        duplicateArgumentB = Argument("B", ["someargument"], int)
+        command = Command("Duplicate", "DUPLICATEHITVALUE", [], [duplicateArgumentA, duplicateArgumentB])
 
         try:
-            Command("Duplicate", "DUPLICATEHITVALUE", [], [duplicateArgument])
+            Argumentor([command])
             self.assertTrue(False) # Fail here
         except AttributeError as ex:
-            self.assertTrue(str(ex).__contains__("Duplicates found in arguments"))
+            self.assertTrue(str(ex).__contains__("Duplicate arguments"))
             self.assertTrue(str(ex).__contains__("someargument"))
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentNames(self):
+        duplicateArgumentA = Argument("someargument", ["A"], int)
+        duplicateArgumentB = Argument("someargument", ["B"], int)
+        command = Command("Duplicate", "DUPLICATEHITVALUE", [], [duplicateArgumentA, duplicateArgumentB])
+
+        try:
+            Argumentor([command])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate arguments"))
+            self.assertTrue(str(ex).__contains__("someargument"))
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentAlias(self):
+        duplicateArgumentA = Argument("A", ["someargument"], int)
+        duplicateArgumentB = Argument("B", ["someargument"], int)
+        command = Command("Duplicate", "DUPLICATEHITVALUE", [], [duplicateArgumentA, duplicateArgumentB])
+
+        try:
+            Argumentor([command])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate arguments"))
+            self.assertTrue(str(ex).__contains__("someargument"))
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandNameAlias(self):
+        duplicateCommandA = Command("somecommand", "DUPLICATEHITVALUE", ["A"])
+        duplicateCommandB = Command("B", "DUPLICATEHITVALUE", ["somecommand"])
+
+        try:
+            Argumentor([duplicateCommandA, duplicateCommandB])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate commands"))
+            self.assertTrue(str(ex).__contains__("somecommand"))
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandNames(self):
+        duplicateCommandA = Command("somecommand", "DUPLICATEHITVALUE", ["A"])
+        duplicateCommandB = Command("somecommand", "DUPLICATEHITVALUE", ["B"])
+
+        try:
+            Argumentor([duplicateCommandA, duplicateCommandB])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate commands"))
+            self.assertTrue(str(ex).__contains__("somecommand"))
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandAlias(self):
+        duplicateCommandA = Command("A", "DUPLICATEHITVALUE", ["somecommand"])
+        duplicateCommandB = Command("B", "DUPLICATEHITVALUE", ["somecommand"])
+
+        try:
+            Argumentor([duplicateCommandA, duplicateCommandB])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate commands"))
+            self.assertTrue(str(ex).__contains__("somecommand"))
             
     def test_Argumentor_ShouldReturnValid_WhenInputA(self):
         argumentor = self.__basicArgumentor()

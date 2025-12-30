@@ -33,12 +33,6 @@ class Command():
         self.arguments = arguments 
         self.description = description
         
-        argumentNamesAndAlias = [e.name for e in self.arguments]
-        [argumentNamesAndAlias.extend(e.alias) for e in self.arguments]
-        aliasDuplicates = [e for e in argumentNamesAndAlias if argumentNamesAndAlias.count(e) > 1]
-        if(aliasDuplicates):
-            raise AttributeError(f"Duplicates found in arguments (name or alias): {aliasDuplicates}")
-        
     def getFormattedDescription(self) -> str:
         """
         Get the description of command and arguments combined with formatting.

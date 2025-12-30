@@ -23,11 +23,33 @@ class Argumentor():
             namedArgDelim (str, optional): Deliminator for named arguments, e.g. "width:10". Defaults to ":".
             inputDelim (str, optional): Deliminator for input, only used for validateString. Defaults to " ".
         """
+
         self.commands = commands
         self.commandPrefix = commandPrefix
         self.namedArgDelim = namedArgDelim
         self.inputDelim = inputDelim
-        
+
+        # Check for duplicates,
+        # two different command cannot have the same names or alias,
+        # a command cannot have two arguments with the same names or alias
+        commandList = []
+        for command in self.commands:
+            argumentList = []
+            for argument in command.arguments:
+                argumentList.append(argument.name)
+                argumentList.extend(argument.alias)
+    
+            argumentDuplicates = [e for e in argumentList if argumentList.count(e) > 1]
+            if(argumentDuplicates):
+                raise AttributeError(f"Duplicate arguments ({argumentDuplicates}) found in arguments for {command.name}")
+
+            commandList.append(command.name)
+            commandList.extend(command.alias)
+
+        commandDuplicates = [e for e in commandList if commandList.count(e) > 1]
+        if(commandDuplicates):
+            raise AttributeError(f"Duplicate commands ({commandDuplicates}) found")
+
     def getFormattedDescription(self) -> str:
         """
         Get the description of commands and arguments combined with formatting.

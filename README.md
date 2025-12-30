@@ -53,7 +53,14 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- duplicate checks: have to check duplicate commands and alias across all commands, duplicate arguments and alias across all arguments in command, eg. there can't ever be two arguments to the same command named "d", could be alias for directory and dimensions 
 - add some basic input methods like casting string to bool (input in ["yes", "y", "1"] etc), casting to number like 1.3, 1,3 etc to decimals? too broad scope?
+    - pointless for bools when flags are in place, pointless for other validation since vaildation can only take one arg, string -> bool 
+    - confirm/isAffirmative
+    - deny ?
+    - check enum/int is a valid enum
+    - validate number is beween x and y
+    - str length
+    - file or dir exists
+- in prints, (int)enum values show as int, not user friendly
 - publish pip
 - add flags? (would function like a named argument that is true if present, eg. "-command argument1 --flag1"(-- : prefix?) results in command rin with argument1 = argument1 and flag1 = true)
