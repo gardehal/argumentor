@@ -198,7 +198,8 @@ class ArgumentorTests(unittest.TestCase):
         heightArgument = Argument("Height", ["height", "h"], int,
             validateFunc= self.validateInt, description= "Height of object, between 1 and 100")
         unitArgument = Argument("Unit", ["unit", "u"], Measurement,
-            castFunc= self.castMeasurements, nullable= True,
+            optional= True,
+            castFunc= self.castMeasurements, 
             validateFunc= self.validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")

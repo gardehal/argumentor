@@ -44,7 +44,7 @@ class Command():
         argumentDescriptions = "\n".join([e.getFormattedDescription() for e in self.arguments]) 
         argumentsDisplayString = f"\n{argumentDescriptions}" if self.arguments else ""
         
-        requiredArgumentsDisplayString = f"{len([e for e in self.arguments if not e.nullable])} required arguments"
+        requiredArgumentsDisplayString = f"{len([e for e in self.arguments if not e.optional])} required arguments"
         aliasDisplayString = f", alias: {", ".join(self.alias)}" if self.alias else ""
         return f"\nCommand {self.name} ({requiredArgumentsDisplayString}{aliasDisplayString}) \
             \n\t{self.description} \

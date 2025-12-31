@@ -14,7 +14,8 @@ class Main:
         heightArgument = Argument("Height", ["height", "h"], int,
             validateFunc= validateInt, description= "Height of object, between 1 and 100")
         unitArgument = Argument("Unit", ["unit", "u"], Measurement,
-            castFunc= castMeasurements, nullable= True,
+            optional= True,
+            castFunc= castMeasurements, 
             validateFunc= validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")

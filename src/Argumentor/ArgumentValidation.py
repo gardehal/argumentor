@@ -112,14 +112,14 @@ class ArgumentValidation():
             value = self.validatedArguments[key]
             if(value is None):
                 if(argument.useDefaultValue):
-                    self.errorMessages.append(self.__formatArgumentError(key, f"Value was None and not nullable, default value {argument.defaultValue} was applied"))
+                    self.errorMessages.append(self.__formatArgumentError(key, f"Value was None and not optional, default value {argument.defaultValue} was applied"))
                     castValue = argument.defaultValue
                     continue
-                elif(argument.nullable):
+                elif(argument.optional):
                     self.castArguments[key] = None
                     continue
                 else:
-                    self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! Value was None, and Argument is not nullable"))
+                    self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! Value was None, and Argument is not optional"))
                     inputIsValid = False
                     continue
             
@@ -131,13 +131,13 @@ class ArgumentValidation():
                 else:
                     castValue = (argument.typeT)(value)
                 
-                if(castValue is None and not argument.nullable):
+                if(castValue is None and not argument.optional):
                     if(argument.useDefaultValue):
-                        self.errorMessages.append(self.__formatArgumentError(key, f"Value was None but argument was not nullable, default value {argument.defaultValue} was applied"))
+                        self.errorMessages.append(self.__formatArgumentError(key, f"Value was None but argument was not optional, default value {argument.defaultValue} was applied"))
                         castValue = argument.defaultValue
                         continue
                     else:
-                        self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! Value was None, not nullable, and no default was given")) # Remember useDefaultValue
+                        self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! Value was None, not optional, and no default was given")) # Remember useDefaultValue
                         inputIsValid = False
                         continue
                 
@@ -176,7 +176,7 @@ class ArgumentValidation():
         
             self.castArguments[key] = castValue
             
-        requiredArgumentNames = [e.name for e in command.arguments if not e.nullable]
+        requiredArgumentNames = [e.name for e in command.arguments if not e.optional]
         if(len(self.castArguments.keys())) < len(requiredArgumentNames):
             self.errorMessages.append(f"Critical error! Required arguments are missing (got {len(self.castArguments.keys())}/{len(requiredArgumentNames)})")
             inputIsValid = False

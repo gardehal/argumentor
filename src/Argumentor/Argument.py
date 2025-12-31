@@ -8,8 +8,8 @@ class Argument[T]():
     name: str
     alias: list[str]
     typeT: Type[T]
+    optional: bool
     castFunc: Callable[[str], T]
-    nullable: bool
     validateFunc: Callable[[T], bool]
     useDefaultValue: bool
     defaultValue: T
@@ -18,8 +18,8 @@ class Argument[T]():
     def __init__(self, name: str, 
                  alias: list[str] = [], 
                  typeT: Type[T] = str, 
+                 optional: bool = False, 
                  castFunc: Callable[[str], T] = None, 
-                 nullable: bool = False, 
                  validateFunc: Callable[[T], bool] = None, 
                  useDefaultValue: bool = False, 
                  defaultValue: T = None, 
@@ -33,8 +33,8 @@ class Argument[T]():
             name (str): Name of argument, key for dictionary in Return
             alias (list[str], optional): Alias of argument. Defaults to [].
             typeT (Type[T]), optional: Type of argument, str, int, bool, enum, etc. Defaults to str.
+            optional (bool, optional): Argument is optional/nullable (from input). Defaults to False. Note that this implies the argument can be None in result, unless useDefaultValue and defaultValue are both set.
             castFunc (Callable[[str], T], optional): Optional function for custom casting of input to typeT. Must take in 1 argument: str and return typeT. Defaults to None.
-            nullable (bool, optional): Argument is nullable (from input). Defaults to False. Note that this implies the argument can be None in result, unless useDefaultValue and defaultValue are both set.
             validateFunc (Callable[[T], bool], optional): Optional function for custom validation. Must take in 1 argument: typeT and return bool. Defaults to None.
             useDefaultValue (bool, optional): Use a default value if casting and validation fails. Defaults to False.
             defaultValue (T, optional): The default value to use if casting and validation fails, and useDefaultValue is True. Must be typeT. Defaults to None.
@@ -44,8 +44,8 @@ class Argument[T]():
         self.name = re.sub(r"\s", "", name)
         self.alias = [re.sub(r"\s", "", e) for e in alias]
         self.typeT = typeT
+        self.optional = optional
         self.castFunc = castFunc
-        self.nullable = nullable
         self.validateFunc = validateFunc
         self.useDefaultValue = useDefaultValue
         self.defaultValue = defaultValue
@@ -59,9 +59,9 @@ class Argument[T]():
             str: String description.
         """
         
-        nullableDisplayString = "optional" if self.nullable else "required"
+        optionalDisplayString = "optional" if self.optional else "required"
         typeDisplayString = f", type: {self.typeT.__name__}"
         aliasDisplayString = f", alias: {", ".join(self.alias)}" if self.alias else ""
         defaultDisplayString = f", default: {str(self.defaultValue)}" if self.useDefaultValue else ""
-        return f"* Argument {self.name} ({nullableDisplayString}{typeDisplayString}{defaultDisplayString}{aliasDisplayString}): \
+        return f"* Argument {self.name} ({optionalDisplayString}{typeDisplayString}{defaultDisplayString}{aliasDisplayString}): \
             \n\t{self.description}"
