@@ -1,13 +1,11 @@
 import re
 
-from typing import TypeVar
+from typing import Any
 
-T = TypeVar("T")
-
-class Flag[T]():
+class Flag():
     name: str
     alias: list[str]
-    value: T
+    value: Any
     description: str
 
     # TODO add to init
@@ -20,7 +18,7 @@ class Flag[T]():
     
     def __init__(self, name: str, 
                  alias: list[str] = [], 
-                 value: T = None, 
+                 value: Any = None, 
                  description: str = None):
         """
         Designates values input as a flag after commands 
@@ -30,7 +28,7 @@ class Flag[T]():
         Args:
             name (str): Name of argument, key for dictionary in Return
             alias (list[str], optional): Alias of argument. Defaults to [].
-            value (T, optional): The value to use if flag is present in input. Defaults to None.
+            value (Any, optional): The value to use if flag is present in input. Defaults to None.
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         
