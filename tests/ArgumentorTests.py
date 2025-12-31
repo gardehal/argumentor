@@ -96,6 +96,17 @@ class ArgumentorTests(unittest.TestCase):
             self.assertTrue(str(ex).__contains__("Duplicate commands"))
             self.assertTrue(str(ex).__contains__("somecommand"))
             
+    def test_Argumentor_ShouldDoNothing_WhenCommandAndArgumentHaveSameNames(self):
+        name = "someargument"
+        argument = Argument(name, ["A"], int)
+        command = Command(name, "DUPLICATEHITVALUE", ["B"], [argument])
+
+        argumentor = Argumentor([command])
+        self.assertEqual(1, len(argumentor.commands))
+        self.assertEqual(1, len(argumentor.commands[0].arguments))
+        self.assertEqual(name, argumentor.commands[0].name)
+        self.assertEqual(name, argumentor.commands[0].arguments[0].name)
+            
     def test_Argumentor_ShouldReturnValid_WhenInputA(self):
         argumentor = self.__basicArgumentor()
         inputA = "-dim 1 2 3" # Valid

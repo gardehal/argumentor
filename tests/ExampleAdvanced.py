@@ -6,7 +6,7 @@ from enums.CommandHitValues import CommandHitValues
 class Main:
     def main():
         # Example input: python ExampleAdvanced.py -d 1 2 3 inches
-            
+        
         widthArgument = Argument("Width", ["width", "w"], int,
             validateFunc= validateInt, description= "Width of object, between 1 and 100")
         depthArgument = Argument("Depth", ["depth", "d"], int,
@@ -18,10 +18,12 @@ class Main:
             validateFunc= validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
-        arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
         
-        helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h", "man"], [], "Print this documentation")
-        dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], arguments, "Add the dimensions of object")
+        helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h", "man"], 
+            description= "Print this documentation")
+        dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], 
+            [widthArgument, depthArgument, heightArgument, unitArgument],
+            description= "Add the dimensions of object")
         argumentor = Argumentor([helpCommand, dimensionCommand])
         
         results = argumentor.validate(sys.argv)
@@ -34,6 +36,11 @@ class Main:
             # print(result.toString()) # For debugging
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
+                print(result.getFormattedErrors())
+                continue
+            
+            if(result.errorMessages):
+                print(f"Command was accepted with modifications:")
                 print(result.getFormattedErrors())
                 continue
                         
@@ -55,7 +62,7 @@ def castMeasurements(value: str) -> Measurement:
         case "2" | "inch" | "inches":
             return Measurement.INCHES
         case _:
-            return None
+            return Measurement.CENTIMETERS
             
 # Note: validateFunc must be from typeT and return bool
 def validateMeasurements(value: Measurement) -> bool:
