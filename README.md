@@ -62,10 +62,12 @@ The following list of examples explains some expected outcomes, or could be used
     1. Valid commands will have a dict of cast arguments ready to use.
 1. Document your Commands and Arguments using descprition, provide a command (HELP/MAN) for users to see this. Access a printable description of commands through Argumentor().getFormattedDescription().
 1. Arguments have fields for custom casting and validation functions (castFunc, validateFunc), the usage and limitations of these should be documented in descriptions.
-1. Use arguments defaultValue and useDefaultValue to set a default or fallback in case casting or validating input from user fails.
+1. Use arguments defaultValue and useDefaultValue to set a default or fallback in case casting or validating input from user fails. In some cases, a validation function is needed for applying default.
 
 ## TODO
 
-- generic probably misused a bit, should be init as Argument[int] not Argument(typeT = int) but how to get name of T for desc print?
+- generic probably misused for classes, should be init as Argument[int] not Argument(typeT = int) but how to get name of T for desc print?
 - publish pip
-- add flags? (would function like a named argument that is true if present, eg. "-command argument1 --flag1"(-- : prefix?) results in command rin with argument1 = argument1 and flag1 = true)
+- add flags? 
+    - seems like just a shorthand version of argument but without value, a lot of work and complexity for a very minor QOL..
+    - eg. "-command argument1 --flag1"(-- : prefix?) results in command with argument1 = argument1 and flag1 = true or whatever static value flag was configured to
