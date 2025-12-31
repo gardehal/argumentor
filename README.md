@@ -66,6 +66,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- argument.nullable is ambigious, strictly means nullable from input, eg. optional, rename and move to after alias 
 - generic probably misused for classes, should be init as Argument[int] not Argument(typeT = int) but how to get name of T for desc print?
 - publish pip
 - add flags? 
