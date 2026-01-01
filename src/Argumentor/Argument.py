@@ -16,14 +16,14 @@ class Argument[T]():
     description: str
     
     def __init__(self, name: str, 
-                 alias: list[str],
-                 typeT: Type[T], 
-                 optional: bool = False, 
-                 castFunc: Callable[[str], T] = None, 
-                 validateFunc: Callable[[T], bool] = None, 
-                 useDefaultValue: bool = False, 
-                 defaultValue: T = None, 
-                 description: str = None):
+        alias: list[str],
+        typeT: Type[T], 
+        optional: bool = False, 
+        castFunc: Callable[[str], T] = None, 
+        validateFunc: Callable[[T], bool] = None, 
+        useDefaultValue: bool = False, 
+        defaultValue: T = None, 
+        description: str = None):
         """
         Designates values input as arguments after commands 
         eg. height in 

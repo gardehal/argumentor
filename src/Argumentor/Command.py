@@ -10,10 +10,10 @@ class Command():
     description: str
     
     def __init__(self, name: str, 
-                 alias: list[str], 
-                 hitValue: object, 
-                 arguments: list[Argument] = [], 
-                 description: str = None):
+        alias: list[str], 
+        hitValue: object, 
+        arguments: list[Argument] = [], 
+        description: str = None):
         """
         Designates commands
         eg. dimensions in 

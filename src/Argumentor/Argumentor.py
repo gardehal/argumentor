@@ -11,9 +11,9 @@ class Argumentor():
     inputDelim: str
     
     def __init__(self, commands: list[Command], 
-                 commandPrefix: str = "-", 
-                 namedArgDelim: str = ":", 
-                 inputDelim: str = " "):
+        commandPrefix: str = "-", 
+        namedArgDelim: str = ":", 
+        inputDelim: str = " "):
         """
         Holder of all commands and arguments, base for validation of input.
 

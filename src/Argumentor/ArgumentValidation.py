@@ -11,11 +11,6 @@ class ArgumentValidation():
     messages: list[str]
     
     def __init__(self, inputList: list[str], command: Command, namedArgDelim: str):
-        self.isValid = False
-        self.namedArguments = {}
-        self.validatedArguments = {}
-        self.castArguments = {}
-        self.messages = []
         """
         Internal validation in Argumentor.
 
@@ -25,8 +20,13 @@ class ArgumentValidation():
             namedArgDelim (str): Delimiter used for named input, e.g. ":" in key:value
         """
         
+        self.isValid = False
+        self.namedArguments = {}
+        self.validatedArguments = {}
+        self.castArguments = {}
+        self.messages = []
+        
         if(len(command.arguments) == 0):
-            self.isValid = True
             return
 
         self.__populateNamedArguments(inputList, namedArgDelim)
