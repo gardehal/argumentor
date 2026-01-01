@@ -66,7 +66,6 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- class init is usually name alias other args but its not consistent (command), and alias is usually optional.. Move alias to back with description since it's in a similar optional and recommended but not functionally nessecary? a lot of refactoring for tests.. 
 - publish pip
 - add flags? 
     - seems like just a shorthand version of argument but without value, a lot of work and complexity for a very minor QOL..

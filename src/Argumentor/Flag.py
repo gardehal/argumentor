@@ -8,18 +8,18 @@ class Flag():
     value: Any
     description: str
 
-    # TODO add to init
+    # TODO add to init.py
     # TODO add prefix to argumentor, duplicate checks, and desc strings
     # TODO add flag to commands
-    # TODO add flags to example advanced
+    # TODO add implementation to validation/named args
     # TODO add to example advanced 
-    # updateExternalFlag = Flag[bool]("UpdateExternalVendors", ["updateexternal", "uev", "eu"],
+    # updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], value= True,
         # description= "Update all external vendors with new values.") 
     
     def __init__(self, name: str, 
-                 alias: list[str],
-                 value: Any,
-                 description: str = None):
+        alias: list[str],
+        value: Any,
+        description: str = None):
         """
         Designates values input as a flag after commands 
         eg. update_external in 
