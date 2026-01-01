@@ -41,9 +41,8 @@ class Main:
                 continue
             
             if(result.errorMessages):
-                print(f"Command was accepted with modifications:")
+                print(f"Command {result.commandName} was accepted with modifications:")
                 print(result.getFormattedErrors())
-                continue
                         
             if(result.isValid and result.commandHitValue == CommandHitValues.HELP):
                 print(argumentor.getFormattedDescription())

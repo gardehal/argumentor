@@ -66,8 +66,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- argument.nullable is ambigious, strictly means nullable from input, eg. optional, rename and move to after alias 
-- generic probably misused for classes, should be init as Argument[int] not Argument(typeT = int) but how to get name of T for desc print?
+- errormessages can be a bit misleading, they can be used when it's not strictly speaking an error, maybe rename to just messages?
 - publish pip
 - add flags? 
     - seems like just a shorthand version of argument but without value, a lot of work and complexity for a very minor QOL..

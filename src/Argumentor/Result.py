@@ -57,8 +57,4 @@ class Result():
             str: String errors.
         """
         
-        errorMessages = f"Input for {self.commandName} was not valid:"
-        for error in self.errorMessages:
-            errorMessages += f"\n* {error}"
-
-        return errorMessages
+        return "\n".join([f"* {e}" for e in self.errorMessages])
