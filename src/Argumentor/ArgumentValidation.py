@@ -27,6 +27,7 @@ class ArgumentValidation():
         self.messages = []
         
         if(len(command.arguments) == 0):
+            self.isValid = True
             return
 
         self.__populateNamedArguments(inputList, namedArgDelim)
@@ -49,7 +50,7 @@ class ArgumentValidation():
             castArguments: {self.castArguments},
             messages: {self.messages},
             """
-            
+    
     def __populateNamedArguments(self, inputList: list[str], namedArgDelim: str):
         namedInputs = [e for e in inputList if(namedArgDelim in e)]
         namedArguments = {}
@@ -187,7 +188,8 @@ class ArgumentValidation():
                     self.castArguments[argument.name] = argument.defaultValue
         
         self.isValid = inputIsValid
-    
+        
     def __formatArgumentError(self, arg: str, error: str) -> str:
         return f"{arg} error: {error}"
+    
     
