@@ -27,7 +27,7 @@ class Main:
         for result in results:
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
-                print(result.getFormattedErrors())
+                print(result.getFormattedMessages())
                 continue
 
             if(result.isValid and result.commandHitValue == CommandHitValues.CALC_VOLUME):

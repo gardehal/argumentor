@@ -114,7 +114,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertEqual(len(result[0].messages), 0)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputB(self):
         argumentor = self.__basicArgumentor()
@@ -123,11 +123,11 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertFalse(result[0].isValid)
-        self.assertEqual(len(result[0].errorMessages), 4)
-        self.assertTrue(result[0].errorMessages[0].__contains__("a could not be cast"))
-        self.assertTrue(result[0].errorMessages[1].__contains__("b could not be cast"))
-        self.assertTrue(result[0].errorMessages[2].__contains__("c could not be cast"))
-        self.assertTrue(result[0].errorMessages[3].__contains__("Critical error! Required arguments are missing (got 0/3)"))
+        self.assertEqual(len(result[0].messages), 4)
+        self.assertTrue(result[0].messages[0].__contains__("a could not be cast"))
+        self.assertTrue(result[0].messages[1].__contains__("b could not be cast"))
+        self.assertTrue(result[0].messages[2].__contains__("c could not be cast"))
+        self.assertTrue(result[0].messages[3].__contains__("Critical error! Required arguments are missing (got 0/3)"))
         
     def test_Argumentor_ShouldReturnValid_WhenInputC(self):
         argumentor = self.__basicArgumentor()
@@ -136,7 +136,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertEqual(len(result[0].messages), 0)
         
     def test_Argumentor_ShouldReturnValid_WhenInputD(self):
         argumentor = self.__basicArgumentor()
@@ -145,7 +145,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertEqual(len(result[0].messages), 0)
         
     def test_Argumentor_ShouldReturnValid_WhenInputE(self):
         argumentor = self.__basicArgumentor()
@@ -154,7 +154,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].errorMessages), 0)
+        self.assertEqual(len(result[0].messages), 0)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputF(self):
         argumentor = self.__basicArgumentor()
@@ -164,10 +164,10 @@ class ArgumentorTests(unittest.TestCase):
     
         self.assertEqual(len(result), 1)
         self.assertFalse(result[0].isValid)
-        self.assertEqual(len(result[0].errorMessages), 3)
-        self.assertTrue(result[0].errorMessages[0].__contains__("-14 did not pass validation"))
-        self.assertTrue(result[0].errorMessages[1].__contains__("-15 did not pass validation"))
-        self.assertTrue(result[0].errorMessages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
+        self.assertEqual(len(result[0].messages), 3)
+        self.assertTrue(result[0].messages[0].__contains__("-14 did not pass validation"))
+        self.assertTrue(result[0].messages[1].__contains__("-15 did not pass validation"))
+        self.assertTrue(result[0].messages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputG(self):
         argumentor = self.__basicArgumentor()
@@ -177,10 +177,10 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertFalse(result[0].isValid)
-        self.assertEqual(len(result[0].errorMessages), 3)
-        self.assertTrue(result[0].errorMessages[0].__contains__(":17 could not be cast to int"))
-        self.assertTrue(result[0].errorMessages[1].__contains__(":18 could not be cast to int"))
-        self.assertTrue(result[0].errorMessages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
+        self.assertEqual(len(result[0].messages), 3)
+        self.assertTrue(result[0].messages[0].__contains__(":17 could not be cast to int"))
+        self.assertTrue(result[0].messages[1].__contains__(":18 could not be cast to int"))
+        self.assertTrue(result[0].messages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
         
     def test_Argumentor_ShouldReturnEmptyResult_WhenInputH(self):
         argumentor = self.__basicArgumentor()

@@ -58,7 +58,7 @@ The following list of examples explains some expected outcomes, or could be used
 1. Argumentor().validate() returns a list of Result with detected commands. Parse the result with this in mind:
     1. If the list is empty, no command-like input was detected.
     1. When populated, each Result will specify what command was hit by name and have a hitValue that was specified on init.
-    1. If a command is detected but has errors, isValid will be false, and errorMessages will details.
+    1. If a command is detected but has errors, isValid will be false, and messages will details.
     1. Valid commands will have a dict of cast arguments ready to use.
 1. Document your Commands and Arguments using descprition, provide a command (HELP/MAN) for users to see this. Access a printable description of commands through Argumentor().getFormattedDescription().
 1. Arguments have fields for custom casting and validation functions (castFunc, validateFunc), the usage and limitations of these should be documented in descriptions.
@@ -66,7 +66,6 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- errormessages can be a bit misleading, they can be used when it's not strictly speaking an error, maybe rename to just messages?
 - publish pip
 - add flags? 
     - seems like just a shorthand version of argument but without value, a lot of work and complexity for a very minor QOL..

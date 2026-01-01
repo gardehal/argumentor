@@ -37,12 +37,12 @@ class Main:
             # print(result.toString()) # For debugging
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
-                print(result.getFormattedErrors())
+                print(result.getFormattedMessages())
                 continue
             
-            if(result.errorMessages):
+            if(result.messages):
                 print(f"Command {result.commandName} was accepted with modifications:")
-                print(result.getFormattedErrors())
+                print(result.getFormattedMessages())
                         
             if(result.isValid and result.commandHitValue == CommandHitValues.HELP):
                 print(argumentor.getFormattedDescription())

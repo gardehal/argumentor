@@ -8,14 +8,14 @@ class ArgumentValidation():
     namedArguments: dict[str, str]
     validatedArguments: dict[str, str]
     castArguments: dict[str, object]
-    errorMessages: list[str]
+    messages: list[str]
     
     def __init__(self, inputList: list[str], command: Command, namedArgDelim: str):
         self.isValid = False
         self.namedArguments = {}
         self.validatedArguments = {}
         self.castArguments = {}
-        self.errorMessages = []
+        self.messages = []
         """
         Internal validation in Argumentor.
 
@@ -47,7 +47,7 @@ class ArgumentValidation():
             namedArguments: {self.namedArguments},
             validatedArguments: {self.validatedArguments},
             castArguments: {self.castArguments},
-            errorMessages: {self.errorMessages},
+            messages: {self.messages},
             """
             
     def __populateNamedArguments(self, inputList: list[str], namedArgDelim: str):
@@ -70,11 +70,11 @@ class ArgumentValidation():
             
         for key in self.namedArguments.keys():
             if(key not in argumentAliasMap.keys()):
-                self.errorMessages.append(self.__formatArgumentError(key, "Not a valid argument alias"))
+                self.messages.append(self.__formatArgumentError(key, "Not a valid argument alias"))
                 continue
             
             if(key in self.validatedArguments.keys()):
-                self.errorMessages.append(self.__formatArgumentError(key, "Alias was already added"))
+                self.messages.append(self.__formatArgumentError(key, "Alias was already added"))
                 continue
             
             self.validatedArguments[argumentAliasMap[key]] = self.namedArguments[key]
@@ -86,16 +86,16 @@ class ArgumentValidation():
 
         for i in range(len(unnamedInput)):
             if(i >= len(remainingArgument)):
-                self.errorMessages.append(f"Received more positional arguments ({len(unnamedInput)}) than expected ({len(remainingArgument)})")
+                self.messages.append(f"Received more positional arguments ({len(unnamedInput)}) than expected ({len(remainingArgument)})")
                 for extraArg in unnamedInput[i:]:
-                    self.errorMessages.append(f"{extraArg} not added, exceeds expected Arguments length")
+                    self.messages.append(f"{extraArg} not added, exceeds expected Arguments length")
                     
                 break # unnamedInput loop
             
             unnamedArg = unnamedInput[i]
             positionalArg = remainingArgument[i]
             if(positionalArg.name in self.validatedArguments.keys()):
-                self.errorMessages.append(self.__formatArgumentError(positionalArg.name, f"Already added as named argument {unnamedArg}"))
+                self.messages.append(self.__formatArgumentError(positionalArg.name, f"Already added as named argument {unnamedArg}"))
                 continue
             
             self.validatedArguments[positionalArg.name] = unnamedArg
@@ -105,21 +105,21 @@ class ArgumentValidation():
         for key in self.validatedArguments.keys():
             argument = [e for e in command.arguments if e.name is key][0]
             if(argument is None):
-                self.errorMessages.append(self.__formatArgumentError(key, "Critical error! No Argument object found"))
+                self.messages.append(self.__formatArgumentError(key, "Critical error! No Argument object found"))
                 inputIsValid = False
                 continue
             
             value = self.validatedArguments[key]
             if(value is None):
                 if(argument.useDefaultValue):
-                    self.errorMessages.append(self.__formatArgumentError(key, f"Value was None and not optional, default value {argument.defaultValue} was applied"))
+                    self.messages.append(self.__formatArgumentError(key, f"Value was None and not optional, default value {argument.defaultValue} was applied"))
                     castValue = argument.defaultValue
                     continue
                 elif(argument.optional):
                     self.castArguments[key] = None
                     continue
                 else:
-                    self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! Value was None, and Argument is not optional"))
+                    self.messages.append(self.__formatArgumentError(key, f"Critical error! Value was None, and Argument is not optional"))
                     inputIsValid = False
                     continue
             
@@ -133,22 +133,22 @@ class ArgumentValidation():
                 
                 if(castValue is None and not argument.optional):
                     if(argument.useDefaultValue):
-                        self.errorMessages.append(self.__formatArgumentError(key, f"Value was None but argument was not optional, default value {argument.defaultValue} was applied"))
+                        self.messages.append(self.__formatArgumentError(key, f"Value was None but argument was not optional, default value {argument.defaultValue} was applied"))
                         castValue = argument.defaultValue
                         continue
                     else:
-                        self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! Value was None, not optional, and no default was given")) # Remember useDefaultValue
+                        self.messages.append(self.__formatArgumentError(key, f"Critical error! Value was None, not optional, and no default was given")) # Remember useDefaultValue
                         inputIsValid = False
                         continue
                 
                 castSuccess = True
             except Exception as ex:
                 if(argument.useDefaultValue):
-                    self.errorMessages.append(self.__formatArgumentError(key, f"{value} could not be cast, default value {argument.defaultValue} was applied"))
+                    self.messages.append(self.__formatArgumentError(key, f"{value} could not be cast, default value {argument.defaultValue} was applied"))
                     castValue = argument.defaultValue
                     continue
                 else:
-                    self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} could not be cast to {argument.typeT.__name__}")) 
+                    self.messages.append(self.__formatArgumentError(key, f"Critical error! {value} could not be cast to {argument.typeT.__name__}")) 
                     inputIsValid = False
                     continue
         
@@ -157,20 +157,20 @@ class ArgumentValidation():
                     resultValid = argument.validateFunc(castValue)
                     if(not resultValid):
                         if(argument.useDefaultValue):
-                            self.errorMessages.append(self.__formatArgumentError(key, f"{value} did not pass validation, default value {argument.defaultValue} was applied"))
+                            self.messages.append(self.__formatArgumentError(key, f"{value} did not pass validation, default value {argument.defaultValue} was applied"))
                             castValue = argument.defaultValue
                             continue
                         else:
-                            self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} did not pass validation"))
+                            self.messages.append(self.__formatArgumentError(key, f"Critical error! {value} did not pass validation"))
                             inputIsValid = False
                             continue
                 except Exception as ex:
                     if(argument.useDefaultValue):
-                        self.errorMessages.append(self.__formatArgumentError(key, f"{value} validation raised an exception, default value {argument.defaultValue} was applied"))
+                        self.messages.append(self.__formatArgumentError(key, f"{value} validation raised an exception, default value {argument.defaultValue} was applied"))
                         castValue = argument.defaultValue
                         continue
                     else:
-                        self.errorMessages.append(self.__formatArgumentError(key, f"Critical error! {value} validation raised an exception and no defaults were given"))
+                        self.messages.append(self.__formatArgumentError(key, f"Critical error! {value} validation raised an exception and no defaults were given"))
                         inputIsValid = False
                         continue
         
@@ -178,7 +178,7 @@ class ArgumentValidation():
             
         requiredArgumentNames = [e.name for e in command.arguments if not e.optional]
         if(len(self.castArguments.keys())) < len(requiredArgumentNames):
-            self.errorMessages.append(f"Critical error! Required arguments are missing (got {len(self.castArguments.keys())}/{len(requiredArgumentNames)})")
+            self.messages.append(f"Critical error! Required arguments are missing (got {len(self.castArguments.keys())}/{len(requiredArgumentNames)})")
             inputIsValid = False
         
         if(inputIsValid):
