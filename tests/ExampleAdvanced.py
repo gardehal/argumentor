@@ -20,10 +20,11 @@ class Main:
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
 
-        helpCommand = Command("Help", CommandHitValues.HELP, ["help", "h", "man"],
+        helpCommand = Command("Help", ["help", "h", "man"],
+            CommandHitValues.HELP,
             description= "Print this documentation")
-        dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"],
-            [widthArgument, depthArgument, heightArgument, unitArgument],
+        dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"],
+            CommandHitValues.DIMENSIONS, [widthArgument, depthArgument, heightArgument, unitArgument],
             description= "Add the dimensions of object")
         argumentor = Argumentor([helpCommand, dimensionCommand])
 

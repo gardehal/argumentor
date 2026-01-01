@@ -17,8 +17,8 @@ class Flag():
         # description= "Update all external vendors with new values.") 
     
     def __init__(self, name: str, 
-                 alias: list[str] = [], 
-                 value: Any = None, 
+                 alias: list[str],
+                 value: Any,
                  description: str = None):
         """
         Designates values input as a flag after commands 
@@ -27,8 +27,8 @@ class Flag():
 
         Args:
             name (str): Name of argument, key for dictionary in Return
-            alias (list[str], optional): Alias of argument. Defaults to [].
-            value (Any, optional): The value to use if flag is present in input. Defaults to None.
+            alias (list[str]): Alias of argument.
+            value (Any): The value to use if flag is present in input.
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         

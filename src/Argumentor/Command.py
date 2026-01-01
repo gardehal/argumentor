@@ -10,8 +10,8 @@ class Command():
     description: str
     
     def __init__(self, name: str, 
+                 alias: list[str], 
                  hitValue: object, 
-                 alias: list[str] = [], 
                  arguments: list[Argument] = [], 
                  description: str = None):
         """
@@ -21,15 +21,15 @@ class Command():
 
         Args:
             name (str): Name of command
+            alias (list[str]): Alias of command.
             hitValue (object): Value to return in Result when this command is found in input
-            alias (list[str], optional): Alias of command. Defaults to [].
             arguments (list[Argument], optional): Arguments to be cast and validated, then returned in Result. Defaults to [].
             description (str, optional): Explaining what the command does. Defaults to None.
         """
         
         self.name = re.sub(r"\s", "", name)
-        self.hitValue = hitValue
         self.alias = [re.sub(r"\s", "", e) for e in alias]
+        self.hitValue = hitValue
         self.arguments = arguments 
         self.description = description
         

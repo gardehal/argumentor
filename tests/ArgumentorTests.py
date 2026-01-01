@@ -30,7 +30,7 @@ class ArgumentorTests(unittest.TestCase):
     def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentNameAlias(self):
         duplicateArgumentA = Argument("someargument", ["A"], int)
         duplicateArgumentB = Argument("B", ["someargument"], int)
-        command = Command("Duplicate", "DUPLICATEHITVALUE", [], [duplicateArgumentA, duplicateArgumentB])
+        command = Command("Duplicate", [], "DUPLICATEHITVALUE", [duplicateArgumentA, duplicateArgumentB])
 
         try:
             Argumentor([command])
@@ -42,7 +42,7 @@ class ArgumentorTests(unittest.TestCase):
     def test_Argumentor_ShouldRaiseException_WhenDuplicateArgumentNames(self):
         duplicateArgumentA = Argument("someargument", ["A"], int)
         duplicateArgumentB = Argument("someargument", ["B"], int)
-        command = Command("Duplicate", "DUPLICATEHITVALUE", [], [duplicateArgumentA, duplicateArgumentB])
+        command = Command("Duplicate", [], "DUPLICATEHITVALUE", [duplicateArgumentA, duplicateArgumentB])
 
         try:
             Argumentor([command])
@@ -64,8 +64,8 @@ class ArgumentorTests(unittest.TestCase):
             self.assertTrue(str(ex).__contains__("someargument"))
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandNameAlias(self):
-        duplicateCommandA = Command("somecommand", "DUPLICATEHITVALUE", ["A"])
-        duplicateCommandB = Command("B", "DUPLICATEHITVALUE", ["somecommand"])
+        duplicateCommandA = Command("somecommand", ["A"], "DUPLICATEHITVALUE")
+        duplicateCommandB = Command("B", ["somecommand"], "DUPLICATEHITVALUE")
 
         try:
             Argumentor([duplicateCommandA, duplicateCommandB])
@@ -75,8 +75,8 @@ class ArgumentorTests(unittest.TestCase):
             self.assertTrue(str(ex).__contains__("somecommand"))
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandNames(self):
-        duplicateCommandA = Command("somecommand", "DUPLICATEHITVALUE", ["A"])
-        duplicateCommandB = Command("somecommand", "DUPLICATEHITVALUE", ["B"])
+        duplicateCommandA = Command("somecommand", ["A"], "DUPLICATEHITVALUE")
+        duplicateCommandB = Command("somecommand", ["B"], "DUPLICATEHITVALUE")
 
         try:
             Argumentor([duplicateCommandA, duplicateCommandB])
@@ -86,8 +86,8 @@ class ArgumentorTests(unittest.TestCase):
             self.assertTrue(str(ex).__contains__("somecommand"))
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandAlias(self):
-        duplicateCommandA = Command("A", "DUPLICATEHITVALUE", ["somecommand"])
-        duplicateCommandB = Command("B", "DUPLICATEHITVALUE", ["somecommand"])
+        duplicateCommandA = Command("A", ["somecommand"], "DUPLICATEHITVALUE")
+        duplicateCommandB = Command("B", ["somecommand"], "DUPLICATEHITVALUE")
 
         try:
             Argumentor([duplicateCommandA, duplicateCommandB])
@@ -99,7 +99,7 @@ class ArgumentorTests(unittest.TestCase):
     def test_Argumentor_ShouldDoNothing_WhenCommandAndArgumentHaveSameNames(self):
         name = "someargument"
         argument = Argument(name, ["A"], int)
-        command = Command(name, "DUPLICATEHITVALUE", ["B"], [argument])
+        command = Command(name, ["B"], "DUPLICATEHITVALUE", [argument])
 
         argumentor = Argumentor([command])
         self.assertEqual(1, len(argumentor.commands))
@@ -206,8 +206,10 @@ class ArgumentorTests(unittest.TestCase):
         arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
         
         # Note spaces in name and alias
-        helpCommand = Command("He lp", CommandHitValues.HELP, ["h e l p", "h"], [], "Print this documentation")
-        dimensionCommand = Command("Dimensions", CommandHitValues.DIMENSIONS, ["dimensions", "dimension", "dim", "d"], arguments, "Add the dimensions of object")
+        helpCommand = Command("He lp", ["h e l p", "h"], 
+            CommandHitValues.HELP, [], "Print this documentation")
+        dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"], 
+            CommandHitValues.DIMENSIONS, arguments, "Add the dimensions of object")
         return Argumentor([helpCommand, dimensionCommand])
     
     # Note: castFunc must be from string and return typeT
