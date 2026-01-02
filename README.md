@@ -46,7 +46,9 @@ The following list of examples explains some expected outcomes, or could be used
     inputE = "-d w:10 11 12" # Valid
     inputF = "-d w:13 d:'-14' h:-15" # Invalid, validateInt function does not allow negative values (-14), and arguments (h:-15) starting with the command prefix (default "-") must be a named alias with quotation marks
     inputG = "-d w:16 d:':17' h::18" # Invalid, the default int casting (':17') will fail, and arguments with colon ":" (h::18) must be a named alias or in quotation marks
-    inputH = "-test 1 2 3" # Invalid, command "test" does not exist and nothing will be returned from validate
+    inputH = "-test 19 20 21" # Invalid, command "test" does not exist and nothing will be returned from validate
+    inputI = "-d 22 24 25 --updateexternal" # Valid, flag --updateexternal will return a static value
+    inputJ = "-d 26 27 28 --nosuchflag" # Valid, but flag does not exist and reports this through Result.messages
     
     # Input as string
     argResults = argumentor.validateString(inputA)
@@ -66,7 +68,11 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- 100% multiple things to improve in validate, efficacy and readability
+- enforce check that name and alias are a-zA-Z \w characters only near duplicate checks, replace sub space regex + tests, raise exception, dont just quietly fix
+- add duplicate checks for flags internally in commands + tests
+- flag general tests 
+- argvalidation castarguments rename
+- add syntax for prefix/delim to help/format prints? should be it's own method since it's not nessecary for every instance of formatted description and is mostly meta info
+- duplicate check isnt nessecary EVERY time argumentor starts, only if the commands arguments or flags have changed. add option to disable it, or some comparison with a cache?
 - publish pip
-- add flags? 
-    - seems like just a shorthand version of argument but without value, a lot of work and complexity for a very minor QOL..
-    - eg. "-command argument1 --flag1"(-- : prefix?) results in command with argument1 = argument1 and flag1 = true or whatever static value flag was configured to
