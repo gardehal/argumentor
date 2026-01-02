@@ -63,6 +63,48 @@ class ArgumentorTests(unittest.TestCase):
             self.assertTrue(str(ex).__contains__("Duplicate arguments"))
             self.assertTrue(str(ex).__contains__("someargument"))
         
+    # 
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateFlagNameAlias(self):
+        flagName = "someflag"
+        flagA = Argument(flagName, ["A"], int)
+        flagB = Argument("B", [flagName], int)
+        command = Command("Duplicate", [], "DUPLICATEHITVALUE", flags= [flagA, flagB])
+
+        try:
+            Argumentor([command])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate flag"))
+            self.assertTrue(str(ex).__contains__(flagName))
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateFlagNames(self):
+        flagName = "someflag"
+        flagA = Flag(flagName, ["A"], int)
+        flagB = Flag(flagName, ["B"], int)
+        command = Command("Duplicate", [], "DUPLICATEHITVALUE", flags= [flagA, flagB])
+
+        try:
+            Argumentor([command])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate flags"))
+            self.assertTrue(str(ex).__contains__(flagName))
+        
+    def test_Argumentor_ShouldRaiseException_WhenDuplicateFlagAlias(self):
+        flagName = "someflag"
+        flagA = Flag("A", [flagName], int)
+        flagB = Argument("B", [flagName], int)
+        command = Command("Duplicate", [], "DUPLICATEHITVALUE", flags= [flagA, flagB])
+
+        try:
+            Argumentor([command])
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__("Duplicate flags"))
+            self.assertTrue(str(ex).__contains__(flagName))
+    #
+
     def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandNameAlias(self):
         duplicateCommandA = Command("somecommand", ["A"], "DUPLICATEHITVALUE")
         duplicateCommandB = Command("B", ["somecommand"], "DUPLICATEHITVALUE")
@@ -114,6 +156,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].arguments), 4)
         self.assertEqual(len(result[0].messages), 0)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputB(self):
@@ -184,10 +227,32 @@ class ArgumentorTests(unittest.TestCase):
         
     def test_Argumentor_ShouldReturnEmptyResult_WhenInputH(self):
         argumentor = self.__basicArgumentor()
-        inputH = "-test 1 2 3" # Invalid, command "test" does not exist and nothing will be returned from validate
+        inputH = "-test 19 20 21" # Invalid, command "test" does not exist and nothing will be returned from validate
         result = argumentor.validate(inputH.split(" "))
         
         self.assertEqual(len(result), 0)
+
+    def test_Argumentor_ShouldReturnValidResultWithFlagValue_WhenInputI(self):
+        argumentor = self.__basicArgumentor()
+        inputI = "-d 22 24 25 --updateexternal" # Valid, flag --updateexternal will return a static value
+        result = argumentor.validate(inputI.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].arguments), 5)
+        self.assertEqual(len(result[0].messages), 0)
+
+    def test_Argumentor_ShouldReturnValidWithoutFlags_WhenInputJ(self):
+        argumentor = self.__basicArgumentor()
+        inputJ = "-d 26 27 28 --nosuchflag" # Valid, but flag does not exist and reports this through Result.messages
+        result = argumentor.validate(inputJ.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].arguments), 4)
+        self.assertEqual(len(result[0].messages), 1)
+        self.assertTrue(result[0].messages[0].__contains__("nosuchflag"))
+        self.assertTrue(result[0].messages[0].__contains__("No such flag(s)"))
         
     def __basicArgumentor(self) -> Argumentor:
         # Note spaces in name and alias
@@ -199,17 +264,22 @@ class ArgumentorTests(unittest.TestCase):
             validateFunc= self.validateInt, description= "Height of object, between 1 and 100")
         unitArgument = Argument("Unit", ["unit", "u"], Measurement,
             optional= True,
-            castFunc= self.castMeasurements, 
+            castFunc= self.castMeasurements,
             validateFunc= self.validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
-        arguments = [widthArgument, depthArgument, heightArgument, unitArgument]
+        
+        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], value= True,
+            description= "Update all external vendors with new values.") 
         
         # Note spaces in name and alias
-        helpCommand = Command("He lp", ["h e l p", "h"], 
-            CommandHitValues.HELP, [], "Print this documentation")
-        dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"], 
-            CommandHitValues.DIMENSIONS, arguments, "Add the dimensions of object")
+        helpCommand = Command("He lp", ["h e l p", "h"],
+            CommandHitValues.HELP, 
+            description= "Print this documentation")
+        dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"],
+            CommandHitValues.DIMENSIONS,
+            [widthArgument, depthArgument, heightArgument, unitArgument], [updateExternalFlag],
+            description= "Add the dimensions of object")
         return Argumentor([helpCommand, dimensionCommand])
     
     # Note: castFunc must be from string and return typeT
@@ -220,6 +290,8 @@ class ArgumentorTests(unittest.TestCase):
             case "2" | "inch" | "inches":
                 return Measurement.INCHES
             case _:
+                # Note that a default value can be added here as well,
+                # but doing so will override Arguments defaultValue 
                 return None
                 
     # Note: validateFunc must be from typeT and return bool

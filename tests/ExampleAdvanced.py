@@ -5,7 +5,7 @@ from enums.CommandHitValues import CommandHitValues
 
 class Main:
     def main():
-        # Example input: python ExampleAdvanced.py -d 1 2 3 inches
+        # Example input: python ExampleAdvanced.py -d 1 2 3 inches --uev
 
         widthArgument = Argument("Width", ["width", "w"], int,
             validateFunc= validateInt, description= "Width of object, between 1 and 100")
@@ -20,11 +20,15 @@ class Main:
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
 
+        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], value= True,
+            description= "Update all external vendors with new values.") 
+
         helpCommand = Command("Help", ["help", "h", "man"],
             CommandHitValues.HELP,
             description= "Print this documentation")
         dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"],
-            CommandHitValues.DIMENSIONS, [widthArgument, depthArgument, heightArgument, unitArgument],
+            CommandHitValues.DIMENSIONS, 
+            [widthArgument, depthArgument, heightArgument, unitArgument], [updateExternalFlag],
             description= "Add the dimensions of object")
         argumentor = Argumentor([helpCommand, dimensionCommand])
 
@@ -35,7 +39,7 @@ class Main:
             return
 
         for result in results:
-            # print(result.toString()) # For debugging
+            print(result.toString()) # For debugging
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
                 print(result.getFormattedMessages())
@@ -54,6 +58,9 @@ class Main:
                 #   result.arguments[depthArgument.name],
                 #   result.arguments[heightArgument.name],
                 #   result.arguments[unitArgument.name])
+
+                # if(result.arguments[updateExternalFlag.name]):
+                #     externalService.update()
 
 # Note: castFunc must be from string and return typeT
 def castMeasurements(value: str) -> Measurement:
