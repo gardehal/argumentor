@@ -68,11 +68,8 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- command hitvalue vs flag value, any or object?
+- __basicArgumentor in tests is the same as in example advanced, can reduce duplicate code? want to keep example advanced all in one file for example coherency
 - 100% multiple things to improve in validate, efficacy and readability
-- enforce check that name and alias are a-zA-Z \w characters only near duplicate checks, replace sub space regex + tests, raise exception, dont just quietly fix
-- add duplicate checks for flags internally in commands + tests
-- flag general tests 
 - argvalidation castarguments rename
-- add syntax for prefix/delim to help/format prints? should be it's own method since it's not nessecary for every instance of formatted description and is mostly meta info
-- duplicate check isnt nessecary EVERY time argumentor starts, only if the commands arguments or flags have changed. add option to disable it, or some comparison with a cache?
 - publish pip
