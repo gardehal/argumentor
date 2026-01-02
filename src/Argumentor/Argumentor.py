@@ -15,7 +15,8 @@ class Argumentor():
         commandPrefix: str = "-",
         namedArgDelim: str = ":",
         flagPrefix: str = "--",
-        inputDelim: str = " "):
+        inputDelim: str = " ",
+        nameDuplicateCheck: bool = True):
         """
         Holder of all commands and arguments, base for validation of input.
 
@@ -25,6 +26,7 @@ class Argumentor():
             namedArgDelim (str, optional): Deliminator for named arguments, e.g. "width:10". Defaults to ":".
             flagPrefix (str, optional): Prefix for flags, e.g. "--updateexternal". Defaults to "--".
             inputDelim (str, optional): Deliminator for input, only used for validateString. Defaults to " ".
+            nameDuplicateCheck (bool, optional): Enable checks on command, argument, flag name/alias duplicates. Defaults to True.
         """
 
         self.commands = commands
@@ -36,24 +38,46 @@ class Argumentor():
         # Check for duplicates,
         # two different command cannot have the same names or alias,
         # a command cannot have two arguments with the same names or alias
-        commandList = []
-        for command in self.commands:
-            argumentList = [e for f in command.arguments for e in (f.alias + [f.name])]
-            argumentDuplicates = [e for e in argumentList if argumentList.count(e) > 1]
-            if(argumentDuplicates):
-                raise AttributeError(f"Duplicate arguments ({argumentDuplicates}) found in {command.name}")
-            
-            flagList = [e for f in command.flags for e in (f.alias + [f.name])]
-            flagDuplicates = [e for e in flagList if flagList.count(e) > 1]
-            if(flagDuplicates):
-                raise AttributeError(f"Duplicate flags ({flagDuplicates}) found in {command.name}")
+        if(nameDuplicateCheck):
+            argumentorList = [self.commandPrefix, self.namedArgDelim, self.flagPrefix, self.inputDelim]
+            argumentorDuplicates = [e for e in argumentorList if argumentorList.count(e) > 1]
+            if(argumentorDuplicates):
+                raise AttributeError(f"Duplicate prefixes or delims ({argumentorDuplicates}) found in Argumentor")
 
-            commandList.append(command.name)
-            commandList.extend(command.alias)
+            commandList = []
+            for command in self.commands:
+                argumentList = [e for f in command.arguments for e in (f.alias + [f.name])]
+                argumentDuplicates = [e for e in argumentList if argumentList.count(e) > 1]
+                if(argumentDuplicates):
+                    raise AttributeError(f"Duplicate arguments ({argumentDuplicates}) found in {command.name}")
+                
+                flagList = [e for f in command.flags for e in (f.alias + [f.name])]
+                flagDuplicates = [e for e in flagList if flagList.count(e) > 1]
+                if(flagDuplicates):
+                    raise AttributeError(f"Duplicate flags ({flagDuplicates}) found in {command.name}")
 
-        commandDuplicates = [e for e in commandList if commandList.count(e) > 1]
-        if(commandDuplicates):
-            raise AttributeError(f"Duplicate commands ({commandDuplicates}) found")
+                commandList.append(command.name)
+                commandList.extend(command.alias)
+
+            commandDuplicates = [e for e in commandList if commandList.count(e) > 1]
+            if(commandDuplicates):
+                raise AttributeError(f"Duplicate commands ({commandDuplicates}) found")
+
+    def getSyntaxDescription(self) -> str:
+        """
+        Get the description of syntax for calling commands.
+
+        Returns:
+            str: String description.
+        """
+        
+        return f"""\
+Commands must be prefixed with \"{self.commandPrefix}\"
+Arguments can be either positional or prefixed with the argument name using \"{self.namedArgDelim}\"
+Flags must be prefixed with \"{self.flagPrefix}\"
+All input must be parted with \"{self.inputDelim}\"
+Example: {self.commandPrefix}command{self.inputDelim}positionalArgument{self.inputDelim}argumentName{self.namedArgDelim}argumentValue{self.inputDelim}{self.flagPrefix}flag
+            """
 
     def getFormattedDescription(self) -> str:
         """

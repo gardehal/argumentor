@@ -30,12 +30,13 @@ class Main:
             CommandHitValues.DIMENSIONS, 
             [widthArgument, depthArgument, heightArgument, unitArgument], [updateExternalFlag],
             description= "Add the dimensions of object")
-        argumentor = Argumentor([helpCommand, dimensionCommand])
+        argumentor = Argumentor([helpCommand, dimensionCommand], inputDelim="    ")
 
         results = argumentor.validate(sys.argv)
 
         if(len(results) == 0):
-            print("No valid command was found, please consult the manual for available commands.")
+            print("No valid command was found, please consult the manual for available commands. See the syntax description below:")
+            print(argumentor.getSyntaxDescription())
             return
 
         for result in results:
