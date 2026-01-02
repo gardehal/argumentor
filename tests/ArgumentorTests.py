@@ -78,7 +78,7 @@ class ArgumentorTests(unittest.TestCase):
         argumentName = "someargument"
         argumentA = Argument(argumentName, ["A"], int)
         argumentB = Argument("B", [argumentName], int)
-        command = Command("Duplicate", [], "DUPLICATEHITVALUE", [argumentA, argumentB])
+        command = Command("Duplicate", [], "HITVALUE", [argumentA, argumentB])
 
         try:
             Argumentor([command])
@@ -91,7 +91,7 @@ class ArgumentorTests(unittest.TestCase):
         argumentName = "someargument"
         argumentA = Argument(argumentName, ["A"], int)
         argumentB = Argument(argumentName, ["B"], int)
-        command = Command("Duplicate", [], "DUPLICATEHITVALUE", [argumentA, argumentB])
+        command = Command("Duplicate", [], "HITVALUE", [argumentA, argumentB])
 
         try:
             Argumentor([command])
@@ -104,7 +104,7 @@ class ArgumentorTests(unittest.TestCase):
         argumentName = "someargument"
         argumentA = Argument("A", [argumentName], int)
         argumentB = Argument("B", [argumentName], int)
-        command = Command("Duplicate", [], "DUPLICATEHITVALUE", [argumentA, argumentB])
+        command = Command("Duplicate", [], "HITVALUE", [argumentA, argumentB])
 
         try:
             Argumentor([command])
@@ -117,7 +117,7 @@ class ArgumentorTests(unittest.TestCase):
         flagName = "someflag"
         flagA = Argument(flagName, ["A"], int)
         flagB = Argument("B", [flagName], int)
-        command = Command("Duplicate", [], "DUPLICATEHITVALUE", flags= [flagA, flagB])
+        command = Command("Duplicate", [], "HITVALUE", flags= [flagA, flagB])
 
         try:
             Argumentor([command])
@@ -130,7 +130,7 @@ class ArgumentorTests(unittest.TestCase):
         flagName = "someflag"
         flagA = Flag(flagName, ["A"], int)
         flagB = Flag(flagName, ["B"], int)
-        command = Command("Duplicate", [], "DUPLICATEHITVALUE", flags= [flagA, flagB])
+        command = Command("Duplicate", [], "HITVALUE", flags= [flagA, flagB])
 
         try:
             Argumentor([command])
@@ -143,7 +143,7 @@ class ArgumentorTests(unittest.TestCase):
         flagName = "someflag"
         flagA = Flag("A", [flagName], int)
         flagB = Argument("B", [flagName], int)
-        command = Command("Duplicate", [], "DUPLICATEHITVALUE", flags= [flagA, flagB])
+        command = Command("Duplicate", [], "HITVALUE", flags= [flagA, flagB])
 
         try:
             Argumentor([command])
@@ -154,8 +154,8 @@ class ArgumentorTests(unittest.TestCase):
 
     def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandNameAlias(self):
         commandName = "somecommand"
-        commandA = Command(commandName, ["A"], "DUPLICATEHITVALUE")
-        commandB = Command("B", [commandName], "DUPLICATEHITVALUE")
+        commandA = Command(commandName, ["A"], "HITVALUE")
+        commandB = Command("B", [commandName], "HITVALUE")
 
         try:
             Argumentor([commandA, commandB])
@@ -166,8 +166,8 @@ class ArgumentorTests(unittest.TestCase):
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandNames(self):
         commandName = "somecommand"
-        commandA = Command(commandName, ["A"], "DUPLICATEHITVALUE")
-        commandB = Command(commandName, ["B"], "DUPLICATEHITVALUE")
+        commandA = Command(commandName, ["A"], "HITVALUE")
+        commandB = Command(commandName, ["B"], "HITVALUE")
 
         try:
             Argumentor([commandA, commandB])
@@ -178,8 +178,8 @@ class ArgumentorTests(unittest.TestCase):
         
     def test_Argumentor_ShouldRaiseException_WhenDuplicateCommandAlias(self):
         commandName = "somecommand"
-        commandA = Command("A", [commandName], "DUPLICATEHITVALUE")
-        commandB = Command("B", [commandName], "DUPLICATEHITVALUE")
+        commandA = Command("A", [commandName], "HITVALUE")
+        commandB = Command("B", [commandName], "HITVALUE")
 
         try:
             Argumentor([commandA, commandB])
@@ -191,7 +191,7 @@ class ArgumentorTests(unittest.TestCase):
     def test_Argumentor_ShouldDoNothing_WhenCommandAndArgumentHaveSameNames(self):
         name = "someargument"
         argument = Argument(name, ["A"], int)
-        command = Command(name, ["B"], "DUPLICATEHITVALUE", [argument])
+        command = Command(name, ["B"], "HITVALUE", [argument])
 
         argumentor = Argumentor([command])
         self.assertEqual(1, len(argumentor.commands))
@@ -251,7 +251,7 @@ class ArgumentorTests(unittest.TestCase):
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputF(self):
         argumentor = self.__basicArgumentor()
-        # Note quatation markes ' removed as it's not CLI input
+        # Note quotation marks ' removed as it's not CLI input
         inputF = "-d w:13 d:-14 h:-15" # Invalid, validateInt function does not allow negative values (-14), and arguments (h:-15) starting with the command prefix (default "-") must be a named alias with quotation marks
         result = argumentor.validate(inputF.split(" "))
     
@@ -264,7 +264,7 @@ class ArgumentorTests(unittest.TestCase):
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputG(self):
         argumentor = self.__basicArgumentor()
-        # Note quatation markes ' removed as it's not CLI input
+        # Note quotation marks ' removed as it's not CLI input
         inputG = "-d w:16 d::17 h::18" # Invalid, the default int casting (':17') will fail, and arguments with colon ":" (h::18) must be a named alias or in quotation marks
         result = argumentor.validate(inputG.split(" "))
         
