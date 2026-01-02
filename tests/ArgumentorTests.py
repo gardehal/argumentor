@@ -5,18 +5,56 @@ from enums.Measurement import Measurement
 from enums.CommandHitValues import CommandHitValues
 
 class ArgumentorTests(unittest.TestCase):
-    def test_Argumentor_ShouldRemoveSpaces_WhenSpacesInNamesAndAlias(self):
-        argumentor = self.__basicArgumentor()
-        namesAndAlias = []
-        for command in argumentor.commands:
-            namesAndAlias.append(command.name)
-            namesAndAlias.extend(command.alias)
-            for argument in command.arguments:
-                namesAndAlias.append(argument.name)
-                namesAndAlias.extend(argument.alias)
+    def test_Argumentor_ShouldRaiseException_WhenSpaceInArgumentName(self):
+        invalidName = "invalid name"
+        try:
+            Argument(invalidName, [], int)
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__(f"Argument \"{invalidName}\" name or alias (['{invalidName}']) contain invalid characters"))
             
-        for name in namesAndAlias:
-            self.assertFalse(name.__contains__(" "))
+    def test_Argumentor_ShouldRaiseException_WhenSpaceInArgumentAlias(self):
+        name = "A"
+        invalidName = "invalid name"
+        try:
+            Argument(name, [invalidName], int)
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__(f"Argument \"{name}\" name or alias (['{invalidName}']) contain invalid characters"))
+            
+    def test_Argumentor_ShouldRaiseException_WhenSpaceInFlagName(self):
+        invalidName = "invalid name"
+        try:
+            Flag(invalidName, [], 1)
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__(f"Flag \"{invalidName}\" name or alias (['{invalidName}']) contain invalid characters"))
+            
+    def test_Argumentor_ShouldRaiseException_WhenSpaceInFlagAlias(self):
+        name = "A"
+        invalidName = "invalid name"
+        try:
+            Flag(name, [invalidName], 1)
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__(f"Flag \"{name}\" name or alias (['{invalidName}']) contain invalid characters"))
+            
+    def test_Argumentor_ShouldRaiseException_WhenSpaceInCommandName(self):
+        invalidName = "invalid name"
+        try:
+            Command(invalidName, [], "HITVALUE")
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__(f"Command \"{invalidName}\" name or alias (['{invalidName}']) contain invalid characters"))
+            
+    def test_Argumentor_ShouldRaiseException_WhenSpaceInCommandAlias(self):
+        name = "A"
+        invalidName = "invalid name"
+        try:
+            Command(name, [invalidName], "HITVALUE")
+            self.assertTrue(False) # Fail here
+        except AttributeError as ex:
+            self.assertTrue(str(ex).__contains__(f"Command \"{name}\" name or alias (['{invalidName}']) contain invalid characters"))
             
     def test_Argumentor_ShouldBeInAddedOrder_WhenAddedAsList(self):
         argumentor = self.__basicArgumentor()
@@ -66,7 +104,7 @@ class ArgumentorTests(unittest.TestCase):
         argumentName = "someargument"
         argumentA = Argument("A", [argumentName], int)
         argumentB = Argument("B", [argumentName], int)
-        command = Command("Duplicate", "DUPLICATEHITVALUE", [], [argumentA, argumentB])
+        command = Command("Duplicate", [], "DUPLICATEHITVALUE", [argumentA, argumentB])
 
         try:
             Argumentor([command])
@@ -267,8 +305,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertTrue(result[0].messages[0].__contains__("No such flag(s)"))
         
     def __basicArgumentor(self) -> Argumentor:
-        # Note spaces in name and alias
-        widthArgument = Argument("Widt h", ["w idt h", "w"], int,
+        widthArgument = Argument("Width", ["width", "w"], int,
             validateFunc= self.validateInt, description= "Width of object, between 1 and 100")
         depthArgument = Argument("Depth", ["depth", "d"], int,
             validateFunc= self.validateInt, description= "Depth of object, between 1 and 100")
@@ -284,8 +321,7 @@ class ArgumentorTests(unittest.TestCase):
         updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], value= True,
             description= "Update all external vendors with new values.") 
         
-        # Note spaces in name and alias
-        helpCommand = Command("He lp", ["h e l p", "h"],
+        helpCommand = Command("Help", ["help", "h"],
             CommandHitValues.HELP, 
             description= "Print this documentation")
         dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"],

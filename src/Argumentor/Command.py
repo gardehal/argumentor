@@ -30,9 +30,14 @@ class Command():
             flags (list[Flag], optional): Flags which when present returns a static value. Defaults to [].
             description (str, optional): Explaining what the command does. Defaults to None.
         """
+
+        invalidCharactersRegex = r"\W"
+        invalidNames = [e for e in alias + [name] if (re.search(invalidCharactersRegex, e))]
+        if(invalidNames):
+            raise AttributeError(f"Command \"{name}\" name or alias ({invalidNames}) contain invalid characters, must be alphanumeric.")
         
-        self.name = re.sub(r"\s", "", name)
-        self.alias = [re.sub(r"\s", "", e) for e in alias]
+        self.name = name
+        self.alias = alias
         self.hitValue = hitValue
         self.arguments = arguments
         self.flags = flags

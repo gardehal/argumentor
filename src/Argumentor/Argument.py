@@ -41,8 +41,13 @@ class Argument[T]():
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         
-        self.name = re.sub(r"\s", "", name)
-        self.alias = [re.sub(r"\s", "", e) for e in alias]
+        invalidCharactersRegex = r"\W"
+        invalidNames = [e for e in alias + [name] if (re.search(invalidCharactersRegex, e))]
+        if(invalidNames):
+            raise AttributeError(f"Argument \"{name}\" name or alias ({invalidNames}) contain invalid characters, must be alphanumeric.")
+        
+        self.name = name
+        self.alias = alias
         self.typeT = typeT
         self.optional = optional
         self.castFunc = castFunc
