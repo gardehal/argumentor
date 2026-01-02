@@ -68,8 +68,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- command hitvalue vs flag value, any or object?
 - __basicArgumentor in tests is the same as in example advanced, can reduce duplicate code? want to keep example advanced all in one file for example coherency
 - 100% multiple things to improve in validate, efficacy and readability
-- argvalidation castarguments rename
+- spellchecks..
 - publish pip

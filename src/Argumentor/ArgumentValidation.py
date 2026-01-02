@@ -8,7 +8,7 @@ class ArgumentValidation():
     isValid: bool
     namedArguments: dict[str, str]
     validatedArguments: dict[str, str]
-    castArguments: dict[str, object]
+    finalizedArguments: dict[str, object]
     messages: list[str]
     
     namedInputRegex: str
@@ -28,7 +28,7 @@ class ArgumentValidation():
         self.isValid = False
         self.namedArguments = {}
         self.validatedArguments = {}
-        self.castArguments = {}
+        self.finalizedArguments = {}
         self.messages = []
         
         if(not command.arguments and not command.flags):
@@ -59,7 +59,7 @@ class ArgumentValidation():
             isValid: {self.isValid},
             namedArguments: {self.namedArguments},
             validatedArguments: {self.validatedArguments},
-            castArguments: {self.castArguments},
+            finalizedArguments: {self.finalizedArguments},
             messages: {self.messages},
             """
     
@@ -128,7 +128,7 @@ class ArgumentValidation():
                     castValue = argument.defaultValue
                     continue
                 elif(argument.optional):
-                    self.castArguments[key] = None
+                    self.finalizedArguments[key] = None
                     continue
                 else:
                     self.messages.append(self.__formatArgumentError(key, f"Critical error! Value was None, and Argument is not optional"))
@@ -186,17 +186,17 @@ class ArgumentValidation():
                         inputIsValid = False
                         continue
         
-            self.castArguments[key] = castValue
+            self.finalizedArguments[key] = castValue
             
         requiredArgumentNames = [e.name for e in command.arguments if not e.optional]
-        if(len(self.castArguments.keys())) < len(requiredArgumentNames):
-            self.messages.append(f"Critical error! Required arguments are missing (got {len(self.castArguments.keys())}/{len(requiredArgumentNames)})")
+        if(len(self.finalizedArguments.keys())) < len(requiredArgumentNames):
+            self.messages.append(f"Critical error! Required arguments are missing (got {len(self.finalizedArguments.keys())}/{len(requiredArgumentNames)})")
             inputIsValid = False
         
         if(inputIsValid):
             for argument in command.arguments:
-                if(argument.name not in self.castArguments.keys() and argument.useDefaultValue):
-                    self.castArguments[argument.name] = argument.defaultValue
+                if(argument.name not in self.finalizedArguments.keys() and argument.useDefaultValue):
+                    self.finalizedArguments[argument.name] = argument.defaultValue
         
         self.isValid = inputIsValid
     
@@ -205,7 +205,7 @@ class ArgumentValidation():
         for flag in flags:
             intersections = list(set(flagInputs) & set(flag.alias + [flag.name]))
             if(intersections):
-                self.castArguments[flag.name] = flag.value
+                self.finalizedArguments[flag.name] = flag.value
                 for intersection in intersections:
                     flagInputs.remove(intersection)
         

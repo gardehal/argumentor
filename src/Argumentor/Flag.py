@@ -1,16 +1,14 @@
 import re
 
-from typing import Any
-
 class Flag():
     name: str
     alias: list[str]
-    value: Any
+    value: object
     description: str
 
     def __init__(self, name: str, 
         alias: list[str],
-        value: Any,
+        value: object,
         description: str = None):
         """
         Designates values input as a flag after commands. These are always optional and only return a static value.
@@ -20,7 +18,7 @@ class Flag():
         Args:
             name (str): Name of argument, key for dictionary in Return
             alias (list[str]): Alias of argument.
-            value (Any): The value to use if flag is present in input.
+            value (object): The value to use if flag is present in input.
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         

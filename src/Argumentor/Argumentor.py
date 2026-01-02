@@ -134,7 +134,7 @@ Example: {self.commandPrefix}command{self.inputDelim}positionalArgument{self.inp
                 args = potentialArgs[:argsEndIndex]
                 validation = ArgumentValidation(args, command, self.namedArgDelim, self.flagPrefix)
                 
-                argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.castArguments, validation.messages)
+                argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.finalizedArguments, validation.messages)
                 result.append(argResult)
         
         if(nextInputs):
