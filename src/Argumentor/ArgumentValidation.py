@@ -1,5 +1,6 @@
 from .Argument import Argument
 from .Command import Command
+from .Flag import Flag
 
 import re
 
@@ -10,7 +11,10 @@ class ArgumentValidation():
     castArguments: dict[str, object]
     messages: list[str]
     
-    def __init__(self, inputList: list[str], command: Command, namedArgDelim: str):
+    namedInputRegex: str
+    flagInputRegex: str
+
+    def __init__(self, inputList: list[str], command: Command, namedArgDelim: str, flagPrefix: str):
         """
         Internal validation in Argumentor.
 
@@ -18,6 +22,7 @@ class ArgumentValidation():
             inputList (list[str]): List of inputs from user
             command (Command): Command to validate input against
             namedArgDelim (str): Delimiter used for named input, e.g. ":" in key:value
+            flagPrefix (str): Prefix for flags, e.g. "--updateexternal".
         """
         
         self.isValid = False
@@ -26,14 +31,21 @@ class ArgumentValidation():
         self.castArguments = {}
         self.messages = []
         
-        if(len(command.arguments) == 0):
+        if(not command.arguments and not command.flags):
             self.isValid = True
             return
 
-        self.__populateNamedArguments(inputList, namedArgDelim)
-        self.__validateNamedArguments(command.arguments)
-        self.__addPositionalArguments(inputList, namedArgDelim, command)
-        self.__castAndValidateArguments(command)
+        self.namedInputRegex = fr"^\w+{namedArgDelim}\S+"
+        self.flagInputRegex = fr"^{flagPrefix}\w+"
+
+        if(command.arguments):
+            self.__populateNamedArguments(inputList, namedArgDelim)
+            self.__validateNamedArguments(command.arguments)
+            self.__addPositionalArguments(inputList, command)
+            self.__castAndValidateArguments(command)
+
+        if(command.flags):
+            self.__addFlags(inputList, flagPrefix, command.flags)
         
     def toString(self) -> str:
         """
@@ -80,9 +92,8 @@ class ArgumentValidation():
             
             self.validatedArguments[argumentAliasMap[key]] = self.namedArguments[key]
     
-    def __addPositionalArguments(self, inputList: list[str], namedArgDelim: str, command: Command):
-        namedInputRegex = fr"^\w+{namedArgDelim}\S*"
-        unnamedInput = [e for e in inputList if(not re.search(namedInputRegex, e))]
+    def __addPositionalArguments(self, inputList: list[str], command: Command):
+        unnamedInput = [e for e in inputList if(not re.search(self.namedInputRegex, e) and not re.search(self.flagInputRegex, e))]
         remainingArgument = [e for e in command.arguments if(e.name not in self.validatedArguments.keys())]
 
         for i in range(len(unnamedInput)):
@@ -188,7 +199,19 @@ class ArgumentValidation():
                     self.castArguments[argument.name] = argument.defaultValue
         
         self.isValid = inputIsValid
+    
+    def __addFlags(self, inputList: list[str], flagPrefix: str, flags: list[Flag]):
+        flagInputs = [e.removeprefix(flagPrefix) for e in inputList if(re.search(self.flagInputRegex, e))]
+        for flag in flags:
+            intersections = list(set(flagInputs) & set(flag.alias + [flag.name]))
+            if(intersections):
+                self.castArguments[flag.name] = flag.value
+                for intersection in intersections:
+                    flagInputs.remove(intersection)
         
+        if(flagInputs):
+            self.messages.append(self.__formatArgumentError(", ".join(flagInputs), f"No such flag(s)"))
+    
     def __formatArgumentError(self, arg: str, error: str) -> str:
         return f"{arg} error: {error}"
     

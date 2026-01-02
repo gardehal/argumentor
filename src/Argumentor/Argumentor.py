@@ -8,11 +8,13 @@ class Argumentor():
     commands: list[Command]
     commandPrefix: str
     namedArgDelim: str
+    flagPrefix: str
     inputDelim: str
     
-    def __init__(self, commands: list[Command], 
-        commandPrefix: str = "-", 
-        namedArgDelim: str = ":", 
+    def __init__(self, commands: list[Command],
+        commandPrefix: str = "-",
+        namedArgDelim: str = ":",
+        flagPrefix: str = "--",
         inputDelim: str = " "):
         """
         Holder of all commands and arguments, base for validation of input.
@@ -21,12 +23,14 @@ class Argumentor():
             commands (list[Command]): Commands to search for in input.
             commandPrefix (str, optional): Prefix expected to be in front of Commands only. Defaults to "-".
             namedArgDelim (str, optional): Deliminator for named arguments, e.g. "width:10". Defaults to ":".
+            flagPrefix (str, optional): Prefix for flags, e.g. "--updateexternal". Defaults to "--".
             inputDelim (str, optional): Deliminator for input, only used for validateString. Defaults to " ".
         """
 
         self.commands = commands
         self.commandPrefix = commandPrefix
         self.namedArgDelim = namedArgDelim
+        self.flagPrefix = flagPrefix
         self.inputDelim = inputDelim
 
         # Check for duplicates,
@@ -34,14 +38,15 @@ class Argumentor():
         # a command cannot have two arguments with the same names or alias
         commandList = []
         for command in self.commands:
-            argumentList = []
-            for argument in command.arguments:
-                argumentList.append(argument.name)
-                argumentList.extend(argument.alias)
-    
+            argumentList = [e for f in command.arguments for e in (f.alias + [f.name])]
             argumentDuplicates = [e for e in argumentList if argumentList.count(e) > 1]
             if(argumentDuplicates):
-                raise AttributeError(f"Duplicate arguments ({argumentDuplicates}) found in arguments for {command.name}")
+                raise AttributeError(f"Duplicate arguments ({argumentDuplicates}) found in {command.name}")
+            
+            flagList = [e for f in command.flags for e in (f.alias + [f.name])]
+            flagDuplicates = [e for e in flagList if flagList.count(e) > 1]
+            if(flagDuplicates):
+                raise AttributeError(f"Duplicate flags ({flagDuplicates}) found in {command.name}")
 
             commandList.append(command.name)
             commandList.extend(command.alias)
@@ -103,7 +108,7 @@ class Argumentor():
                 nextInputs = potentialArgs[argsEndIndex:]
                 
                 args = potentialArgs[:argsEndIndex]
-                validation = ArgumentValidation(args, command, self.namedArgDelim)
+                validation = ArgumentValidation(args, command, self.namedArgDelim, self.flagPrefix)
                 
                 argResult = Result(validation.isValid, command.name, command.hitValue, commandIndex, validation.castArguments, validation.messages)
                 result.append(argResult)
@@ -114,7 +119,7 @@ class Argumentor():
         return result
     
     def __getLastArgumentIndex(self, potentialArgs: list[str]) -> int:
-        commandRegex = fr"^{self.commandPrefix}.*"
+        commandRegex = fr"^{self.commandPrefix}\w"
         for potentialArg in potentialArgs:
             if(re.search(commandRegex, potentialArg)):
                 return (potentialArgs.index(potentialArg))
