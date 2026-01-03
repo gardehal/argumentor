@@ -4,11 +4,13 @@ class Flag():
     name: str
     alias: list[str]
     value: object
+    defaultValue: object
     description: str
 
     def __init__(self, name: str, 
         alias: list[str],
         value: object,
+        defaultValue: object = None,
         description: str = None):
         """
         Designates values input as a flag after commands. These are always optional and only return a static value.
@@ -16,9 +18,10 @@ class Flag():
         $ -dimensions height:100 --update_external
 
         Args:
-            name (str): Name of argument, key for dictionary in Return
+            name (str): Name of argument, key for dictionary in Return.
             alias (list[str]): Alias of argument.
             value (object): The value to use if flag is present in input.
+            defaultValue (object, optional): The value to use if flag is NOT present in input. Defaults to None.
             description (str, optional): Explaining what the argument is for. Defaults to None.
         """
         
@@ -30,6 +33,7 @@ class Flag():
         self.name = name
         self.alias = alias
         self.value = value
+        self.defaultValue = defaultValue
         self.description = description
                 
     def getFormattedDescription(self) -> str:

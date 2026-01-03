@@ -20,7 +20,8 @@ class Main:
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
 
-        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], value= True,
+        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], 
+            value= True, defaultValue= False,
             description= "Update all external vendors with new values.") 
 
         helpCommand = Command("Help", ["help", "h", "man"],

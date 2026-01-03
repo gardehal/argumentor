@@ -206,7 +206,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].arguments), 4)
+        self.assertEqual(len(result[0].arguments), 5)
         self.assertEqual(len(result[0].messages), 0)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputB(self):
@@ -299,7 +299,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].arguments), 4)
+        self.assertEqual(len(result[0].arguments), 5)
         self.assertEqual(len(result[0].messages), 1)
         self.assertTrue(result[0].messages[0].__contains__("nosuchflag"))
         self.assertTrue(result[0].messages[0].__contains__("No such flag(s)"))
@@ -318,7 +318,8 @@ class ArgumentorTests(unittest.TestCase):
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
         
-        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], value= True,
+        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], 
+            value= True, defaultValue= False,
             description= "Update all external vendors with new values.") 
         
         helpCommand = Command("Help", ["help", "h"],

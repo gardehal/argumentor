@@ -208,6 +208,8 @@ class ArgumentValidation():
                 self.finalizedArguments[flag.name] = flag.value
                 for intersection in intersections:
                     flagInputs.remove(intersection)
+            else:
+                self.finalizedArguments[flag.name] = flag.defaultValue
         
         if(flagInputs):
             self.messages.append(self.__formatArgumentError(", ".join(flagInputs), f"No such flag(s)"))
