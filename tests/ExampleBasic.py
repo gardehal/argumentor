@@ -11,7 +11,7 @@ class Main:
             description="Int ID of object to get volume for")
 
         # Create command(s) and Argumentor
-        volumeCommand = Command("Calculate Volume", ["calculatevolume", "calcvolume", "cv"],
+        volumeCommand = Command("CalculateVolume", ["calculatevolume", "calcvolume", "cv"],
             CommandHitValues.CALC_VOLUME, [idArgument],
             description="Calculate volume of object by ID")
         argumentor = Argumentor([volumeCommand])

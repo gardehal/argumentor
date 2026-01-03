@@ -4,7 +4,7 @@ from typing import TypeVar, Type, Callable
 
 T = TypeVar("T")
 
-class Argument[T]():
+class Argument():
     name: str
     alias: list[str]
     typeT: Type[T]
