@@ -24,18 +24,18 @@ Install from files locally
 #### Getting started
 
 Creating a command to calculate volume for a given object we have stored somewhere with an ID.
-[ExampleBasic.py](https://github.com/gardehal/argumentor/tests/ExampleBasic.py)
+[ExampleBasic.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleBasic.py)
 - $ `python .\tests\ExampleBasic.py -help`
 
 #### A step further
 
 Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
-[ExampleAdvanced.py](https://github.com/gardehal/argumentor/tests/ExampleAdvanced.py)
+[ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py)
 - $ `python .\tests\ExampleAdvanced.py -help`
 
 ##### Expected outcomes
 
-The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](https://github.com/gardehal/argumentor/tests/ExampleAdvanced.py).
+The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py).
 
     # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI (using ' or " would be a main reason as CLI reads it differently)
 
@@ -56,7 +56,7 @@ The following list of examples explains some expected outcomes, or could be used
 ## Recommendations
 
 1. Use a more complete argument parser
-1. See [ExampleBasic.py](https://github.com/gardehal/argumentor/tests/ExampleBasic.py) and [ExampleAdvanced.py](https://github.com/gardehal/argumentor/tests/ExampleAdvanced.py) for examples of usage.
+1. See [ExampleBasic.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleBasic.py) and [ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py) for examples of usage.
 1. Argumentor().validate() returns a list of Result with detected commands. Parse the result with this in mind:
     1. If the list is empty, no command-like input was detected.
     1. When populated, each Result will specify what command was hit by name and have a hitValue that was specified on init.
@@ -70,6 +70,7 @@ The following list of examples explains some expected outcomes, or could be used
 ## TODO
 
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
+- set up github pipeline for testing and publish
 
 #### Publish/update pip
 
