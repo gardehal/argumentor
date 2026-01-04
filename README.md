@@ -5,12 +5,12 @@ Command and argument parsing and documentation for Python CLI.
 > [!WARNING]  
 > This project is not really meant for widespread application and was mostly made for fun. Use at your own risk.
 
-<sub><sup><sub><sup>Feel free to contribute if you find any issues though.</sup></sub></sup></sub>
+<sub><sup>Feel free to contribute if you find any issues though.</sup></sub>
 
 ## Install
 
 #### Pip
-- $ `pip install xxx` TODO
+- $ `pip install argumentor-gardehal`
 
 #### Local from folder
 - $ `cd [path to this folder]`
@@ -22,18 +22,18 @@ Command and argument parsing and documentation for Python CLI.
 #### Getting started
 
 Creating a command to calculate volume for a given object we have stored somewhere with an ID.
-[ExampleBasic.py](./tests/ExampleBasic.py)
+[ExampleBasic.py](https://github.com/gardehal/argumentor/tests/ExampleBasic.py)
 - $ `python .\tests\ExampleBasic.py -help`
 
 #### A step further
 
 Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
-[ExampleAdvanced.py](./tests/ExampleAdvanced.py)
+[ExampleAdvanced.py](https://github.com/gardehal/argumentor/tests/ExampleAdvanced.py)
 - $ `python .\tests\ExampleAdvanced.py -help`
 
 ##### Expected outcomes
 
-The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](./tests/ExampleAdvanced.py).
+The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](https://github.com/gardehal/argumentor/tests/ExampleAdvanced.py).
 
     # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI (using ' or " would be a main reason as CLI reads it differently)
 
@@ -54,7 +54,7 @@ The following list of examples explains some expected outcomes, or could be used
 ## Recommendations
 
 1. Use a more complete argument parser
-1. See [ExampleBasic.py](./tests/ExampleBasic.py) and [ExampleAdvanced.py](./tests/ExampleAdvanced.py) for examples of usage.
+1. See [ExampleBasic.py](https://github.com/gardehal/argumentor/tests/ExampleBasic.py) and [ExampleAdvanced.py](https://github.com/gardehal/argumentor/tests/ExampleAdvanced.py) for examples of usage.
 1. Argumentor().validate() returns a list of Result with detected commands. Parse the result with this in mind:
     1. If the list is empty, no command-like input was detected.
     1. When populated, each Result will specify what command was hit by name and have a hitValue that was specified on init.
@@ -68,4 +68,3 @@ The following list of examples explains some expected outcomes, or could be used
 ## TODO
 
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
-- publish pip
