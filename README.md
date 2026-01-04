@@ -9,10 +9,12 @@ Command and argument parsing and documentation for Python CLI.
 
 ## Install
 
-#### Pip
+[PyPi project](https://pypi.org/project/argumentor-gardehal/)
+
+Install using pip
 - $ `pip install argumentor-gardehal`
 
-#### Local from folder
+Install from files locally
 - $ `cd [path to this folder]`
 - $ `pip cache purge` (may help if old packages are cached)
 - $ `pip install .`
@@ -68,3 +70,12 @@ The following list of examples explains some expected outcomes, or could be used
 ## TODO
 
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
+
+#### Publish/update pip
+
+1. Install tools
+    - python3 -m pip install --user --upgrade twine
+    - python3 -m pip install --user --upgrade setuptools wheel
+1. Build and publish (packages and versions appear in build folder)
+    - python3 setup.py sdist bdist_wheel
+    - python3 -m twine upload dist/*
