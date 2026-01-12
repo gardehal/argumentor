@@ -71,6 +71,7 @@ The following list of examples explains some expected outcomes, or could be used
 ## TODO
 
 - argument as comma-separated (or similar) list, could be parsed in castFunc? add example
+- personal usage of flags is value true default false, implement as default values? implement bool flag as additional init, inheriting from flag?
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
 - set up github pipeline for testing and publish
     - get version through github release
