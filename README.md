@@ -70,6 +70,7 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- argument as comma-separated (or similar) list, could be parsed in castFunc? add example
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
 - set up github pipeline for testing and publish
     - get version through github release
