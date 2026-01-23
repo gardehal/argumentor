@@ -31,7 +31,7 @@ class Main:
             CommandHitValues.DIMENSIONS, 
             [widthArgument, depthArgument, heightArgument, unitArgument], [updateExternalFlag],
             description= "Add the dimensions of object")
-        argumentor = Argumentor([helpCommand, dimensionCommand], inputDelim="    ")
+        argumentor = Argumentor([helpCommand, dimensionCommand])
 
         results = argumentor.validate(sys.argv)
 
