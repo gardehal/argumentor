@@ -307,7 +307,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertTrue(result[0].messages[0].__contains__("nosuchflag"))
         self.assertTrue(result[0].messages[0].__contains__("No such flag(s)"))
 
-    def test_Argumentor_ShouldReturnValidWithoutFlags_WhenInputK(self):
+    def test_Argumentor_ShouldReturnValidWithExternalVendorUpdateList_WhenInputK(self):
         argumentor = self.__basicArgumentor()
         inputK = "-d 29 30 31 ExternalVendorUpdateList:warehouse,default" # Valid, note that the string "warehouse,default" will be cast to a list of strings with these validated items
         result = argumentor.validate(inputK.split(" "))
@@ -317,6 +317,19 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(len(result[0].arguments), 6)
         self.assertListEqual(result[0].arguments["ExternalVendorUpdateList"], ["warehouse", "default"])
         self.assertEqual(len(result[0].messages), 0)
+
+    def test_Argumentor_ShouldReturnValidWithInvalidExternalVendorUpdateListItem_WhenInputL(self):
+        argumentor = self.__basicArgumentor()
+        inputL = "-d 31 32 33 evul:notvalid" # Valid, but "notvalid" is not part of pre-approved ExternalVendorUpdateList items, validated in validateFunc, and results in a message
+        result = argumentor.validate(inputL.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].arguments), 6)
+        self.assertListEqual(result[0].arguments["ExternalVendorUpdateList"], [])
+        self.assertEqual(len(result[0].messages), 1)
+        self.assertTrue(result[0].messages[0].__contains__("did not pass validation"))
+        self.assertTrue(result[0].messages[0].__contains__("default value [] was applied"))
         
     def __basicArgumentor(self) -> Argumentor:
         widthArgument = Argument("Width", ["width", "w"], int,
@@ -331,7 +344,7 @@ class ArgumentorTests(unittest.TestCase):
             validateFunc= self.validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
-        externalVendorUpdateListArgument = Argument("ExternalVendorUpdateList", ["externalvendorsupdate", "evu"], list[str],
+        externalVendorUpdateListArgument = Argument("ExternalVendorUpdateList", ["externalvendorsupdatelist", "evul"], list[str],
             optional= True,
             castFunc= self.castStringToList,
             validateFunc= self.validateExternalVendorsList,
