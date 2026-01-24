@@ -5,6 +5,9 @@ from enums.Measurement import Measurement
 from enums.CommandHitValues import CommandHitValues
 
 class ArgumentorTests(unittest.TestCase):
+    # Run from base directory
+    # py .\tests\ArgumentorTests.py
+    
     def test_Argumentor_ShouldRaiseException_WhenSpaceInArgumentName(self):
         invalidName = "invalid name"
         try:
@@ -206,7 +209,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].arguments), 5)
+        self.assertEqual(len(result[0].arguments), 6)
         self.assertEqual(len(result[0].messages), 0)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputB(self):
@@ -289,7 +292,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].arguments), 5)
+        self.assertEqual(len(result[0].arguments), 6)
         self.assertEqual(len(result[0].messages), 0)
 
     def test_Argumentor_ShouldReturnValidWithoutFlags_WhenInputJ(self):
@@ -299,10 +302,21 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].arguments), 5)
+        self.assertEqual(len(result[0].arguments), 6)
         self.assertEqual(len(result[0].messages), 1)
         self.assertTrue(result[0].messages[0].__contains__("nosuchflag"))
         self.assertTrue(result[0].messages[0].__contains__("No such flag(s)"))
+
+    def test_Argumentor_ShouldReturnValidWithoutFlags_WhenInputK(self):
+        argumentor = self.__basicArgumentor()
+        inputK = "-d 29 30 31 ExternalVendorUpdateList:warehouse,default" # Valid, note that the string "warehouse,default" will be cast to a list of strings with these validated items
+        result = argumentor.validate(inputK.split(" "))
+        
+        self.assertEqual(len(result), 1)
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(len(result[0].arguments), 6)
+        self.assertListEqual(result[0].arguments["ExternalVendorUpdateList"], ["warehouse", "default"])
+        self.assertEqual(len(result[0].messages), 0)
         
     def __basicArgumentor(self) -> Argumentor:
         widthArgument = Argument("Width", ["width", "w"], int,
@@ -317,6 +331,12 @@ class ArgumentorTests(unittest.TestCase):
             validateFunc= self.validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
+        externalVendorUpdateListArgument = Argument("ExternalVendorUpdateList", ["externalvendorsupdate", "evu"], list[str],
+            optional= True,
+            castFunc= self.castStringToList,
+            validateFunc= self.validateExternalVendorsList,
+            useDefaultValue= True, defaultValue= [],
+            description= "List of external vendors to update")
         
         updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], 
             value= True, defaultValue= False,
@@ -327,7 +347,7 @@ class ArgumentorTests(unittest.TestCase):
             description= "Print this documentation")
         dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"],
             CommandHitValues.DIMENSIONS,
-            [widthArgument, depthArgument, heightArgument, unitArgument], [updateExternalFlag],
+            [widthArgument, depthArgument, heightArgument, unitArgument, externalVendorUpdateListArgument], [updateExternalFlag],
             description= "Add the dimensions of object")
         return Argumentor([helpCommand, dimensionCommand])
     
@@ -342,6 +362,10 @@ class ArgumentorTests(unittest.TestCase):
                 # Note that a default value can be added here as well,
                 # but doing so will override Arguments defaultValue 
                 return None
+            
+    # Note: castFunc must be from string and return typeT
+    def castStringToList(self, value: str, separator: str = ",") -> list[str]:
+        return value.split(separator)
                 
     # Note: validateFunc must be from typeT and return bool
     def validateMeasurements(self, value: Measurement) -> bool:
@@ -350,6 +374,14 @@ class ArgumentorTests(unittest.TestCase):
     # Note: validateFunc must be from typeT and return bool
     def validateInt(self, value: int) -> bool:
         return value > 0 and value < 100
+
+    # Note: validateFunc must be from typeT and return bool
+    def validateExternalVendorsList(self, vendorsList: list[str]) -> bool:
+        for vendor in vendorsList:
+            if(vendor not in ["default", "warehouse", "webstore"]):
+                return False
+        
+        return True 
 
 if __name__ == '__main__':
     unittest.main()
