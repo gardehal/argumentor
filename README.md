@@ -51,6 +51,7 @@ The following list of examples explains some expected outcomes, or could be used
     inputI = "-d 22 24 25 --updateexternal" # Valid, flag --updateexternal will return a static value
     inputJ = "-d 26 27 28 --nosuchflag" # Valid, but flag does not exist and reports this through Result.messages
     inputK = "-d 29 30 31 ExternalVendorUpdateList:warehouse,default" # Valid, note that the string "warehouse,default" will be cast to a list of strings with these validated items
+    inputL = "-d 31 32 33 evul:notvalid" # Valid, but "notvalid" is not part of pre-approved ExternalVendorUpdateList items, validated in validateFunc, and results in a message
     
     # Input as string
     argResults = argumentor.validateString(inputA)

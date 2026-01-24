@@ -5,7 +5,7 @@ from enums.CommandHitValues import CommandHitValues
 
 class Main:
     def main():
-        # Example input: python ExampleAdvanced.py -d 1 2 3 inches --uev
+        # Example input: python ExampleAdvanced.py -d 1 2 3 inches warehouse,default --uev
 
         widthArgument = Argument("Width", ["width", "w"], int,
             validateFunc= validateInt, description= "Width of object, between 1 and 100")
@@ -19,15 +19,14 @@ class Main:
             validateFunc= validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
-        externalVendorUpdateListArgument = Argument("ExternalVendorUpdateList", ["externalvendorsupdate", "evu"], list[str],
+        externalVendorUpdateListArgument = Argument("ExternalVendorUpdateList", ["externalvendorsupdatelist", "evul"], list[str],
             optional= True,
             castFunc= castStringToList,
             validateFunc= validateExternalVendorsList,
             useDefaultValue= True, defaultValue= [],
             description= "List of external vendors to update")
 
-        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], 
-            value= True, defaultValue= False,
+        updateExternalFlag = BoolFlag("UpdateExternalVendors", ["updateexternal", "uev", "ue"], 
             description= "Update all external vendors with new values.") 
 
         helpCommand = Command("Help", ["help", "h", "man"],
@@ -65,7 +64,8 @@ class Main:
                 # itemService.updateDimensions(result.arguments[widthArgument.name],
                 #   result.arguments[depthArgument.name],
                 #   result.arguments[heightArgument.name],
-                #   result.arguments[unitArgument.name])
+                #   result.arguments[unitArgument.name],
+                #   result.arguments[externalVendorUpdateListArgument.name])
 
                 # if(result.arguments[updateExternalFlag.name]):
                 #     externalService.update()
