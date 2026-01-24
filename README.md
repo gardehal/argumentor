@@ -50,6 +50,7 @@ The following list of examples explains some expected outcomes, or could be used
     inputH = "-test 19 20 21" # Invalid, command "test" does not exist and nothing will be returned from validate
     inputI = "-d 22 24 25 --updateexternal" # Valid, flag --updateexternal will return a static value
     inputJ = "-d 26 27 28 --nosuchflag" # Valid, but flag does not exist and reports this through Result.messages
+    inputK = "-d 29 30 31 ExternalVendorUpdateList:warehouse,default" # Valid, note that the string "warehouse,default" will be cast to a list of strings with these validated items
     
     # Input as string
     argResults = argumentor.validateString(inputA)

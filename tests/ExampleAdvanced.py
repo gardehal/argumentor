@@ -19,6 +19,12 @@ class Main:
             validateFunc= validateMeasurements,
             useDefaultValue= True, defaultValue= Measurement.CENTIMETERS,
             description= "Unit of measurements, cm or inches, default cm")
+        externalVendorUpdateListArgument = Argument("ExternalVendorUpdateList", ["externalvendorsupdate", "evu"], list[str],
+            optional= True,
+            castFunc= castStringToList,
+            validateFunc= validateExternalVendorsList,
+            useDefaultValue= True, defaultValue= [],
+            description= "List of external vendors to update")
 
         updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], 
             value= True, defaultValue= False,
@@ -29,7 +35,7 @@ class Main:
             description= "Print this documentation")
         dimensionCommand = Command("Dimensions", ["dimensions", "dimension", "dim", "d"],
             CommandHitValues.DIMENSIONS, 
-            [widthArgument, depthArgument, heightArgument, unitArgument], [updateExternalFlag],
+            [widthArgument, depthArgument, heightArgument, unitArgument, externalVendorUpdateListArgument], [updateExternalFlag],
             description= "Add the dimensions of object")
         argumentor = Argumentor([helpCommand, dimensionCommand])
 
@@ -75,6 +81,10 @@ def castMeasurements(value: str) -> Measurement:
             # Note that a default value can be added here as well,
             # but doing so will override Arguments defaultValue 
             return None
+        
+# Note: castFunc must be from string and return typeT
+def castStringToList(value: str, separator: str = ",") -> list[str]:
+    return value.split(separator)
 
 # Note: validateFunc must be from typeT and return bool
 def validateMeasurements(value: Measurement) -> bool:
@@ -83,6 +93,14 @@ def validateMeasurements(value: Measurement) -> bool:
 # Note: validateFunc must be from typeT and return bool
 def validateInt(value: int) -> bool:
     return value > 0 and value < 100
+
+# Note: validateFunc must be from typeT and return bool
+def validateExternalVendorsList(vendorsList: list[str]) -> bool:
+    for vendor in vendorsList:
+        if(vendor not in ["default", "warehouse", "webstore"]):
+            return False
+    
+    return True 
 
 if __name__ == "__main__":
     Main.main()
