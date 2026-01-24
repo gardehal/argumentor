@@ -26,7 +26,7 @@ class Main:
             useDefaultValue= True, defaultValue= [],
             description= "List of external vendors to update")
 
-        updateExternalFlag = BoolFlag("UpdateExternalVendors", ["updateexternal", "uev", "ue"], 
+        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "ue"], 
             description= "Update all external vendors with new values.") 
 
         helpCommand = Command("Help", ["help", "h", "man"],
