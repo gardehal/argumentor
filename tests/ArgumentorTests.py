@@ -351,8 +351,7 @@ class ArgumentorTests(unittest.TestCase):
             useDefaultValue= True, defaultValue= [],
             description= "List of external vendors to update")
         
-        updateExternalFlag = Flag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], 
-            value= True, defaultValue= False,
+        updateExternalFlag = BoolFlag("UpdateExternalVendors", ["updateexternal", "uev", "eu"], 
             description= "Update all external vendors with new values.") 
         
         helpCommand = Command("Help", ["help", "h"],
