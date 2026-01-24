@@ -18,11 +18,11 @@ class Flag():
         $ -dimensions height:100 --update_external
 
         Args:
-            name (str): Name of argument, key for dictionary in Return.
-            alias (list[str]): Alias of argument.
+            name (str): Name of flag, key for dictionary in Return.
+            alias (list[str]): Alias of flag.
             value (object): The value to use if flag is present in input.
             defaultValue (object, optional): The value to use if flag is NOT present in input. Defaults to None.
-            description (str, optional): Explaining what the argument is for. Defaults to None.
+            description (str, optional): Explaining what the flag is for. Defaults to None.
         """
         
         invalidCharactersRegex = r"\W"
