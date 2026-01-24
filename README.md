@@ -71,15 +71,14 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- for description, some way to group commands or arguments to it can be printed with some sort of title? Makes it easier for walls of text
-- argument as comma-separated (or similar) list, could be parsed in castFunc? add example
+- for description, some way to group commands or arguments to it can be printed with some sort of title? Makes it easier for walls of text, or maybe options to put something (newlines, "---") between all commands?
 - personal usage of flags is value true default false, implement as default values? implement bool flag as additional init, inheriting from flag?
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
 - set up github pipeline for testing and publish
     - get version through github release
     - add a cool badge with build status and version 
 
-#### Publish/update pip
+## Package Publish/update pip (just notes to publish this package on PyPI)
 
 1. Install tools
     - python3 -m pip install --user --upgrade twine
