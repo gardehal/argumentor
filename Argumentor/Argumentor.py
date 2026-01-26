@@ -121,7 +121,7 @@ Example: {self.commandPrefix}command{self.inputDelim}positionalArgument{self.inp
         result = []
         nextInputs = []
         for command in self.commands:
-            prefixedCommandAlias = [f"{self.commandPrefix}{e}" for e in command.alias]
+            prefixedCommandAlias = [f"{self.commandPrefix}{e}" for e in command.alias + [command.name]]
             for commandAlias in prefixedCommandAlias:
                 if(commandAlias not in input):
                     continue

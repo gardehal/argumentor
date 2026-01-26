@@ -202,6 +202,35 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(name, argumentor.commands[0].name)
         self.assertEqual(name, argumentor.commands[0].arguments[0].name)
             
+    def test_Argumentor_ShouldReturnValid_CommandCalledByName(self):
+        commandName = "testCommand"
+        commandHitValue = "HITVALUE"
+        command = Command(commandName, [], commandHitValue)
+        
+        argumentor = Argumentor([command])
+        
+        result = argumentor.validate([f"-{commandName}"])
+
+        self.assertEqual(1, len(result))
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(commandName, result[0].commandName)
+        self.assertEqual(commandHitValue, result[0].commandHitValue)
+            
+    def test_Argumentor_ShouldReturnValid_CommandCalledByAlias(self):
+        commandName = "testCommand"
+        commandAlias = "testAlias"
+        commandHitValue = "HITVALUE"
+        command = Command(commandName, [commandAlias], commandHitValue)
+        
+        argumentor = Argumentor([command])
+        
+        result = argumentor.validate([f"-{commandAlias}"])
+
+        self.assertEqual(1, len(result))
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(commandName, result[0].commandName)
+        self.assertEqual(commandHitValue, result[0].commandHitValue)
+            
     def test_Argumentor_ShouldReturnValid_WhenInputA(self):
         argumentor = self.__basicArgumentor()
         inputA = "-dim 1 2 3" # Valid
