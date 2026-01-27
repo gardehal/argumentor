@@ -30,10 +30,6 @@ class ArgumentValidation():
         self.validatedArguments = {}
         self.finalizedArguments = {}
         self.messages = []
-        
-        if(not command.arguments and not command.flags):
-            self.isValid = True
-            return
 
         self.namedInputRegex = fr"^\w+{namedArgDelim}\S+"
         self.flagInputRegex = fr"^{flagPrefix}\w+"
@@ -43,6 +39,8 @@ class ArgumentValidation():
             self.__validateNamedArguments(command.arguments)
             self.__addPositionalArguments(inputList, command)
             self.__castAndValidateArguments(command)
+        else:
+            self.isValid = True
 
         if(command.flags):
             self.__addFlags(inputList, flagPrefix, command.flags)
@@ -113,6 +111,13 @@ class ArgumentValidation():
             self.validatedArguments[positionalArg.name] = unnamedArg
             
     def __castAndValidateArguments(self, command: Command):
+        
+        requiredArgumentNames = [e.name for e in command.arguments if not e.optional]
+        # No arguments found, none to validate
+        if(len(requiredArgumentNames) == 0 and len(self.validatedArguments.keys()) == 0):
+            self.isValid = True
+            return
+        
         inputIsValid = True
         for key in self.validatedArguments.keys():
             argument = [e for e in command.arguments if e.name is key][0]
@@ -188,7 +193,6 @@ class ArgumentValidation():
         
             self.finalizedArguments[key] = castValue
             
-        requiredArgumentNames = [e.name for e in command.arguments if not e.optional]
         if(len(self.finalizedArguments.keys())) < len(requiredArgumentNames):
             self.messages.append(f"Critical error! Required arguments are missing (got {len(self.finalizedArguments.keys())}/{len(requiredArgumentNames)})")
             inputIsValid = False

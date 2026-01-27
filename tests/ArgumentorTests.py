@@ -231,6 +231,44 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(commandName, result[0].commandName)
         self.assertEqual(commandHitValue, result[0].commandHitValue)
             
+    def test_Argumentor_ShouldReturnFlagValue_FlagWithFlagInput(self):
+        flagName = "testFlag"
+        flagValue = "FLAGVALUE"
+        flagDefault = "DEFAULTVALUE"
+        commandName = "testCommand"
+        flag = Flag(flagName, [], flagValue, flagDefault)
+        command = Command(commandName, [], "HITVALUE", flags= [flag])
+        
+        argumentor = Argumentor([command])
+        
+        input = f"-{commandName} --{flagName}"
+        result = argumentor.validate(input.split(" "))
+
+        self.assertEqual(1, len(result))
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(0, len(result[0].messages))
+        self.assertEqual(1, len(result[0].arguments))
+        self.assertEqual(flagValue, result[0].arguments[flagName])
+            
+    def test_Argumentor_ShouldReturnDefaultFlagValue_FlagWithoutInput(self):
+        flagName = "testFlag"
+        flagValue = "FLAGVALUE"
+        flagDefault = "DEFAULTVALUE"
+        commandName = "testCommand"
+        flag = Flag(flagName, [], flagValue, flagDefault)
+        command = Command(commandName, [], "HITVALUE", flags= [flag])
+        
+        argumentor = Argumentor([command])
+        
+        input = f"-{commandName}"
+        result = argumentor.validate(input.split(" "))
+        
+        self.assertEqual(1, len(result))
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(0, len(result[0].messages))
+        self.assertEqual(1, len(result[0].arguments))
+        self.assertEqual(flagDefault, result[0].arguments[flagName])
+            
     def test_Argumentor_ShouldReturnValid_WhenInputA(self):
         argumentor = self.__basicArgumentor()
         inputA = "-dim 1 2 3" # Valid
