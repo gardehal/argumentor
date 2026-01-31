@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="argumentor_gardehal",
-    version="0.0.3",
+    version="0.0.4",
     author="Gardehal",
     author_email="alethogar@protonmail.com",
     description="CLI argument parsing, validation, documentation",
