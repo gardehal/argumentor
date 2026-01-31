@@ -269,6 +269,26 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(1, len(result[0].arguments))
         self.assertEqual(flagDefault, result[0].arguments[flagName])
             
+    def test_Argumentor_ShouldReturnDefaultValues_InputNull(self):
+        argumentName = "testArgument"
+        defaultValue = "DEFAULTVALUE"
+        commandName = "testCommand"
+        argument = Argument(argumentName, [], str, 
+            optional= True, 
+            defaultValue= defaultValue, useDefaultValue= True)
+        command = Command(commandName, [], "HITVALUE", arguments= [argument])
+        
+        argumentor = Argumentor([command])
+        
+        input = f"-{commandName}"
+        result = argumentor.validate(input.split(" "))
+        
+        self.assertEqual(1, len(result))
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(0, len(result[0].messages))
+        self.assertEqual(1, len(result[0].arguments))
+        self.assertEqual(defaultValue, result[0].arguments[argumentName])
+            
     def test_Argumentor_ShouldReturnValid_WhenInputA(self):
         argumentor = self.__basicArgumentor()
         inputA = "-dim 1 2 3" # Valid
