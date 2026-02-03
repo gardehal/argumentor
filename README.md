@@ -72,7 +72,10 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
+- when an arg is optional and no value has been given, with no default, add arg with name name value None to dict so it doesnt throw key error 
 - for description, some way to group commands or arguments to it can be printed with some sort of title? Makes it easier for walls of text, or maybe options to put something (newlines, "---") between all commands?
+    - extra optional input for argumentor, dict[str, Command] where str is the "grouping"?
+    - extra optional str to command, "grouping", with separate formatted print command that orders by grouping (sort groupings and commands how exactly?), with grouping header left/right args? e.g. "---- " + command.grouping + " ----"?
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
 - set up github pipeline for testing and publish
     - get version through github release

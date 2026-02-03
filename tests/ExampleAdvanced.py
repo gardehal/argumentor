@@ -46,7 +46,7 @@ class Main:
             return
 
         for result in results:
-            print(result.toString()) # For debugging
+            # print(result.toString()) # For debugging
             if(not result.isValid):
                 print(f"Input for {result.commandName} was not valid:")
                 print(result.getFormattedMessages())
