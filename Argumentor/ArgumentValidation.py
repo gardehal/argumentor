@@ -112,6 +112,13 @@ class ArgumentValidation():
             
     def __castAndValidateArguments(self, command: Command):
         inputIsValid = True
+        
+        # Adding optional arguments not in input
+        # TODO new method?
+        for argument in command.arguments:
+            if(argument.optional and argument.name not in self.validatedArguments):
+                self.validatedArguments[argument.name] = None
+        
         for key in self.validatedArguments.keys():
             argument = [e for e in command.arguments if e.name is key][0]
             if(argument is None):
