@@ -202,7 +202,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(name, argumentor.commands[0].name)
         self.assertEqual(name, argumentor.commands[0].arguments[0].name)
             
-    def test_Argumentor_ShouldReturnValid_CommandCalledByName(self):
+    def test_Argumentor_ShouldReturnValid_WhenCommandCalledByName(self):
         commandName = "testCommand"
         commandHitValue = "HITVALUE"
         command = Command(commandName, [], commandHitValue)
@@ -216,7 +216,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(commandName, result[0].commandName)
         self.assertEqual(commandHitValue, result[0].commandHitValue)
             
-    def test_Argumentor_ShouldReturnValid_CommandCalledByAlias(self):
+    def test_Argumentor_ShouldReturnValid_WhenCommandCalledByAlias(self):
         commandName = "testCommand"
         commandAlias = "testAlias"
         commandHitValue = "HITVALUE"
@@ -231,7 +231,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(commandName, result[0].commandName)
         self.assertEqual(commandHitValue, result[0].commandHitValue)
             
-    def test_Argumentor_ShouldReturnFlagValue_FlagWithFlagInput(self):
+    def test_Argumentor_ShouldReturnReturnValidWithFlagValue_WhenFlagWithFlagInput(self):
         flagName = "testFlag"
         flagValue = "FLAGVALUE"
         flagDefault = "DEFAULTVALUE"
@@ -250,7 +250,25 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(1, len(result[0].arguments))
         self.assertEqual(flagValue, result[0].arguments[flagName])
             
-    def test_Argumentor_ShouldReturnDefaultFlagValue_FlagWithoutInput(self):
+    def test_Argumentor_ShouldReturnValidWithDefaultValues_WhenInputNull(self):
+        argumentName = "testArgument"
+        commandName = "testCommand"
+        argument = Argument(argumentName, [], str, 
+            optional= True)
+        command = Command(commandName, [], "HITVALUE", arguments= [argument])
+        
+        argumentor = Argumentor([command])
+        
+        input = f"-{commandName}"
+        result = argumentor.validate(input.split(" "))
+        
+        self.assertEqual(1, len(result))
+        self.assertTrue(result[0].isValid)
+        self.assertEqual(0, len(result[0].messages))
+        self.assertEqual(1, len(result[0].arguments))
+        self.assertEqual(None, result[0].arguments[argumentName])
+            
+    def test_Argumentor_ShouldReturnValidWithDefaultFlagValue_WhenFlagWithoutInput(self):
         flagName = "testFlag"
         flagValue = "FLAGVALUE"
         flagDefault = "DEFAULTVALUE"
@@ -269,7 +287,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(1, len(result[0].arguments))
         self.assertEqual(flagDefault, result[0].arguments[flagName])
             
-    def test_Argumentor_ShouldReturnDefaultValues_InputNull(self):
+    def test_Argumentor_ShouldReturnValidWithNone_WhenInputNullWithoutDefault(self):
         argumentName = "testArgument"
         defaultValue = "DEFAULTVALUE"
         commandName = "testCommand"
