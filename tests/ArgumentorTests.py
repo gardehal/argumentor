@@ -303,7 +303,7 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(1, len(result))
         self.assertTrue(result[0].isValid)
-        self.assertEqual(0, len(result[0].messages))
+        self.assertEqual(1, len(result[0].messages))
         self.assertEqual(1, len(result[0].arguments))
         self.assertEqual(defaultValue, result[0].arguments[argumentName])
             
@@ -315,7 +315,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
         self.assertEqual(len(result[0].arguments), 6)
-        self.assertEqual(len(result[0].messages), 0)
+        self.assertEqual(len(result[0].messages), 2)
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputB(self):
         argumentor = self.__basicArgumentor()
@@ -324,11 +324,11 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertFalse(result[0].isValid)
-        self.assertEqual(len(result[0].messages), 4)
+        self.assertEqual(len(result[0].messages), 6)
         self.assertTrue(result[0].messages[0].__contains__("a could not be cast"))
         self.assertTrue(result[0].messages[1].__contains__("b could not be cast"))
         self.assertTrue(result[0].messages[2].__contains__("c could not be cast"))
-        self.assertTrue(result[0].messages[3].__contains__("Critical error! Required arguments are missing (got 0/3)"))
+        self.assertTrue(result[0].messages[5].__contains__("Critical error! Required arguments are missing (got 0/3)"))
         
     def test_Argumentor_ShouldReturnValid_WhenInputC(self):
         argumentor = self.__basicArgumentor()
@@ -337,25 +337,25 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].messages), 0)
+        self.assertEqual(len(result[0].messages), 2)
         
     def test_Argumentor_ShouldReturnValid_WhenInputD(self):
         argumentor = self.__basicArgumentor()
         inputD = "-d w:7 8 d:9" # Valid, note the order: width, then unnamed argument which will be resolved to height because width and depth are named with an alias, then depth
         result = argumentor.validate(inputD.split(" "))
         
-        self.assertEqual(len(result), 1)
+        self.assertEqual(1, len(result))
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].messages), 0)
+        self.assertEqual(2, len(result[0].messages))
         
     def test_Argumentor_ShouldReturnValid_WhenInputE(self):
         argumentor = self.__basicArgumentor()
         inputE = "-d w:10 11 12" # Valid
         result = argumentor.validate(inputE.split(" "))
         
-        self.assertEqual(len(result), 1)
+        self.assertEqual(1, len(result))
         self.assertTrue(result[0].isValid)
-        self.assertEqual(len(result[0].messages), 0)
+        self.assertEqual(2, len(result[0].messages))
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputF(self):
         argumentor = self.__basicArgumentor()
@@ -365,10 +365,10 @@ class ArgumentorTests(unittest.TestCase):
     
         self.assertEqual(len(result), 1)
         self.assertFalse(result[0].isValid)
-        self.assertEqual(len(result[0].messages), 3)
+        self.assertEqual(5, len(result[0].messages))
         self.assertTrue(result[0].messages[0].__contains__("-14 did not pass validation"))
         self.assertTrue(result[0].messages[1].__contains__("-15 did not pass validation"))
-        self.assertTrue(result[0].messages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
+        self.assertTrue(result[0].messages[4].__contains__("Critical error! Required arguments are missing (got 1/3)"))
         
     def test_Argumentor_ShouldReturnInvalid_WhenInputG(self):
         argumentor = self.__basicArgumentor()
@@ -378,10 +378,10 @@ class ArgumentorTests(unittest.TestCase):
         
         self.assertEqual(len(result), 1)
         self.assertFalse(result[0].isValid)
-        self.assertEqual(len(result[0].messages), 3)
+        self.assertEqual(len(result[0].messages), 5)
         self.assertTrue(result[0].messages[0].__contains__(":17 could not be cast to int"))
         self.assertTrue(result[0].messages[1].__contains__(":18 could not be cast to int"))
-        self.assertTrue(result[0].messages[2].__contains__("Critical error! Required arguments are missing (got 1/3)"))
+        self.assertTrue(result[0].messages[4].__contains__("Critical error! Required arguments are missing (got 1/3)"))
         
     def test_Argumentor_ShouldReturnEmptyResult_WhenInputH(self):
         argumentor = self.__basicArgumentor()
@@ -398,7 +398,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
         self.assertEqual(len(result[0].arguments), 6)
-        self.assertEqual(len(result[0].messages), 0)
+        self.assertEqual(len(result[0].messages), 2)
 
     def test_Argumentor_ShouldReturnValidWithoutFlags_WhenInputJ(self):
         argumentor = self.__basicArgumentor()
@@ -408,9 +408,9 @@ class ArgumentorTests(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0].isValid)
         self.assertEqual(len(result[0].arguments), 6)
-        self.assertEqual(len(result[0].messages), 1)
-        self.assertTrue(result[0].messages[0].__contains__("nosuchflag"))
-        self.assertTrue(result[0].messages[0].__contains__("No such flag(s)"))
+        self.assertEqual(len(result[0].messages), 3)
+        self.assertTrue(result[0].messages[2].__contains__("nosuchflag"))
+        self.assertTrue(result[0].messages[2].__contains__("No such flag(s)"))
 
     def test_Argumentor_ShouldReturnValidWithExternalVendorUpdateList_WhenInputK(self):
         argumentor = self.__basicArgumentor()
@@ -421,7 +421,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertTrue(result[0].isValid)
         self.assertEqual(len(result[0].arguments), 6)
         self.assertListEqual(result[0].arguments["ExternalVendorUpdateList"], ["warehouse", "default"])
-        self.assertEqual(len(result[0].messages), 0)
+        self.assertEqual(len(result[0].messages), 1)
 
     def test_Argumentor_ShouldReturnValidWithInvalidExternalVendorUpdateListItem_WhenInputL(self):
         argumentor = self.__basicArgumentor()
@@ -432,7 +432,7 @@ class ArgumentorTests(unittest.TestCase):
         self.assertTrue(result[0].isValid)
         self.assertEqual(len(result[0].arguments), 6)
         self.assertListEqual(result[0].arguments["ExternalVendorUpdateList"], [])
-        self.assertEqual(len(result[0].messages), 1)
+        self.assertEqual(len(result[0].messages), 2)
         self.assertTrue(result[0].messages[0].__contains__("did not pass validation"))
         self.assertTrue(result[0].messages[0].__contains__("default value [] was applied"))
         
