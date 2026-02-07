@@ -12,17 +12,19 @@ jobs:
   build:
     name: Build project
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{steps.get_version.outputs.version}}
     steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
       - name: Get version
         id: get_version
         run: |
           $short_ref_name = $("${{github.ref_name}}".Substring(0, [math]::Min(10, "${{github.ref_name}}".Length)))
           $short_sha = $(git rev-parse --short ${{github.sha}})
           echo "version=$short_ref_name-$short_sha" >> $env:GITHUB_OUTPUT
-
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
           
       - name: Set up Python
         uses: actions/setup-python@v6
