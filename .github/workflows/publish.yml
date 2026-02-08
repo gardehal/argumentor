@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build project
+    name: Build Argumentor ${{github.ref_name}}
     runs-on: ubuntu-latest
     outputs:
       version: ${{steps.get_version.outputs.version}}

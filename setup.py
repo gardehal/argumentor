@@ -1,11 +1,16 @@
+import os
 import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+tag = os.getenv("GITHUB_REF_NAME", "dev")
+if tag.startswith("v"):
+    tag = tag[1:]
+    
 setuptools.setup(
     name="argumentor_gardehal",
-    version="0.0.4",
+    version=tag,
     author="Gardehal",
     author_email="alethogar@protonmail.com",
     description="CLI argument parsing, validation, documentation",
