@@ -14,9 +14,9 @@ authors = [{name = "Gardehal"}]
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 
-[tool.hatch.version]
-source = "vcs"
-tag-pattern = "^(?P<version>[\\d\\.]+)$"
+[tool.setuptools_scm]
+version_scheme = "release-branch-semver"
+local_scheme = "no-local-version"
 
 [project.urls]
 Homepage = "https://pypi.org/project/argumentor-gardehal"
