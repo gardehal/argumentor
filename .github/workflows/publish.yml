@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write  
 
 jobs:
   build:
@@ -36,6 +37,9 @@ jobs:
         with:
           name: argumentor
           path: dist/
+          
+      - name: List built files
+        run: ls -la dist/
 
   publish:
     name: Publish to PyPI
