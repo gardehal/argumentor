@@ -10,4 +10,10 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [{name = "Gardehal"}]
+
+[tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+
+[project.urls]
+Homepage = "https://pypi.org/project/argumentor-gardehal"
+Repository = "https://github.com/gardehal/argumentor"
