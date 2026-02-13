@@ -8,6 +8,8 @@ Command and argument parsing and documentation for Python CLI.
 <sub><sup>Feel free to contribute if you find any issues though.</sup></sub>
 
 [![Publish to PyPI](https://github.com/gardehal/argumentor/actions/workflows/publish.yml/badge.svg)](https://github.com/gardehal/argumentor/actions/workflows/publish.yml)
+[![GitHub Release](https://img.shields.io/github/release/gardehal/argumentor.svg?style=flat)]()
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/gardehal/argumentor/blob/main/LICENSE)
 
 ## Install
 
@@ -15,7 +17,7 @@ Command and argument parsing and documentation for Python CLI.
 
 Install using pip
 - $ `pip install argumentor-gardehal`
-- `from Argumentor import *` 
+- In python files: `from Argumentor import *` 
 
 Install from files locally
 - $ `cd [path to this folder]`
@@ -32,15 +34,17 @@ Creating a command to calculate volume for a given object we have stored somewhe
 
 ### A step further
 
-Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum.
+Creating a command that takes multiple inputs, validating dimensions, and a optional argument with custom casting and validation from string to an enum and lists.
 - [ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py)
 - $ `python .\tests\ExampleAdvanced.py -help`
 
 ##### Expected outcomes
 
-The following list of examples explains some expected outcomes, or could be used to test Argumentor. Note: These are based on [ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py).
+The following list of examples explains some expected outcomes, or could be used to test Argumentor. 
 
-    # Note, depending on CLI, these results may vary compared to validateString version as below, or as input into CLI (using ' or " would be a main reason as CLI reads it differently)
+>[!INFO] 
+> These are based on [ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py).
+> Depending on CLI, these results may vary compared to validateString version as below, or as input into CLI (using ' or " would be a main reason as CLI reads it differently).
 
     inputA = "-dim 1 2 3" # Valid
     inputB = "-d a b c" # Invalid, a b c cannot be cast to ints unless you create a custom cast function
@@ -55,7 +59,7 @@ The following list of examples explains some expected outcomes, or could be used
     inputK = "-d 29 30 31 ExternalVendorUpdateList:warehouse,default" # Valid, note that the string "warehouse,default" will be cast to a list of strings with these validated items
     inputL = "-d 31 32 33 evul:notvalid" # Valid, but "notvalid" is not part of pre-approved ExternalVendorUpdateList items, validated in validateFunc, and results in a message
     
-    # Input as string
+    # Input as single string
     argResults = argumentor.validateString(inputA)
 
 ## Recommendations
@@ -68,9 +72,9 @@ The following list of examples explains some expected outcomes, or could be used
     1. If a command is detected but has errors, isValid will be false, and messages will details.
     1. Valid commands will have a dict of cast arguments ready to use.
 1. Document your Commands, Arguments, and Flags using descriptions, provide a command (HELP/MAN) for users to see this. Access a printable description of commands through Argumentor().getFormattedDescription().
-1. Arguments have fields for custom casting and validation functions (castFunc, validateFunc), the usage and limitations of these should be documented in descriptions.
-1. Use arguments defaultValue and useDefaultValue to set a default or fallback in case casting or validating input from user fails. In some cases, a validation function is needed for applying default.
-1. Static values can be set using a Flag, if the flag is present in input, the value set in Flag init will be in Result.arguments
+1. Arguments may have fields for custom casting and validation functions (castFunc, validateFunc), the usage and limitations of these should be documented in descriptions.
+1. Use arguments defaultValue and useDefaultValue to set a default or fallback in case casting or validating input from user fails. In some cases, a validation function is needed to apply default (e.g. default:0, validation: 0 >= value >= 100, input: -1, default of 0 is applied).
+1. Static values can be set using a Flag, if the flag is present in input, the value set in Flag init will be in Result[x].arguments, otherwise the default value is added.
 
 ## TODO
 
