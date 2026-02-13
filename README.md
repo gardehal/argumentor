@@ -8,7 +8,7 @@ Command and argument parsing and documentation for Python CLI.
 <sub><sup>Feel free to contribute if you find any issues though.</sup></sub>
 
 [![Publish to PyPI](https://github.com/gardehal/argumentor/actions/workflows/publish.yml/badge.svg)](https://github.com/gardehal/argumentor/actions/workflows/publish.yml)
-[![GitHub Release](https://img.shields.io/github/release/gardehal/argumentor.svg?style=flat)]()
+[![GitHub Release](https://img.shields.io/github/release/gardehal/argumentor.svg)]()
 [![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/gardehal/argumentor/blob/main/LICENSE)
 
 ## Install
