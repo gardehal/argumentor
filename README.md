@@ -43,7 +43,7 @@ Creating a command that takes multiple inputs, validating dimensions, and a opti
 The following list of examples explains some expected outcomes, or could be used to test Argumentor. 
 
 >[!INFO] 
-> These are based on [ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py).
+> These are based on [ExampleAdvanced.py](https://github.com/gardehal/argumentor/blob/main/tests/ExampleAdvanced.py), basically something like "-dimensions \<int> \<int> \<int> \<enum>? \<list[str]>?".
 > Depending on CLI, these results may vary compared to validateString version as below, or as input into CLI (using ' or " would be a main reason as CLI reads it differently).
 
     inputA = "-dim 1 2 3" # Valid
