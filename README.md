@@ -78,7 +78,11 @@ The following list of examples explains some expected outcomes, or could be used
 
 ## TODO
 
-- for description, some way to group commands or arguments to it can be printed with some sort of title? Makes it easier for walls of text, or maybe options to put something (newlines, "---") between all commands?
+- description/help texts:
+  - argument to not include command/description from formatted help text
+  - some way to group commands or arguments to it can be printed with some sort of title? Makes it easier for walls of text, or maybe options to put something (newlines, "---") between all commands?
     - extra optional input for argumentor, dict[str, Command] where str is the "grouping"?
     - extra optional str to command, "grouping", with separate formatted print command that orders by grouping (sort groupings and commands how exactly?), with grouping header left/right args? e.g. "---- " + command.grouping + " ----"?
+- something about expected arguments missing from result, some better way to detect?
+- when argument includes argname delim (:) and at least one argument is missing, give user a message about using arg name when : in string, e.g. argname:"https://.."
 - guaranteed that multiple things can be improved in validate, both efficacy and readability
